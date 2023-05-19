@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"constant":["PROOF_SIZE_THRESHOLD","REF_TIME_THRESHOLD","XCM_V2","XCM_V3"],"mod":["accounts","bridge_hub_kusama","bridge_hub_polkadot","collators","collectives","kusama","penpal","polkadot","statemine","statemint","validators"],"struct":["HostConfiguration"],"type":["AccountId","AuraId","Balance","BlockNumber","StatemintAuraId"]};

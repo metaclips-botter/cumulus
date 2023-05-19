@@ -52,6 +52,7 @@ var sourcesIndex = JSON.parse('{\
 "cumulus_test_runtime":["",[],["lib.rs","test_pallet.rs"]],\
 "cumulus_test_service":["",[],["chain_spec.rs","genesis.rs","lib.rs"]],\
 "glutton_runtime":["",[["weights",[],["mod.rs","pallet_glutton.rs"]]],["lib.rs","xcm_config.rs"]],\
+"integration_tests_common":["",[],["constants.rs","lib.rs"]],\
 "pallet_bridge_grandpa":["",[],["call_ext.rs","lib.rs","storage_types.rs","weights.rs"]],\
 "pallet_bridge_messages":["",[],["inbound_lane.rs","lib.rs","outbound_lane.rs","weights.rs","weights_ext.rs"]],\
 "pallet_bridge_parachains":["",[],["call_ext.rs","lib.rs","weights.rs","weights_ext.rs"]],\
@@ -69,8 +70,10 @@ var sourcesIndex = JSON.parse('{\
 "seedling_runtime":["",[],["lib.rs"]],\
 "shell_runtime":["",[],["lib.rs","xcm_config.rs"]],\
 "statemine_runtime":["",[["weights",[["xcm",[],["mod.rs","pallet_xcm_benchmarks_fungible.rs","pallet_xcm_benchmarks_generic.rs"]]],["block_weights.rs","cumulus_pallet_xcmp_queue.rs","extrinsic_weights.rs","frame_system.rs","mod.rs","pallet_assets.rs","pallet_balances.rs","pallet_collator_selection.rs","pallet_multisig.rs","pallet_nfts.rs","pallet_proxy.rs","pallet_session.rs","pallet_timestamp.rs","pallet_uniques.rs","pallet_utility.rs","pallet_xcm.rs","paritydb_weights.rs","rocksdb_weights.rs"]]],["constants.rs","lib.rs","xcm_config.rs"]],\
+"statemint_it":["",[],["lib.rs"]],\
 "statemint_runtime":["",[["weights",[["xcm",[],["mod.rs","pallet_xcm_benchmarks_fungible.rs","pallet_xcm_benchmarks_generic.rs"]]],["block_weights.rs","cumulus_pallet_xcmp_queue.rs","extrinsic_weights.rs","frame_system.rs","mod.rs","pallet_assets.rs","pallet_balances.rs","pallet_collator_selection.rs","pallet_multisig.rs","pallet_proxy.rs","pallet_session.rs","pallet_timestamp.rs","pallet_uniques.rs","pallet_utility.rs","pallet_xcm.rs","paritydb_weights.rs","rocksdb_weights.rs"]]],["constants.rs","lib.rs","xcm_config.rs"]],\
 "test_parachain":["",[],["cli.rs","main.rs"]],\
-"westmint_runtime":["",[["weights",[["xcm",[],["mod.rs","pallet_xcm_benchmarks_fungible.rs","pallet_xcm_benchmarks_generic.rs"]]],["block_weights.rs","cumulus_pallet_xcmp_queue.rs","extrinsic_weights.rs","frame_system.rs","mod.rs","pallet_assets.rs","pallet_balances.rs","pallet_collator_selection.rs","pallet_multisig.rs","pallet_nfts.rs","pallet_proxy.rs","pallet_session.rs","pallet_timestamp.rs","pallet_uniques.rs","pallet_utility.rs","pallet_xcm.rs","paritydb_weights.rs","rocksdb_weights.rs"]]],["constants.rs","lib.rs","xcm_config.rs"]]\
+"westmint_runtime":["",[["weights",[["xcm",[],["mod.rs","pallet_xcm_benchmarks_fungible.rs","pallet_xcm_benchmarks_generic.rs"]]],["block_weights.rs","cumulus_pallet_xcmp_queue.rs","extrinsic_weights.rs","frame_system.rs","mod.rs","pallet_assets.rs","pallet_balances.rs","pallet_collator_selection.rs","pallet_multisig.rs","pallet_nfts.rs","pallet_proxy.rs","pallet_session.rs","pallet_timestamp.rs","pallet_uniques.rs","pallet_utility.rs","pallet_xcm.rs","paritydb_weights.rs","rocksdb_weights.rs"]]],["constants.rs","lib.rs","xcm_config.rs"]],\
+"xcm_emulator":["",[],["lib.rs"]]\
 }');
 createSourceSidebar();
