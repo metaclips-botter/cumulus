@@ -2,7 +2,7 @@
     parachain_config: Configuration,
     collator_key: <a class="enum" href="https://doc.rust-lang.org/1.69.0/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;CollatorPair&gt;,
     relay_chain_config: Configuration,
-    para_id: <a class="struct" href="../polkadot_parachain/primitives/struct.Id.html" title="struct polkadot_parachain::primitives::Id">ParaId</a>,
+    para_id: ParaId,
     wrap_announce_block: <a class="enum" href="https://doc.rust-lang.org/1.69.0/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;<a class="struct" href="https://doc.rust-lang.org/1.69.0/alloc/boxed/struct.Box.html" title="struct alloc::boxed::Box">Box</a>&lt;dyn <a class="trait" href="https://doc.rust-lang.org/1.69.0/core/ops/function/trait.FnOnce.html" title="trait core::ops::function::FnOnce">FnOnce</a>(<a class="type" href="type.AnnounceBlockFn.html" title="type cumulus_test_service::AnnounceBlockFn">AnnounceBlockFn</a>) -&gt; <a class="type" href="type.AnnounceBlockFn.html" title="type cumulus_test_service::AnnounceBlockFn">AnnounceBlockFn</a>&gt;&gt;,
     fail_pov_recovery: <a class="primitive" href="https://doc.rust-lang.org/1.69.0/std/primitive.bool.html">bool</a>,
     rpc_ext_builder: RB,
