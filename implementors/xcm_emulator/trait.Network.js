@@ -1,3 +1,3 @@
 (function() {var implementors = {
-"integration_tests_common":[["impl Network for <a class=\"struct\" href=\"integration_tests_common/struct.PolkadotMockNet.html\" title=\"struct integration_tests_common::PolkadotMockNet\">PolkadotMockNet</a>"],["impl Network for <a class=\"struct\" href=\"integration_tests_common/struct.KusamaMockNet.html\" title=\"struct integration_tests_common::KusamaMockNet\">KusamaMockNet</a>"]]
+"integration_tests_common":[["impl Network for <a class=\"struct\" href=\"integration_tests_common/struct.KusamaMockNet.html\" title=\"struct integration_tests_common::KusamaMockNet\">KusamaMockNet</a>"],["impl Network for <a class=\"struct\" href=\"integration_tests_common/struct.PolkadotMockNet.html\" title=\"struct integration_tests_common::PolkadotMockNet\">PolkadotMockNet</a>"]]
 };if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()

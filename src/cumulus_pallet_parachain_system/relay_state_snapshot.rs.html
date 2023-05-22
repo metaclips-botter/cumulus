@@ -302,6 +302,40 @@
 <a href="#302" id="302">302</a>
 <a href="#303" id="303">303</a>
 <a href="#304" id="304">304</a>
+<a href="#305" id="305">305</a>
+<a href="#306" id="306">306</a>
+<a href="#307" id="307">307</a>
+<a href="#308" id="308">308</a>
+<a href="#309" id="309">309</a>
+<a href="#310" id="310">310</a>
+<a href="#311" id="311">311</a>
+<a href="#312" id="312">312</a>
+<a href="#313" id="313">313</a>
+<a href="#314" id="314">314</a>
+<a href="#315" id="315">315</a>
+<a href="#316" id="316">316</a>
+<a href="#317" id="317">317</a>
+<a href="#318" id="318">318</a>
+<a href="#319" id="319">319</a>
+<a href="#320" id="320">320</a>
+<a href="#321" id="321">321</a>
+<a href="#322" id="322">322</a>
+<a href="#323" id="323">323</a>
+<a href="#324" id="324">324</a>
+<a href="#325" id="325">325</a>
+<a href="#326" id="326">326</a>
+<a href="#327" id="327">327</a>
+<a href="#328" id="328">328</a>
+<a href="#329" id="329">329</a>
+<a href="#330" id="330">330</a>
+<a href="#331" id="331">331</a>
+<a href="#332" id="332">332</a>
+<a href="#333" id="333">333</a>
+<a href="#334" id="334">334</a>
+<a href="#335" id="335">335</a>
+<a href="#336" id="336">336</a>
+<a href="#337" id="337">337</a>
+<a href="#338" id="338">338</a>
 </pre><pre class="rust"><code><span class="comment">// Copyright 2021 Parity Technologies (UK) Ltd.
 // This file is part of Cumulus.
 
@@ -328,6 +362,17 @@
 <span class="kw">use </span>sp_std::vec::Vec;
 <span class="kw">use </span>sp_trie::{HashDBT, MemoryDB, StorageProof, EMPTY_PREFIX};
 
+<span class="doccomment">/// The capacity of the upward message queue of a parachain on the relay chain.
+</span><span class="comment">// The field order should stay the same as the data can be found in the proof to ensure both are
+// have the same encoded representation.
+</span><span class="attr">#[derive(Clone, Encode, Decode, TypeInfo, Default)]
+</span><span class="kw">pub struct </span>RelayDispachQueueSize {
+	<span class="doccomment">/// The number of additional messages that can be enqueued.
+	</span><span class="kw">pub </span>remaining_count: u32,
+	<span class="doccomment">/// The total size of additional messages that can be enqueued.
+	</span><span class="kw">pub </span>remaining_size: u32,
+}
+
 <span class="doccomment">/// A snapshot of some messaging related state of relay chain pertaining to the current parachain.
 ///
 /// This data is essential for making sure that the parachain is aware of current resource use on
@@ -341,10 +386,7 @@
 	</span><span class="kw">pub </span>dmq_mqc_head: relay_chain::Hash,
 
 	<span class="doccomment">/// The current capacity of the upward message queue of the current parachain on the relay chain.
-	///
-	/// The capacity is represented by a tuple that consist of the `count` of the messages and the
-	/// `total_size` expressed as the sum of byte sizes of all messages in the queue.
-	</span><span class="kw">pub </span>relay_dispatch_queue_size: (u32, u32),
+	</span><span class="kw">pub </span>relay_dispatch_queue_size: RelayDispachQueueSize,
 
 	<span class="doccomment">/// Information about all the inbound HRMP channels.
 	///
@@ -468,7 +510,10 @@
 	<span class="doccomment">/// Read the [`MessagingStateSnapshot`] from the relay chain state proof.
 	///
 	/// Returns an error if anything failed at reading or decoding.
-	</span><span class="kw">pub fn </span>read_messaging_state_snapshot(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;MessagingStateSnapshot, Error&gt; {
+	</span><span class="kw">pub fn </span>read_messaging_state_snapshot(
+		<span class="kw-2">&amp;</span><span class="self">self</span>,
+		host_config: <span class="kw-2">&amp;</span>AbridgedHostConfiguration,
+	) -&gt; <span class="prelude-ty">Result</span>&lt;MessagingStateSnapshot, Error&gt; {
 		<span class="kw">let </span>dmq_mqc_head: relay_chain::Hash = read_entry(
 			<span class="kw-2">&amp;</span><span class="self">self</span>.trie_backend,
 			<span class="kw-2">&amp;</span>relay_chain::well_known_keys::dmq_mqc_head(<span class="self">self</span>.para_id),
@@ -476,12 +521,35 @@
 		)
 		.map_err(Error::DmqMqcHead)<span class="question-mark">?</span>;
 
-		<span class="kw">let </span>relay_dispatch_queue_size: (u32, u32) = read_entry(
+		<span class="kw">let </span>relay_dispatch_queue_size = read_optional_entry::&lt;RelayDispachQueueSize, <span class="kw">_</span>&gt;(
 			<span class="kw-2">&amp;</span><span class="self">self</span>.trie_backend,
-			<span class="kw-2">&amp;</span>relay_chain::well_known_keys::relay_dispatch_queue_size(<span class="self">self</span>.para_id),
-			<span class="prelude-val">Some</span>((<span class="number">0</span>, <span class="number">0</span>)),
-		)
-		.map_err(Error::RelayDispatchQueueSize)<span class="question-mark">?</span>;
+			<span class="kw-2">&amp;</span>relay_chain::well_known_keys::relay_dispatch_queue_remaining_capacity(<span class="self">self</span>.para_id)
+				.key,
+		);
+
+		<span class="comment">// TODO paritytech/polkadot#6283: Remove all usages of `relay_dispatch_queue_size`
+		//
+		// When the relay chain and all parachains support `relay_dispatch_queue_remaining_capacity`,
+		// this code here needs to be removed and above needs to be changed to `read_entry` that
+		// returns an error if `relay_dispatch_queue_remaining_capacity` can not be found/decoded.
+		//
+		// For now we just fallback to the old dispatch queue size if there is an error.
+		</span><span class="kw">let </span>relay_dispatch_queue_size = <span class="kw">match </span>relay_dispatch_queue_size {
+			<span class="prelude-val">Ok</span>(<span class="prelude-val">Some</span>(r)) =&gt; r,
+			<span class="kw">_ </span>=&gt; {
+				<span class="kw">let </span>res = read_entry::&lt;(u32, u32), <span class="kw">_</span>&gt;(
+					<span class="kw-2">&amp;</span><span class="self">self</span>.trie_backend,
+					<span class="attr">#[allow(deprecated)]
+					</span><span class="kw-2">&amp;</span>relay_chain::well_known_keys::relay_dispatch_queue_size(<span class="self">self</span>.para_id),
+					<span class="prelude-val">Some</span>((<span class="number">0</span>, <span class="number">0</span>)),
+				)
+				.map_err(Error::RelayDispatchQueueSize)<span class="question-mark">?</span>;
+
+				<span class="kw">let </span>remaining_count = host_config.max_upward_queue_count.saturating_sub(res.<span class="number">0</span>);
+				<span class="kw">let </span>remaining_size = host_config.max_upward_queue_size.saturating_sub(res.<span class="number">1</span>);
+				RelayDispachQueueSize { remaining_count, remaining_size }
+			},
+		};
 
 		<span class="kw">let </span>ingress_channel_index: Vec&lt;ParaId&gt; = read_entry(
 			<span class="kw-2">&amp;</span><span class="self">self</span>.trie_backend,

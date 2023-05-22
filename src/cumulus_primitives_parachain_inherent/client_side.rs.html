@@ -190,6 +190,10 @@
 <a href="#190" id="190">190</a>
 <a href="#191" id="191">191</a>
 <a href="#192" id="192">192</a>
+<a href="#193" id="193">193</a>
+<a href="#194" id="194">194</a>
+<a href="#195" id="195">195</a>
+<a href="#196" id="196">196</a>
 </pre><pre class="rust"><code><span class="comment">// Copyright 2021 Parity Technologies (UK) Ltd.
 // This file is part of Cumulus.
 
@@ -291,7 +295,11 @@
 		relay_well_known_keys::CURRENT_SLOT.to_vec(),
 		relay_well_known_keys::ACTIVE_CONFIG.to_vec(),
 		relay_well_known_keys::dmq_mqc_head(para_id),
-		relay_well_known_keys::relay_dispatch_queue_size(para_id),
+		<span class="comment">// TODO paritytech/polkadot#6283: Remove all usages of `relay_dispatch_queue_size`
+		// We need to keep this here until all parachains have migrated to `relay_dispatch_queue_remaining_capacity`.
+		</span><span class="attr">#[allow(deprecated)]
+		</span>relay_well_known_keys::relay_dispatch_queue_size(para_id),
+		relay_well_known_keys::relay_dispatch_queue_remaining_capacity(para_id).key,
 		relay_well_known_keys::hrmp_ingress_channel_index(para_id),
 		relay_well_known_keys::hrmp_egress_channel_index(para_id),
 		relay_well_known_keys::upgrade_go_ahead_signal(para_id),
