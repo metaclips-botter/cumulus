@@ -952,6 +952,9 @@
 <a href="#952" id="952">952</a>
 <a href="#953" id="953">953</a>
 <a href="#954" id="954">954</a>
+<a href="#955" id="955">955</a>
+<a href="#956" id="956">956</a>
+<a href="#957" id="957">957</a>
 </pre><pre class="rust"><code><span class="comment">// Copyright 2023 Parity Technologies (UK) Ltd.
 // This file is part of Polkadot.
 
@@ -1205,6 +1208,7 @@
 					msg: <span class="kw-2">&amp;</span>[u8],
 					para: <span class="self">Self</span>::Origin,
 					meter: <span class="kw-2">&amp;mut </span><span class="macro-nonterminal">$crate::WeightMeter</span>,
+					_id: <span class="kw-2">&amp;mut </span>XcmHash
 				) -&gt; <span class="prelude-ty">Result</span>&lt;bool, <span class="macro-nonterminal">$crate::ProcessMessageError</span>&gt; {
 					<span class="kw">use </span><span class="macro-nonterminal">$</span><span class="kw">crate</span>::{<span class="macro-nonterminal">Weight</span>, AggregateMessageOrigin, UmpQueueId, ServiceQueues, EnqueueMessage};
 					<span class="kw">use </span><span class="macro-nonterminal">$mq </span><span class="kw">as </span>message_queue;
@@ -1769,12 +1773,14 @@
 
 				<span class="kw">fn </span>_process_upward_messages() {
 					<span class="kw">use </span><span class="macro-nonterminal">$</span><span class="kw">crate</span>::{<span class="macro-nonterminal">Bounded</span>, ProcessMessage, WeightMeter};
+					<span class="kw">use </span>sp_core::Encode;
 					<span class="kw">while let </span><span class="prelude-val">Some</span>((from_para_id, msg)) = <span class="macro-nonterminal">$crate::UPWARD_MESSAGES</span>.with(|b| b.borrow_mut().get_mut(<span class="macro">stringify!</span>(<span class="macro-nonterminal">$name</span>)).unwrap().pop_front()) {
 						<span class="kw">let </span><span class="kw-2">mut </span>weight_meter = WeightMeter::max_limit();
 						<span class="kw">let _ </span>=  &lt;<span class="macro-nonterminal">$relay_chain</span>&gt;::process_message(
 							<span class="kw-2">&amp;</span>msg[..],
 							from_para_id.into(),
 							<span class="kw-2">&amp;mut </span>weight_meter,
+							<span class="kw-2">&amp;mut </span>msg.using_encoded(sp_core::blake2_256),
 						);
 					}
 				}
