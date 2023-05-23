@@ -491,6 +491,9 @@
 <a href="#491" id="491">491</a>
 <a href="#492" id="492">492</a>
 <a href="#493" id="493">493</a>
+<a href="#494" id="494">494</a>
+<a href="#495" id="495">495</a>
+<a href="#496" id="496">496</a>
 </pre><pre class="rust"><code><span class="comment">// Copyright (C) 2022 Parity Technologies (UK) Ltd.
 // SPDX-License-Identifier: Apache-2.0
 
@@ -764,6 +767,9 @@
 					pallet_assets::Call::transfer_approved { .. } |
 					pallet_assets::Call::touch { .. } |
 					pallet_assets::Call::refund { .. },
+			) | RuntimeCall::NftFractionalization(
+				pallet_nft_fractionalization::Call::fractionalize { .. } |
+					pallet_nft_fractionalization::Call::unify { .. },
 			) | RuntimeCall::Nfts(
 				pallet_nfts::Call::create { .. } |
 					pallet_nfts::Call::force_create { .. } |
