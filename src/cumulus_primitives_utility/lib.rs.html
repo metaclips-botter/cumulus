@@ -538,6 +538,7 @@
 <a href="#538" id="538">538</a>
 <a href="#539" id="539">539</a>
 <a href="#540" id="540">540</a>
+<a href="#541" id="541">541</a>
 </pre><pre class="rust"><code><span class="comment">// Copyright 2020-2021 Parity Technologies (UK) Ltd.
 // This file is part of Cumulus.
 
@@ -708,17 +709,18 @@
 		<span class="comment">// Calculate how much we should charge in the asset_id for such amount of weight
 		// Require at least a payment of minimum_balance
 		// Necessary for fully collateral-backed assets
-		</span><span class="kw">let </span>asset_balance: u128 = FeeCharger::charge_weight_in_fungibles(local_asset_id, weight)
-			.map(|amount| {
-				<span class="kw">let </span>minimum_balance = ConcreteAssets::minimum_balance(local_asset_id);
-				<span class="kw">if </span>amount &lt; minimum_balance {
-					minimum_balance
-				} <span class="kw">else </span>{
-					amount
-				}
-			})<span class="question-mark">?
-			</span>.try_into()
-			.map_err(|<span class="kw">_</span>| XcmError::Overflow)<span class="question-mark">?</span>;
+		</span><span class="kw">let </span>asset_balance: u128 =
+			FeeCharger::charge_weight_in_fungibles(local_asset_id.clone(), weight)
+				.map(|amount| {
+					<span class="kw">let </span>minimum_balance = ConcreteAssets::minimum_balance(local_asset_id);
+					<span class="kw">if </span>amount &lt; minimum_balance {
+						minimum_balance
+					} <span class="kw">else </span>{
+						amount
+					}
+				})<span class="question-mark">?
+				</span>.try_into()
+				.map_err(|<span class="kw">_</span>| XcmError::Overflow)<span class="question-mark">?</span>;
 
 		<span class="comment">// Convert to the same kind of multiasset, with the required fungible balance
 		</span><span class="kw">let </span>required = first.id.into_multiasset(asset_balance.into());
@@ -746,7 +748,7 @@
 			</span><span class="kw">let </span>(local_asset_id, outstanding_balance) =
 				Matcher::matches_fungibles(<span class="kw-2">&amp;</span>(id, fun).into()).ok()<span class="question-mark">?</span>;
 
-			<span class="kw">let </span>minimum_balance = ConcreteAssets::minimum_balance(local_asset_id);
+			<span class="kw">let </span>minimum_balance = ConcreteAssets::minimum_balance(local_asset_id.clone());
 
 			<span class="comment">// Calculate asset_balance
 			// This read should have already be cached in buy_weight

@@ -546,7 +546,7 @@
 	</span>Assets: fungibles::Inspect&lt;AccountId&gt;,
 {
 	<span class="kw">fn </span>contains(id: <span class="kw-2">&amp;</span>&lt;Assets <span class="kw">as </span>fungibles::Inspect&lt;AccountId&gt;&gt;::AssetId) -&gt; bool {
-		!Assets::total_issuance(<span class="kw-2">*</span>id).is_zero()
+		!Assets::total_issuance(id.clone()).is_zero()
 	}
 }
 
