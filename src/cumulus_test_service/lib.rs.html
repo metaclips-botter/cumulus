@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `test/service/src/lib.rs`."><title>lib.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Bold-a2c9cd1067f8b328.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-c4dbdcde0fbd8430.css" id="mainThemeStyle"><link rel="stylesheet" id="themeStyle" href="../../static.files/light-db279b6232be9c13.css"><link rel="stylesheet" disabled href="../../static.files/dark-cf923f49f397b216.css"><link rel="stylesheet" disabled href="../../static.files/ayu-be46fdc453a55015.css"><script src="../../static.files/storage-3891ce972e3a2bf8.js"></script><script defer src="../../static.files/source-script-1b95b7cca98b26e5.js"></script><script defer src="../../source-files.js"></script><script defer src="../../static.files/main-98a684e84ae5b08b.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-13285aec31fa243e.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><nav class="sub"><a class="sub-logo-container" href="../../cumulus_test_service/index.html"><img class="rust-logo" src="../../static.files/rust-logo-151179464ae7ed46.svg" alt="logo"></a><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><pre class="src-line-numbers"><a href="#1" id="1">1</a>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `test/service/src/lib.rs`."><title>lib.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Bold-a2c9cd1067f8b328.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-ba5701c5741a7b69.css" id="mainThemeStyle"><div id="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="cumulus_test_service" data-themes="" data-resource-suffix="" data-rustdoc-version="1.70.0 (90c541806 2023-05-31)" data-search-js="search-e077946657036a58.js" data-settings-js="settings-298e1ea74db45b39.js" data-settings-css="settings-7bfb4c59cc6bc502.css" data-theme-light-css="light-0f8c037637f9eb3e.css" data-theme-dark-css="dark-1097f8e92a01e3cf.css" data-theme-ayu-css="ayu-614652228113ac93.css" ></div><script src="../../static.files/storage-62ce34ea385b278a.js"></script><script defer src="../../static.files/source-script-905937fbbdc8e9ea.js"></script><script defer src="../../source-files.js"></script><script defer src="../../static.files/main-f61008743c98d196.js"></script><noscript><link rel="stylesheet" media="(prefers-color-scheme:light)" href="../../static.files/light-0f8c037637f9eb3e.css"><link rel="stylesheet" media="(prefers-color-scheme:dark)" href="../../static.files/dark-1097f8e92a01e3cf.css"><link rel="stylesheet" href="../../static.files/noscript-13285aec31fa243e.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><nav class="sub"><a class="sub-logo-container" href="../../cumulus_test_service/index.html"><img class="rust-logo" src="../../static.files/rust-logo-151179464ae7ed46.svg" alt="logo"></a><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
 <a href="#2" id="2">2</a>
 <a href="#3" id="3">3</a>
 <a href="#4" id="4">4</a>
@@ -892,7 +892,23 @@
 <a href="#892" id="892">892</a>
 <a href="#893" id="893">893</a>
 <a href="#894" id="894">894</a>
-</pre><pre class="rust"><code><span class="comment">// Copyright 2019-2021 Parity Technologies (UK) Ltd.
+<a href="#895" id="895">895</a>
+<a href="#896" id="896">896</a>
+<a href="#897" id="897">897</a>
+<a href="#898" id="898">898</a>
+<a href="#899" id="899">899</a>
+<a href="#900" id="900">900</a>
+<a href="#901" id="901">901</a>
+<a href="#902" id="902">902</a>
+<a href="#903" id="903">903</a>
+<a href="#904" id="904">904</a>
+<a href="#905" id="905">905</a>
+<a href="#906" id="906">906</a>
+<a href="#907" id="907">907</a>
+<a href="#908" id="908">908</a>
+<a href="#909" id="909">909</a>
+<a href="#910" id="910">910</a>
+</pre></div><pre class="rust"><code><span class="comment">// Copyright 2019-2021 Parity Technologies (UK) Ltd.
 // This file is part of Cumulus.
 
 // Cumulus is free software: you can redistribute it and/or modify
@@ -912,9 +928,13 @@
 
 </span><span class="attr">#![warn(missing_docs)]
 
-</span><span class="kw">pub mod </span>chain_spec;
+</span><span class="doccomment">/// Utilities used for benchmarking
+</span><span class="kw">pub mod </span>bench_utils;
+
+<span class="kw">pub mod </span>chain_spec;
 <span class="kw">mod </span>genesis;
 
+<span class="kw">use </span>runtime::AccountId;
 <span class="kw">use </span>sc_executor::{HeapAllocStrategy, WasmExecutor, DEFAULT_HEAP_ALLOC_STRATEGY};
 <span class="kw">use </span>std::{
 	future::Future,
@@ -1395,6 +1415,7 @@
 	storage_update_func_relay_chain: <span class="prelude-ty">Option</span>&lt;Box&lt;<span class="kw">dyn </span>Fn()&gt;&gt;,
 	consensus: Consensus,
 	relay_chain_full_node_url: Vec&lt;Url&gt;,
+	endowed_accounts: Vec&lt;AccountId&gt;,
 }
 
 <span class="kw">impl </span>TestNodeBuilder {
@@ -1417,6 +1438,7 @@
 			storage_update_func_relay_chain: <span class="prelude-val">None</span>,
 			consensus: Consensus::RelayChain,
 			relay_chain_full_node_url: <span class="macro">vec!</span>[],
+			endowed_accounts: Default::default(),
 		}
 	}
 
@@ -1523,6 +1545,12 @@
 		<span class="self">self
 	</span>}
 
+	<span class="doccomment">/// Accounts which will have an initial balance.
+	</span><span class="kw">pub fn </span>endowed_accounts(<span class="kw-2">mut </span><span class="self">self</span>, accounts: Vec&lt;AccountId&gt;) -&gt; TestNodeBuilder {
+		<span class="self">self</span>.endowed_accounts = accounts;
+		<span class="self">self
+	</span>}
+
 	<span class="doccomment">/// Build the [`TestNode`].
 	</span><span class="kw">pub async fn </span>build(<span class="self">self</span>) -&gt; TestNode {
 		<span class="kw">let </span>parachain_config = node_config(
@@ -1533,6 +1561,7 @@
 			<span class="self">self</span>.parachain_nodes_exclusive,
 			<span class="self">self</span>.para_id,
 			<span class="self">self</span>.collator_key.is_some(),
+			<span class="self">self</span>.endowed_accounts,
 		)
 		.expect(<span class="string">&quot;could not generate Configuration&quot;</span>);
 
@@ -1586,12 +1615,14 @@
 	nodes_exlusive: bool,
 	para_id: ParaId,
 	is_collator: bool,
+	endowed_accounts: Vec&lt;AccountId&gt;,
 ) -&gt; <span class="prelude-ty">Result</span>&lt;Configuration, ServiceError&gt; {
 	<span class="kw">let </span>base_path = BasePath::new_temp_dir()<span class="question-mark">?</span>;
 	<span class="kw">let </span>root = base_path.path().join(<span class="macro">format!</span>(<span class="string">&quot;cumulus_test_service_{}&quot;</span>, key));
 	<span class="kw">let </span>role = <span class="kw">if </span>is_collator { Role::Authority } <span class="kw">else </span>{ Role::Full };
 	<span class="kw">let </span>key_seed = key.to_seed();
-	<span class="kw">let </span><span class="kw-2">mut </span>spec = Box::new(chain_spec::get_chain_spec(para_id));
+	<span class="kw">let </span><span class="kw-2">mut </span>spec =
+		Box::new(chain_spec::get_chain_spec_with_extra_endowed(para_id, endowed_accounts));
 
 	<span class="kw">let </span><span class="kw-2">mut </span>storage = spec.as_storage_builder().build_storage().expect(<span class="string">&quot;could not build storage&quot;</span>);
 
@@ -1634,14 +1665,15 @@
 		state_pruning: <span class="prelude-val">Some</span>(PruningMode::ArchiveAll),
 		blocks_pruning: BlocksPruning::KeepAll,
 		chain_spec: spec,
-		wasm_method: WasmExecutionMethod::default(),
-		<span class="comment">// NOTE: we enforce the use of the native runtime to make the errors more debuggable
-		</span>execution_strategies: ExecutionStrategies {
-			syncing: sc_client_api::ExecutionStrategy::NativeWhenPossible,
-			importing: sc_client_api::ExecutionStrategy::NativeWhenPossible,
-			block_construction: sc_client_api::ExecutionStrategy::NativeWhenPossible,
-			offchain_worker: sc_client_api::ExecutionStrategy::NativeWhenPossible,
-			other: sc_client_api::ExecutionStrategy::NativeWhenPossible,
+		wasm_method: WasmExecutionMethod::Compiled {
+			instantiation_strategy: sc_executor_wasmtime::InstantiationStrategy::PoolingCopyOnWrite,
+		},
+		execution_strategies: ExecutionStrategies {
+			syncing: sc_client_api::ExecutionStrategy::AlwaysWasm,
+			importing: sc_client_api::ExecutionStrategy::AlwaysWasm,
+			block_construction: sc_client_api::ExecutionStrategy::AlwaysWasm,
+			offchain_worker: sc_client_api::ExecutionStrategy::AlwaysWasm,
+			other: sc_client_api::ExecutionStrategy::AlwaysWasm,
 		},
 		rpc_addr: <span class="prelude-val">None</span>,
 		rpc_max_connections: Default::default(),
@@ -1786,5 +1818,4 @@
 		<span class="prelude-val">Some</span>(cumulus_test_relay_validation_worker_provider::VALIDATION_WORKER.into()),
 	)
 }
-</code></pre></div>
-</section></main><div id="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="cumulus_test_service" data-themes="" data-resource-suffix="" data-rustdoc-version="1.69.0 (84c898d65 2023-04-16)" data-search-js="search-8a59a8356673ec1f.js" data-settings-js="settings-f0c5c39777a9a2f6.js" data-settings-css="settings-0bcba95ff279c1db.css" ></div></body></html>
+</code></pre></div></section></main></body></html>

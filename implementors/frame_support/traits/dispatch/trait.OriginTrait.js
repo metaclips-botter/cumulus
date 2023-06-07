@@ -1,4 +1,7 @@
 (function() {var implementors = {
+"asset_hub_kusama_runtime":[["impl OriginTrait for <a class=\"struct\" href=\"asset_hub_kusama_runtime/struct.RuntimeOrigin.html\" title=\"struct asset_hub_kusama_runtime::RuntimeOrigin\">RuntimeOrigin</a>"]],
+"asset_hub_polkadot_runtime":[["impl OriginTrait for <a class=\"struct\" href=\"asset_hub_polkadot_runtime/struct.RuntimeOrigin.html\" title=\"struct asset_hub_polkadot_runtime::RuntimeOrigin\">RuntimeOrigin</a>"]],
+"asset_hub_westend_runtime":[["impl OriginTrait for <a class=\"struct\" href=\"asset_hub_westend_runtime/struct.RuntimeOrigin.html\" title=\"struct asset_hub_westend_runtime::RuntimeOrigin\">RuntimeOrigin</a>"]],
 "bridge_hub_kusama_runtime":[["impl OriginTrait for <a class=\"struct\" href=\"bridge_hub_kusama_runtime/struct.RuntimeOrigin.html\" title=\"struct bridge_hub_kusama_runtime::RuntimeOrigin\">RuntimeOrigin</a>"]],
 "bridge_hub_polkadot_runtime":[["impl OriginTrait for <a class=\"struct\" href=\"bridge_hub_polkadot_runtime/struct.RuntimeOrigin.html\" title=\"struct bridge_hub_polkadot_runtime::RuntimeOrigin\">RuntimeOrigin</a>"]],
 "bridge_hub_rococo_runtime":[["impl OriginTrait for <a class=\"struct\" href=\"bridge_hub_rococo_runtime/struct.RuntimeOrigin.html\" title=\"struct bridge_hub_rococo_runtime::RuntimeOrigin\">RuntimeOrigin</a>"]],
@@ -10,8 +13,5 @@
 "penpal_runtime":[["impl OriginTrait for <a class=\"struct\" href=\"penpal_runtime/struct.RuntimeOrigin.html\" title=\"struct penpal_runtime::RuntimeOrigin\">RuntimeOrigin</a>"]],
 "rococo_parachain_runtime":[["impl OriginTrait for <a class=\"struct\" href=\"rococo_parachain_runtime/struct.RuntimeOrigin.html\" title=\"struct rococo_parachain_runtime::RuntimeOrigin\">RuntimeOrigin</a>"]],
 "seedling_runtime":[["impl OriginTrait for <a class=\"struct\" href=\"seedling_runtime/struct.RuntimeOrigin.html\" title=\"struct seedling_runtime::RuntimeOrigin\">RuntimeOrigin</a>"]],
-"shell_runtime":[["impl OriginTrait for <a class=\"struct\" href=\"shell_runtime/struct.RuntimeOrigin.html\" title=\"struct shell_runtime::RuntimeOrigin\">RuntimeOrigin</a>"]],
-"statemine_runtime":[["impl OriginTrait for <a class=\"struct\" href=\"statemine_runtime/struct.RuntimeOrigin.html\" title=\"struct statemine_runtime::RuntimeOrigin\">RuntimeOrigin</a>"]],
-"statemint_runtime":[["impl OriginTrait for <a class=\"struct\" href=\"statemint_runtime/struct.RuntimeOrigin.html\" title=\"struct statemint_runtime::RuntimeOrigin\">RuntimeOrigin</a>"]],
-"westmint_runtime":[["impl OriginTrait for <a class=\"struct\" href=\"westmint_runtime/struct.RuntimeOrigin.html\" title=\"struct westmint_runtime::RuntimeOrigin\">RuntimeOrigin</a>"]]
+"shell_runtime":[["impl OriginTrait for <a class=\"struct\" href=\"shell_runtime/struct.RuntimeOrigin.html\" title=\"struct shell_runtime::RuntimeOrigin\">RuntimeOrigin</a>"]]
 };if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()
