@@ -956,6 +956,8 @@
 <a href="#956" id="956">956</a>
 <a href="#957" id="957">957</a>
 <a href="#958" id="958">958</a>
+<a href="#959" id="959">959</a>
+<a href="#960" id="960">960</a>
 </pre></div><pre class="rust"><code><span class="comment">// Copyright 2023 Parity Technologies (UK) Ltd.
 // This file is part of Polkadot.
 
@@ -1698,6 +1700,8 @@
 						<span class="macro-nonterminal">$crate::HORIZONTAL_MESSAGES</span>.with(|b| b.borrow_mut().insert(<span class="macro">stringify!</span>(<span class="macro-nonterminal">$name</span>).to_string(), <span class="macro-nonterminal">$crate::VecDeque::new</span>()));
 						<span class="macro-nonterminal">$crate::RELAY_BLOCK_NUMBER</span>.with(|b| b.borrow_mut().insert(<span class="macro">stringify!</span>(<span class="macro-nonterminal">$name</span>).to_string(), <span class="number">1</span>));
 						<span class="macro-nonterminal">$crate::PARA_IDS</span>.with(|b| b.borrow_mut().insert(<span class="macro">stringify!</span>(<span class="macro-nonterminal">$name</span>).to_string(), <span class="self">Self</span>::_para_ids()));
+
+						$( &lt;<span class="macro-nonterminal">$parachain</span>&gt;::prepare_for_xcmp(); )*
 					}
 				}
 
