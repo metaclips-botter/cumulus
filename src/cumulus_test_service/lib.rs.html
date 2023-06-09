@@ -976,8 +976,8 @@
 		BlocksPruning, DatabaseSource, KeystoreConfig, MultiaddrWithPeerId, NetworkConfiguration,
 		OffchainWorkerConfig, PruningMode, WasmExecutionMethod,
 	},
-	BasePath, ChainSpec, Configuration, Error <span class="kw">as </span>ServiceError, PartialComponents, Role,
-	RpcHandlers, TFullBackend, TFullClient, TaskManager,
+	BasePath, ChainSpec <span class="kw">as </span>ChainSpecService, Configuration, Error <span class="kw">as </span>ServiceError,
+	PartialComponents, Role, RpcHandlers, TFullBackend, TFullClient, TaskManager,
 };
 <span class="kw">use </span>sp_arithmetic::traits::SaturatedConversion;
 <span class="kw">use </span>sp_blockchain::HeaderBackend;
