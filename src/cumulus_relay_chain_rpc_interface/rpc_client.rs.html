@@ -522,9 +522,6 @@
 <a href="#522" id="522">522</a>
 <a href="#523" id="523">523</a>
 <a href="#524" id="524">524</a>
-<a href="#525" id="525">525</a>
-<a href="#526" id="526">526</a>
-<a href="#527" id="527">527</a>
 </pre><pre class="rust"><code><span class="comment">// Copyright 2022 Parity Technologies (UK) Ltd.
 // This file is part of Cumulus.
 
@@ -557,7 +554,7 @@
 
 <span class="kw">use </span>cumulus_primitives_core::{
 	relay_chain::{
-		vstaging, BlockNumber, CandidateCommitments, CandidateEvent, CandidateHash,
+		slashing, BlockNumber, CandidateCommitments, CandidateEvent, CandidateHash,
 		CommittedCandidateReceipt, CoreState, DisputeState, ExecutorParams, GroupRotationInfo,
 		Hash <span class="kw">as </span>RelayHash, Header <span class="kw">as </span>RelayHeader, InboundHrmpMessage, OccupiedCoreAssumption,
 		PvfCheckStatement, ScrapedOnChainVotes, SessionIndex, SessionInfo, ValidationCode,
@@ -861,10 +858,7 @@
 	</span><span class="kw">pub async fn </span>parachain_host_unapplied_slashes(
 		<span class="kw-2">&amp;</span><span class="self">self</span>,
 		at: RelayHash,
-	) -&gt; <span class="prelude-ty">Result</span>&lt;
-		Vec&lt;(SessionIndex, CandidateHash, vstaging::slashing::PendingSlashes)&gt;,
-		RelayChainError,
-	&gt; {
+	) -&gt; <span class="prelude-ty">Result</span>&lt;Vec&lt;(SessionIndex, CandidateHash, slashing::PendingSlashes)&gt;, RelayChainError&gt; {
 		<span class="self">self</span>.call_remote_runtime_function(<span class="string">&quot;ParachainHost_unapplied_slashes&quot;</span>, at, <span class="prelude-val">None</span>::&lt;()&gt;)
 			.<span class="kw">await
 	</span>}
@@ -876,7 +870,7 @@
 		<span class="kw-2">&amp;</span><span class="self">self</span>,
 		at: RelayHash,
 		validator_id: ValidatorId,
-	) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="prelude-ty">Option</span>&lt;vstaging::slashing::OpaqueKeyOwnershipProof&gt;, RelayChainError&gt; {
+	) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="prelude-ty">Option</span>&lt;slashing::OpaqueKeyOwnershipProof&gt;, RelayChainError&gt; {
 		<span class="self">self</span>.call_remote_runtime_function(
 			<span class="string">&quot;ParachainHost_key_ownership_proof&quot;</span>,
 			at,
@@ -892,8 +886,8 @@
 	</span><span class="kw">pub async fn </span>parachain_host_submit_report_dispute_lost(
 		<span class="kw-2">&amp;</span><span class="self">self</span>,
 		at: RelayHash,
-		dispute_proof: vstaging::slashing::DisputeProof,
-		key_ownership_proof: vstaging::slashing::OpaqueKeyOwnershipProof,
+		dispute_proof: slashing::DisputeProof,
+		key_ownership_proof: slashing::OpaqueKeyOwnershipProof,
 	) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="prelude-ty">Option</span>&lt;()&gt;, RelayChainError&gt; {
 		<span class="self">self</span>.call_remote_runtime_function(
 			<span class="string">&quot;ParachainHost_submit_report_dispute_lost&quot;</span>,

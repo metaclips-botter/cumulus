@@ -391,7 +391,7 @@
 <span class="kw">use </span>futures::{Stream, StreamExt};
 <span class="kw">use </span>polkadot_core_primitives::{Block, BlockNumber, Hash, Header};
 <span class="kw">use </span>polkadot_overseer::RuntimeApiSubsystemClient;
-<span class="kw">use </span>polkadot_primitives::vstaging;
+<span class="kw">use </span>polkadot_primitives::slashing;
 <span class="kw">use </span>sc_authority_discovery::{AuthorityDiscovery, Error <span class="kw">as </span>AuthorityDiscoveryError};
 <span class="kw">use </span>sp_api::{ApiError, RuntimeApiInfo};
 
@@ -678,7 +678,7 @@
 		Vec&lt;(
 			polkadot_primitives::SessionIndex,
 			polkadot_primitives::CandidateHash,
-			vstaging::slashing::PendingSlashes,
+			slashing::PendingSlashes,
 		)&gt;,
 		ApiError,
 	&gt; {
@@ -689,15 +689,15 @@
 		<span class="kw-2">&amp;</span><span class="self">self</span>,
 		at: Hash,
 		validator_id: polkadot_primitives::ValidatorId,
-	) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="prelude-ty">Option</span>&lt;vstaging::slashing::OpaqueKeyOwnershipProof&gt;, ApiError&gt; {
+	) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="prelude-ty">Option</span>&lt;slashing::OpaqueKeyOwnershipProof&gt;, ApiError&gt; {
 		<span class="prelude-val">Ok</span>(<span class="self">self</span>.rpc_client.parachain_host_key_ownership_proof(at, validator_id).<span class="kw">await</span><span class="question-mark">?</span>)
 	}
 
 	<span class="kw">async fn </span>submit_report_dispute_lost(
 		<span class="kw-2">&amp;</span><span class="self">self</span>,
 		at: Hash,
-		dispute_proof: vstaging::slashing::DisputeProof,
-		key_ownership_proof: vstaging::slashing::OpaqueKeyOwnershipProof,
+		dispute_proof: slashing::DisputeProof,
+		key_ownership_proof: slashing::OpaqueKeyOwnershipProof,
 	) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="prelude-ty">Option</span>&lt;()&gt;, ApiError&gt; {
 		<span class="prelude-val">Ok</span>(<span class="self">self
 			</span>.rpc_client
