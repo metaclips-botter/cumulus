@@ -259,7 +259,6 @@
 <a href="#259" id="259">259</a>
 <a href="#260" id="260">260</a>
 <a href="#261" id="261">261</a>
-<a href="#262" id="262">262</a>
 </pre><pre class="rust"><code><span class="comment">// This file is part of Cumulus.
 
 // Copyright (C) Parity Technologies (UK) Ltd.
@@ -297,14 +296,13 @@
 <span class="kw">use </span>sc_executor::DEFAULT_HEAP_ALLOC_STRATEGY;
 <span class="kw">use </span>sc_executor_common::runtime_blob::RuntimeBlob;
 <span class="kw">use </span>sp_api::ProvideRuntimeApi;
-<span class="kw">use </span>sp_arithmetic::Perbill;
 <span class="kw">use </span>sp_blockchain::{ApplyExtrinsicFailed::Validity, Error::ApplyExtrinsicFailed};
 <span class="kw">use </span>sp_consensus::BlockOrigin;
 <span class="kw">use </span>sp_core::{sr25519, Pair};
 <span class="kw">use </span>sp_keyring::Sr25519Keyring::Alice;
 <span class="kw">use </span>sp_runtime::{
 	transaction_validity::{InvalidTransaction, TransactionValidityError},
-	AccountId32, OpaqueExtrinsic,
+	AccountId32, FixedU64, OpaqueExtrinsic,
 };
 
 <span class="doccomment">/// Accounts to use for transfer transactions. Enough for 5000 transactions.
@@ -389,7 +387,7 @@
 	src_accounts: <span class="kw-2">&amp;</span>[sr25519::Pair],
 	dst_accounts: <span class="kw-2">&amp;</span>[sr25519::Pair],
 ) -&gt; (usize, Vec&lt;OpaqueExtrinsic&gt;) {
-	<span class="comment">// Add as many tranfer extrinsics as possible into a single block.
+	<span class="comment">// Add as many transfer extrinsics as possible into a single block.
 	</span><span class="kw">let </span><span class="kw-2">mut </span>block_builder = client.new_block(Default::default()).unwrap();
 	<span class="kw">let </span><span class="kw-2">mut </span>max_transfer_count = <span class="number">0</span>;
 	<span class="kw">let </span><span class="kw-2">mut </span>extrinsics = Vec::new();
@@ -462,8 +460,8 @@
 </span><span class="kw">pub fn </span>set_glutton_parameters(
 	client: <span class="kw-2">&amp;</span>TestClient,
 	initialize: bool,
-	compute_percent: <span class="kw-2">&amp;</span>Perbill,
-	storage_percent: <span class="kw-2">&amp;</span>Perbill,
+	compute_ratio: <span class="kw-2">&amp;</span>FixedU64,
+	storage_ratio: <span class="kw-2">&amp;</span>FixedU64,
 ) -&gt; NodeBlock {
 	<span class="kw">let </span>parent_hash = client.usage_info().chain.best_hash;
 	<span class="kw">let </span>parent_header = client.header(parent_hash).expect(<span class="string">&quot;Just fetched this hash.&quot;</span>).unwrap();
@@ -493,7 +491,7 @@
 	</span><span class="kw">let </span>set_compute = construct_extrinsic(
 		client,
 		SudoCall::sudo {
-			call: Box::new(GluttonCall::set_compute { compute: <span class="kw-2">*</span>compute_percent }.into()),
+			call: Box::new(GluttonCall::set_compute { compute: <span class="kw-2">*</span>compute_ratio }.into()),
 		},
 		Alice.into(),
 		<span class="prelude-val">Some</span>(last_nonce),
@@ -505,7 +503,7 @@
 	</span><span class="kw">let </span>set_storage = construct_extrinsic(
 		client,
 		SudoCall::sudo {
-			call: Box::new(GluttonCall::set_storage { storage: <span class="kw-2">*</span>storage_percent }.into()),
+			call: Box::new(GluttonCall::set_storage { storage: <span class="kw-2">*</span>storage_ratio }.into()),
 		},
 		Alice.into(),
 		<span class="prelude-val">Some</span>(last_nonce),
