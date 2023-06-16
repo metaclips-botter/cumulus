@@ -230,7 +230,7 @@
 
 <span class="doccomment">/// Specialized `ChainSpec` for the normal parachain runtime.
 </span><span class="kw">pub type </span>ChainSpec =
-	sc_service::GenericChainSpec&lt;parachain_template_runtime::GenesisConfig, Extensions&gt;;
+	sc_service::GenericChainSpec&lt;parachain_template_runtime::RuntimeGenesisConfig, Extensions&gt;;
 
 <span class="doccomment">/// The default XCM version to set in genesis config.
 </span><span class="kw">const </span>SAFE_XCM_VERSION: u32 = xcm::prelude::XCM_VERSION;
@@ -403,8 +403,8 @@
 	invulnerables: Vec&lt;(AccountId, AuraId)&gt;,
 	endowed_accounts: Vec&lt;AccountId&gt;,
 	id: ParaId,
-) -&gt; parachain_template_runtime::GenesisConfig {
-	parachain_template_runtime::GenesisConfig {
+) -&gt; parachain_template_runtime::RuntimeGenesisConfig {
+	parachain_template_runtime::RuntimeGenesisConfig {
 		system: parachain_template_runtime::SystemConfig {
 			code: parachain_template_runtime::WASM_BINARY
 				.expect(<span class="string">&quot;WASM binary was not build, please build it!&quot;</span>)

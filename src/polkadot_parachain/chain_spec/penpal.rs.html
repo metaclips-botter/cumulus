@@ -135,6 +135,7 @@
 <a href="#135" id="135">135</a>
 <a href="#136" id="136">136</a>
 <a href="#137" id="137">137</a>
+<a href="#138" id="138">138</a>
 </pre></div><pre class="rust"><code><span class="comment">// Copyright 2019-2021 Parity Technologies (UK) Ltd.
 // This file is part of Cumulus.
 
@@ -159,7 +160,8 @@
 <span class="kw">use </span>sc_service::ChainType;
 <span class="kw">use </span>sp_core::sr25519;
 <span class="doccomment">/// Specialized `ChainSpec` for the normal parachain runtime.
-</span><span class="kw">pub type </span>PenpalChainSpec = sc_service::GenericChainSpec&lt;penpal_runtime::GenesisConfig, Extensions&gt;;
+</span><span class="kw">pub type </span>PenpalChainSpec =
+	sc_service::GenericChainSpec&lt;penpal_runtime::RuntimeGenesisConfig, Extensions&gt;;
 
 <span class="kw">pub fn </span>get_penpal_chain_spec(id: ParaId, relay_chain: <span class="kw-2">&amp;</span>str) -&gt; PenpalChainSpec {
 	<span class="comment">// Give your base currency a unit name and decimal places
@@ -220,8 +222,8 @@
 	invulnerables: Vec&lt;(AccountId, AuraId)&gt;,
 	endowed_accounts: Vec&lt;AccountId&gt;,
 	id: ParaId,
-) -&gt; penpal_runtime::GenesisConfig {
-	penpal_runtime::GenesisConfig {
+) -&gt; penpal_runtime::RuntimeGenesisConfig {
+	penpal_runtime::RuntimeGenesisConfig {
 		system: penpal_runtime::SystemConfig {
 			code: penpal_runtime::WASM_BINARY
 				.expect(<span class="string">&quot;WASM binary was not build, please build it!&quot;</span>)

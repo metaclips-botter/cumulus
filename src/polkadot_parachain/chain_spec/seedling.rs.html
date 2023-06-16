@@ -83,7 +83,7 @@
 
 <span class="doccomment">/// Specialized `ChainSpec` for the seedling parachain runtime.
 </span><span class="kw">pub type </span>SeedlingChainSpec =
-	sc_service::GenericChainSpec&lt;seedling_runtime::GenesisConfig, Extensions&gt;;
+	sc_service::GenericChainSpec&lt;seedling_runtime::RuntimeGenesisConfig, Extensions&gt;;
 
 <span class="kw">pub fn </span>get_seedling_chain_spec() -&gt; SeedlingChainSpec {
 	SeedlingChainSpec::from_genesis(
@@ -108,8 +108,8 @@
 <span class="kw">fn </span>seedling_testnet_genesis(
 	root_key: AccountId,
 	parachain_id: ParaId,
-) -&gt; seedling_runtime::GenesisConfig {
-	seedling_runtime::GenesisConfig {
+) -&gt; seedling_runtime::RuntimeGenesisConfig {
+	seedling_runtime::RuntimeGenesisConfig {
 		system: seedling_runtime::SystemConfig {
 			code: seedling_runtime::WASM_BINARY
 				.expect(<span class="string">&quot;WASM binary was not build, please build it!&quot;</span>)

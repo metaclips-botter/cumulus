@@ -247,8 +247,8 @@
 </span><span class="kw">mod </span>block_builder;
 <span class="kw">use </span>codec::{Decode, Encode};
 <span class="kw">use </span>runtime::{
-	Balance, Block, BlockHashCount, GenesisConfig, Runtime, RuntimeCall, Signature, SignedExtra,
-	SignedPayload, UncheckedExtrinsic, VERSION,
+	Balance, Block, BlockHashCount, Runtime, RuntimeCall, RuntimeGenesisConfig, Signature,
+	SignedExtra, SignedPayload, UncheckedExtrinsic, VERSION,
 };
 <span class="kw">use </span>sc_executor::HeapAllocStrategy;
 <span class="kw">use </span>sc_executor_common::runtime_blob::RuntimeBlob;
@@ -352,7 +352,7 @@
 	}
 }
 
-<span class="kw">fn </span>genesis_config() -&gt; GenesisConfig {
+<span class="kw">fn </span>genesis_config() -&gt; RuntimeGenesisConfig {
 	cumulus_test_service::testnet_genesis_with_default_endowed(Default::default())
 }
 

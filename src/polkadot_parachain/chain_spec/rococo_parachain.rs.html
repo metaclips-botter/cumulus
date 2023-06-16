@@ -147,7 +147,7 @@
 <span class="kw">use </span>sp_core::{crypto::UncheckedInto, sr25519};
 
 <span class="kw">pub type </span>RococoParachainChainSpec =
-	sc_service::GenericChainSpec&lt;rococo_parachain_runtime::GenesisConfig, Extensions&gt;;
+	sc_service::GenericChainSpec&lt;rococo_parachain_runtime::RuntimeGenesisConfig, Extensions&gt;;
 
 <span class="kw">pub fn </span>rococo_parachain_local_config() -&gt; RococoParachainChainSpec {
 	RococoParachainChainSpec::from_genesis(
@@ -220,8 +220,8 @@
 	initial_authorities: Vec&lt;AuraId&gt;,
 	endowed_accounts: Vec&lt;AccountId&gt;,
 	id: ParaId,
-) -&gt; rococo_parachain_runtime::GenesisConfig {
-	rococo_parachain_runtime::GenesisConfig {
+) -&gt; rococo_parachain_runtime::RuntimeGenesisConfig {
+	rococo_parachain_runtime::RuntimeGenesisConfig {
 		system: rococo_parachain_runtime::SystemConfig {
 			code: rococo_parachain_runtime::WASM_BINARY
 				.expect(<span class="string">&quot;WASM binary was not build, please build it!&quot;</span>)

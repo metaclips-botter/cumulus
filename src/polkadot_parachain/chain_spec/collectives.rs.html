@@ -201,7 +201,7 @@
 <span class="kw">use </span>sp_core::sr25519;
 
 <span class="kw">pub type </span>CollectivesPolkadotChainSpec =
-	sc_service::GenericChainSpec&lt;collectives_polkadot_runtime::GenesisConfig, Extensions&gt;;
+	sc_service::GenericChainSpec&lt;collectives_polkadot_runtime::RuntimeGenesisConfig, Extensions&gt;;
 
 <span class="kw">const </span>COLLECTIVES_POLKADOT_ED: CollectivesBalance =
 	collectives_polkadot_runtime::constants::currency::EXISTENTIAL_DEPOSIT;
@@ -310,8 +310,8 @@
 	invulnerables: Vec&lt;(AccountId, AuraId)&gt;,
 	endowed_accounts: Vec&lt;AccountId&gt;,
 	id: ParaId,
-) -&gt; collectives_polkadot_runtime::GenesisConfig {
-	collectives_polkadot_runtime::GenesisConfig {
+) -&gt; collectives_polkadot_runtime::RuntimeGenesisConfig {
+	collectives_polkadot_runtime::RuntimeGenesisConfig {
 		system: collectives_polkadot_runtime::SystemConfig {
 			code: collectives_polkadot_runtime::WASM_BINARY
 				.expect(<span class="string">&quot;WASM binary was not build, please build it!&quot;</span>)

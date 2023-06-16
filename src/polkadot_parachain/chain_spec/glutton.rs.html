@@ -120,7 +120,7 @@
 
 <span class="doccomment">/// Specialized `ChainSpec` for the Glutton parachain runtime.
 </span><span class="kw">pub type </span>GluttonChainSpec =
-	sc_service::GenericChainSpec&lt;glutton_runtime::GenesisConfig, Extensions&gt;;
+	sc_service::GenericChainSpec&lt;glutton_runtime::RuntimeGenesisConfig, Extensions&gt;;
 
 <span class="kw">pub fn </span>glutton_development_config(para_id: ParaId) -&gt; GluttonChainSpec {
 	GluttonChainSpec::from_genesis(
@@ -177,8 +177,8 @@
 	)
 }
 
-<span class="kw">fn </span>glutton_genesis(parachain_id: ParaId) -&gt; glutton_runtime::GenesisConfig {
-	glutton_runtime::GenesisConfig {
+<span class="kw">fn </span>glutton_genesis(parachain_id: ParaId) -&gt; glutton_runtime::RuntimeGenesisConfig {
+	glutton_runtime::RuntimeGenesisConfig {
 		system: glutton_runtime::SystemConfig {
 			code: glutton_runtime::WASM_BINARY
 				.expect(<span class="string">&quot;WASM binary was not build, please build it!&quot;</span>)

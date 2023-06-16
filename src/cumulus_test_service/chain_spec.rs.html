@@ -186,7 +186,7 @@
 </span><span class="attr">#[derive(serde::Serialize, serde::Deserialize)]
 </span><span class="kw">pub struct </span>GenesisExt {
 	<span class="doccomment">/// The runtime genesis config.
-	</span>runtime_genesis_config: cumulus_test_runtime::GenesisConfig,
+	</span>runtime_genesis_config: cumulus_test_runtime::RuntimeGenesisConfig,
 	<span class="doccomment">/// The parachain id.
 	</span>para_id: ParaId,
 }
@@ -268,7 +268,7 @@
 <span class="doccomment">/// Local testnet genesis for testing.
 </span><span class="kw">pub fn </span>testnet_genesis_with_default_endowed(
 	<span class="kw-2">mut </span>extra_endowed_accounts: Vec&lt;AccountId&gt;,
-) -&gt; cumulus_test_runtime::GenesisConfig {
+) -&gt; cumulus_test_runtime::RuntimeGenesisConfig {
 	<span class="kw">let </span><span class="kw-2">mut </span>endowed = <span class="macro">vec!</span>[
 		get_account_id_from_seed::&lt;sr25519::Public&gt;(<span class="string">&quot;Alice&quot;</span>),
 		get_account_id_from_seed::&lt;sr25519::Public&gt;(<span class="string">&quot;Bob&quot;</span>),
@@ -292,8 +292,8 @@
 </span><span class="kw">pub fn </span>testnet_genesis(
 	root_key: AccountId,
 	endowed_accounts: Vec&lt;AccountId&gt;,
-) -&gt; cumulus_test_runtime::GenesisConfig {
-	cumulus_test_runtime::GenesisConfig {
+) -&gt; cumulus_test_runtime::RuntimeGenesisConfig {
+	cumulus_test_runtime::RuntimeGenesisConfig {
 		system: cumulus_test_runtime::SystemConfig {
 			code: cumulus_test_runtime::WASM_BINARY
 				.expect(<span class="string">&quot;WASM binary was not build, please build it!&quot;</span>)

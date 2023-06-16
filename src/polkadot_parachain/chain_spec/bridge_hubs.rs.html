@@ -847,7 +847,7 @@
 
 	<span class="doccomment">/// Specialized `ChainSpec` for the normal parachain runtime.
 	</span><span class="kw">pub type </span>BridgeHubChainSpec =
-		sc_service::GenericChainSpec&lt;bridge_hub_rococo_runtime::GenesisConfig, Extensions&gt;;
+		sc_service::GenericChainSpec&lt;bridge_hub_rococo_runtime::RuntimeGenesisConfig, Extensions&gt;;
 
 	<span class="kw">pub type </span>RuntimeApi = bridge_hub_rococo_runtime::RuntimeApi;
 
@@ -919,8 +919,8 @@
 		endowed_accounts: Vec&lt;AccountId&gt;,
 		id: ParaId,
 		bridges_pallet_owner: <span class="prelude-ty">Option</span>&lt;AccountId&gt;,
-	) -&gt; bridge_hub_rococo_runtime::GenesisConfig {
-		bridge_hub_rococo_runtime::GenesisConfig {
+	) -&gt; bridge_hub_rococo_runtime::RuntimeGenesisConfig {
+		bridge_hub_rococo_runtime::RuntimeGenesisConfig {
 			system: bridge_hub_rococo_runtime::SystemConfig {
 				code: bridge_hub_rococo_runtime::WASM_BINARY
 					.expect(<span class="string">&quot;WASM binary was not build, please build it!&quot;</span>)
@@ -1022,7 +1022,7 @@
 
 	<span class="doccomment">/// Specialized `ChainSpec` for the normal parachain runtime.
 	</span><span class="kw">pub type </span>BridgeHubChainSpec =
-		sc_service::GenericChainSpec&lt;bridge_hub_kusama_runtime::GenesisConfig, Extensions&gt;;
+		sc_service::GenericChainSpec&lt;bridge_hub_kusama_runtime::RuntimeGenesisConfig, Extensions&gt;;
 	<span class="kw">pub type </span>RuntimeApi = bridge_hub_kusama_runtime::RuntimeApi;
 
 	<span class="kw">pub fn </span>local_config(
@@ -1085,8 +1085,8 @@
 		invulnerables: Vec&lt;(AccountId, AuraId)&gt;,
 		endowed_accounts: Vec&lt;AccountId&gt;,
 		id: ParaId,
-	) -&gt; bridge_hub_kusama_runtime::GenesisConfig {
-		bridge_hub_kusama_runtime::GenesisConfig {
+	) -&gt; bridge_hub_kusama_runtime::RuntimeGenesisConfig {
+		bridge_hub_kusama_runtime::RuntimeGenesisConfig {
 			system: bridge_hub_kusama_runtime::SystemConfig {
 				code: bridge_hub_kusama_runtime::WASM_BINARY
 					.expect(<span class="string">&quot;WASM binary was not build, please build it!&quot;</span>)
@@ -1154,7 +1154,7 @@
 
 	<span class="doccomment">/// Specialized `ChainSpec` for the normal parachain runtime.
 	</span><span class="kw">pub type </span>BridgeHubChainSpec =
-		sc_service::GenericChainSpec&lt;bridge_hub_polkadot_runtime::GenesisConfig, Extensions&gt;;
+		sc_service::GenericChainSpec&lt;bridge_hub_polkadot_runtime::RuntimeGenesisConfig, Extensions&gt;;
 	<span class="kw">pub type </span>RuntimeApi = bridge_hub_polkadot_runtime::RuntimeApi;
 
 	<span class="kw">pub fn </span>local_config(
@@ -1217,8 +1217,8 @@
 		invulnerables: Vec&lt;(AccountId, AuraId)&gt;,
 		endowed_accounts: Vec&lt;AccountId&gt;,
 		id: ParaId,
-	) -&gt; bridge_hub_polkadot_runtime::GenesisConfig {
-		bridge_hub_polkadot_runtime::GenesisConfig {
+	) -&gt; bridge_hub_polkadot_runtime::RuntimeGenesisConfig {
+		bridge_hub_polkadot_runtime::RuntimeGenesisConfig {
 			system: bridge_hub_polkadot_runtime::SystemConfig {
 				code: bridge_hub_polkadot_runtime::WASM_BINARY
 					.expect(<span class="string">&quot;WASM binary was not build, please build it!&quot;</span>)

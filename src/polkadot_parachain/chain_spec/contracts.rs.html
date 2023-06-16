@@ -303,7 +303,7 @@
 <span class="kw">use </span>sp_core::{crypto::UncheckedInto, sr25519};
 
 <span class="kw">pub type </span>ContractsRococoChainSpec =
-	sc_service::GenericChainSpec&lt;contracts_rococo_runtime::GenesisConfig, Extensions&gt;;
+	sc_service::GenericChainSpec&lt;contracts_rococo_runtime::RuntimeGenesisConfig, Extensions&gt;;
 
 <span class="doccomment">/// No relay chain suffix because the id is the same over all relay chains.
 </span><span class="kw">const </span>CONTRACTS_PARACHAIN_ID: u32 = <span class="number">1002</span>;
@@ -513,8 +513,8 @@
 	invulnerables: Vec&lt;(AccountId, AuraId)&gt;,
 	endowed_accounts: Vec&lt;AccountId&gt;,
 	id: ParaId,
-) -&gt; contracts_rococo_runtime::GenesisConfig {
-	contracts_rococo_runtime::GenesisConfig {
+) -&gt; contracts_rococo_runtime::RuntimeGenesisConfig {
+	contracts_rococo_runtime::RuntimeGenesisConfig {
 		system: contracts_rococo_runtime::SystemConfig {
 			code: contracts_rococo_runtime::WASM_BINARY
 				.expect(<span class="string">&quot;WASM binary was not build, please build it!&quot;</span>)
