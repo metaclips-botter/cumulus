@@ -220,6 +220,10 @@
 <a href="#220" id="220">220</a>
 <a href="#221" id="221">221</a>
 <a href="#222" id="222">222</a>
+<a href="#223" id="223">223</a>
+<a href="#224" id="224">224</a>
+<a href="#225" id="225">225</a>
+<a href="#226" id="226">226</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>cumulus_primitives_core::ParaId;
 <span class="kw">use </span>parachain_template_runtime::{AccountId, AuraId, Signature, EXISTENTIAL_DEPOSIT};
 <span class="kw">use </span>sc_chain_spec::{ChainSpecExtension, ChainSpecGroup};
@@ -323,6 +327,7 @@
 					get_account_id_from_seed::&lt;sr25519::Public&gt;(<span class="string">&quot;Eve//stash&quot;</span>),
 					get_account_id_from_seed::&lt;sr25519::Public&gt;(<span class="string">&quot;Ferdie//stash&quot;</span>),
 				],
+				get_account_id_from_seed::&lt;sr25519::Public&gt;(<span class="string">&quot;Alice&quot;</span>),
 				<span class="number">1000</span>.into(),
 			)
 		},
@@ -378,6 +383,7 @@
 					get_account_id_from_seed::&lt;sr25519::Public&gt;(<span class="string">&quot;Eve//stash&quot;</span>),
 					get_account_id_from_seed::&lt;sr25519::Public&gt;(<span class="string">&quot;Ferdie//stash&quot;</span>),
 				],
+				get_account_id_from_seed::&lt;sr25519::Public&gt;(<span class="string">&quot;Alice&quot;</span>),
 				<span class="number">1000</span>.into(),
 			)
 		},
@@ -402,6 +408,7 @@
 <span class="kw">fn </span>testnet_genesis(
 	invulnerables: Vec&lt;(AccountId, AuraId)&gt;,
 	endowed_accounts: Vec&lt;AccountId&gt;,
+	root: AccountId,
 	id: ParaId,
 ) -&gt; parachain_template_runtime::RuntimeGenesisConfig {
 	parachain_template_runtime::RuntimeGenesisConfig {
@@ -440,6 +447,7 @@
 			safe_xcm_version: <span class="prelude-val">Some</span>(SAFE_XCM_VERSION),
 		},
 		transaction_payment: Default::default(),
+		sudo: parachain_template_runtime::SudoConfig { key: <span class="prelude-val">Some</span>(root) },
 	}
 }
 </code></pre></div></section></main></body></html>
