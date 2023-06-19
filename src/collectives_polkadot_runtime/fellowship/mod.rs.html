@@ -216,6 +216,17 @@
 <a href="#216" id="216">216</a>
 <a href="#217" id="217">217</a>
 <a href="#218" id="218">218</a>
+<a href="#219" id="219">219</a>
+<a href="#220" id="220">220</a>
+<a href="#221" id="221">221</a>
+<a href="#222" id="222">222</a>
+<a href="#223" id="223">223</a>
+<a href="#224" id="224">224</a>
+<a href="#225" id="225">225</a>
+<a href="#226" id="226">226</a>
+<a href="#227" id="227">227</a>
+<a href="#228" id="228">228</a>
+<a href="#229" id="229">229</a>
 </pre></div><pre class="rust"><code><span class="comment">// Copyright 2023 Parity Technologies (UK) Ltd.
 // This file is part of Cumulus.
 
@@ -237,28 +248,28 @@
 </span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">mod </span>migration;
 <span class="kw">mod </span>origins;
 <span class="kw">mod </span>tracks;
-<span class="kw">use </span>cumulus_primitives_core::Junction::GeneralIndex;
-<span class="kw">use </span>frame_system::EnsureNever;
-<span class="kw">pub use </span>origins::{
-	pallet_origins <span class="kw">as </span>pallet_fellowship_origins, Architects, EnsureCanPromoteTo, EnsureCanRetainAt,
-	EnsureFellowship, Fellows, Masters, Members,
-};
-<span class="kw">use </span>xcm_builder::{AliasesIntoAccountId32, LocatableAssetId, PayOverXcm};
-
 <span class="kw">use crate</span>::{
 	constants, impls::ToParentTreasury, weights, AccountId, Balance, Balances, FellowshipReferenda,
 	GovernanceLocation, PolkadotTreasuryAccount, Preimage, Runtime, RuntimeCall, RuntimeEvent,
-	Scheduler, DAYS,
+	RuntimeOrigin, Scheduler, DAYS,
 };
+<span class="kw">use </span>cumulus_primitives_core::Junction::GeneralIndex;
 <span class="kw">use </span>frame_support::{
 	parameter_types,
-	traits::{EitherOf, EitherOfDiverse, MapSuccess},
+	traits::{EitherOf, EitherOfDiverse, MapSuccess, OriginTrait, TryWithMorphedArg},
 };
+<span class="kw">use </span>frame_system::EnsureNever;
+<span class="kw">pub use </span>origins::{
+	pallet_origins <span class="kw">as </span>pallet_fellowship_origins, Architects, EnsureCanPromoteTo, EnsureCanRetainAt,
+	EnsureFellowship, Fellows, Masters, Members, ToVoice,
+};
+<span class="kw">use </span>pallet_ranked_collective::EnsureOfRank;
 <span class="kw">use </span>pallet_xcm::{EnsureXcm, IsVoiceOfBody};
 <span class="kw">use </span>polkadot_runtime_constants::{time::HOURS, xcm::body::FELLOWSHIP_ADMIN_INDEX};
 <span class="kw">use </span>sp_core::{ConstU128, ConstU32};
-<span class="kw">use </span>sp_runtime::traits::{AccountIdConversion, ConstU16, ConvertToValue, Replace};
+<span class="kw">use </span>sp_runtime::traits::{AccountIdConversion, ConstU16, ConvertToValue, Replace, TakeFirst};
 <span class="kw">use </span>xcm::latest::BodyId;
+<span class="kw">use </span>xcm_builder::{AliasesIntoAccountId32, LocatableAssetId, PayOverXcm};
 
 <span class="doccomment">/// The Fellowship members&#39; ranks.
 </span><span class="kw">pub mod </span>ranks {
@@ -292,8 +303,19 @@
 	<span class="kw">type </span>Scheduler = Scheduler;
 	<span class="kw">type </span>Currency = Balances;
 	<span class="comment">// Fellows can submit proposals.
-	</span><span class="kw">type </span>SubmitOrigin =
-		pallet_ranked_collective::EnsureMember&lt;Runtime, FellowshipCollectiveInstance, <span class="number">3</span>&gt;;
+	</span><span class="kw">type </span>SubmitOrigin = EitherOf&lt;
+		pallet_ranked_collective::EnsureMember&lt;Runtime, FellowshipCollectiveInstance, <span class="number">3</span>&gt;,
+		MapSuccess&lt;
+			TryWithMorphedArg&lt;
+				RuntimeOrigin,
+				&lt;RuntimeOrigin <span class="kw">as </span>OriginTrait&gt;::PalletsOrigin,
+				ToVoice,
+				EnsureOfRank&lt;Runtime, FellowshipCollectiveInstance&gt;,
+				(AccountId, u16),
+			&gt;,
+			TakeFirst,
+		&gt;,
+	&gt;;
 	<span class="kw">type </span>CancelOrigin = Architects;
 	<span class="kw">type </span>KillOrigin = Masters;
 	<span class="kw">type </span>Slash = ToParentTreasury&lt;PolkadotTreasuryAccount, ReferendaPalletAccount, Runtime&gt;;
