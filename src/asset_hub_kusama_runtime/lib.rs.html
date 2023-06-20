@@ -1316,6 +1316,16 @@
 <a href="#1316" id="1316">1316</a>
 <a href="#1317" id="1317">1317</a>
 <a href="#1318" id="1318">1318</a>
+<a href="#1319" id="1319">1319</a>
+<a href="#1320" id="1320">1320</a>
+<a href="#1321" id="1321">1321</a>
+<a href="#1322" id="1322">1322</a>
+<a href="#1323" id="1323">1323</a>
+<a href="#1324" id="1324">1324</a>
+<a href="#1325" id="1325">1325</a>
+<a href="#1326" id="1326">1326</a>
+<a href="#1327" id="1327">1327</a>
+<a href="#1328" id="1328">1328</a>
 </pre></div><pre class="rust"><code><span class="comment">// Copyright (C) 2021-2022 Parity Technologies (UK) Ltd.
 // SPDX-License-Identifier: Apache-2.0
 
@@ -1587,7 +1597,7 @@
 	<span class="kw">type </span>StringLimit = AssetsStringLimit;
 	<span class="kw">type </span>Freezer = ();
 	<span class="kw">type </span>Extra = ();
-	<span class="kw">type </span>WeightInfo = weights::pallet_assets::WeightInfo&lt;Runtime&gt;;
+	<span class="kw">type </span>WeightInfo = weights::pallet_assets_local::WeightInfo&lt;Runtime&gt;;
 	<span class="kw">type </span>CallbackHandle = ();
 	<span class="kw">type </span>AssetAccountDeposit = AssetAccountDeposit;
 	<span class="kw">type </span>RemoveItemsLimit = frame_support::traits::ConstU32&lt;<span class="number">1000</span>&gt;;
@@ -1629,7 +1639,7 @@
 	<span class="kw">type </span>StringLimit = ForeignAssetsAssetsStringLimit;
 	<span class="kw">type </span>Freezer = ();
 	<span class="kw">type </span>Extra = ();
-	<span class="kw">type </span>WeightInfo = weights::pallet_assets::WeightInfo&lt;Runtime&gt;;
+	<span class="kw">type </span>WeightInfo = weights::pallet_assets_foreign::WeightInfo&lt;Runtime&gt;;
 	<span class="kw">type </span>CallbackHandle = ();
 	<span class="kw">type </span>AssetAccountDeposit = ForeignAssetsAssetAccountDeposit;
 	<span class="kw">type </span>RemoveItemsLimit = frame_support::traits::ConstU32&lt;<span class="number">1000</span>&gt;;
@@ -2116,8 +2126,8 @@
 </span><span class="kw">mod </span>benches {
 	<span class="macro">define_benchmarks!</span>(
 		[frame_system, SystemBench::&lt;Runtime&gt;]
-		[pallet_assets, Assets]
-		[pallet_assets, ForeignAssets]
+		[pallet_assets, Local]
+		[pallet_assets, Foreign]
 		[pallet_balances, Balances]
 		[pallet_multisig, Multisig]
 		[pallet_nfts, Nfts]
@@ -2350,6 +2360,13 @@
 			</span><span class="kw">type </span>XcmBalances = pallet_xcm_benchmarks::fungible::Pallet::&lt;Runtime&gt;;
 			<span class="kw">type </span>XcmGeneric = pallet_xcm_benchmarks::generic::Pallet::&lt;Runtime&gt;;
 
+			<span class="comment">// Benchmark files generated for `Assets/ForeignAssets` instances are by default
+			// `pallet_assets_assets.rs / pallet_assets_foreign_assets`, which is not really nice,
+			// so with this redefinition we can change names to nicer:
+			// `pallet_assets_local.rs / pallet_assets_foreign.rs`.
+			</span><span class="kw">type </span>Local = pallet_assets::Pallet::&lt;Runtime, TrustBackedAssetsInstance&gt;;
+			<span class="kw">type </span>Foreign = pallet_assets::Pallet::&lt;Runtime, ForeignAssetsInstance&gt;;
+
 			<span class="kw">let </span><span class="kw-2">mut </span>list = Vec::&lt;BenchmarkList&gt;::new();
 			<span class="macro">list_benchmarks!</span>(list, extra);
 
@@ -2475,6 +2492,9 @@
 
 			<span class="kw">type </span>XcmBalances = pallet_xcm_benchmarks::fungible::Pallet::&lt;Runtime&gt;;
 			<span class="kw">type </span>XcmGeneric = pallet_xcm_benchmarks::generic::Pallet::&lt;Runtime&gt;;
+
+			<span class="kw">type </span>Local = pallet_assets::Pallet::&lt;Runtime, TrustBackedAssetsInstance&gt;;
+			<span class="kw">type </span>Foreign = pallet_assets::Pallet::&lt;Runtime, ForeignAssetsInstance&gt;;
 
 			<span class="kw">let </span>whitelist: Vec&lt;TrackedStorageKey&gt; = <span class="macro">vec!</span>[
 				<span class="comment">// Block Number
