@@ -710,6 +710,15 @@
 <a href="#710" id="710">710</a>
 <a href="#711" id="711">711</a>
 <a href="#712" id="712">712</a>
+<a href="#713" id="713">713</a>
+<a href="#714" id="714">714</a>
+<a href="#715" id="715">715</a>
+<a href="#716" id="716">716</a>
+<a href="#717" id="717">717</a>
+<a href="#718" id="718">718</a>
+<a href="#719" id="719">719</a>
+<a href="#720" id="720">720</a>
+<a href="#721" id="721">721</a>
 </pre></div><pre class="rust"><code><span class="comment">// Copyright (C) 2018-2022 Parity Technologies (UK) Ltd.
 // SPDX-License-Identifier: GPL-3.0-or-later WITH Classpath-exception-2.0
 //
@@ -1363,10 +1372,19 @@
 		<span class="kw">fn </span>dispatch_benchmark(
 			config: frame_benchmarking::BenchmarkConfig
 		) -&gt; <span class="prelude-ty">Result</span>&lt;Vec&lt;frame_benchmarking::BenchmarkBatch&gt;, sp_runtime::RuntimeString&gt; {
-			<span class="kw">use </span>frame_benchmarking::{Benchmarking, BenchmarkBatch, TrackedStorageKey};
+			<span class="kw">use </span>frame_benchmarking::{Benchmarking, BenchmarkBatch, BenchmarkError, TrackedStorageKey};
 
 			<span class="kw">use </span>frame_system_benchmarking::Pallet <span class="kw">as </span>SystemBench;
-			<span class="kw">impl </span>frame_system_benchmarking::Config <span class="kw">for </span>Runtime {}
+			<span class="kw">impl </span>frame_system_benchmarking::Config <span class="kw">for </span>Runtime {
+				<span class="kw">fn </span>setup_set_code_requirements(code: <span class="kw-2">&amp;</span>sp_std::vec::Vec&lt;u8&gt;) -&gt; <span class="prelude-ty">Result</span>&lt;(), BenchmarkError&gt; {
+					ParachainSystem::initialize_for_set_code_benchmark(code.len() <span class="kw">as </span>u32);
+					<span class="prelude-val">Ok</span>(())
+				}
+
+				<span class="kw">fn </span>verify_set_code() {
+					System::assert_last_event(cumulus_pallet_parachain_system::Event::&lt;Runtime&gt;::ValidationFunctionStored.into());
+				}
+			}
 
 			<span class="kw">use </span>cumulus_pallet_session_benchmarking::Pallet <span class="kw">as </span>SessionBench;
 			<span class="kw">impl </span>cumulus_pallet_session_benchmarking::Config <span class="kw">for </span>Runtime {}

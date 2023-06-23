@@ -1291,6 +1291,15 @@
 <a href="#1291" id="1291">1291</a>
 <a href="#1292" id="1292">1292</a>
 <a href="#1293" id="1293">1293</a>
+<a href="#1294" id="1294">1294</a>
+<a href="#1295" id="1295">1295</a>
+<a href="#1296" id="1296">1296</a>
+<a href="#1297" id="1297">1297</a>
+<a href="#1298" id="1298">1298</a>
+<a href="#1299" id="1299">1299</a>
+<a href="#1300" id="1300">1300</a>
+<a href="#1301" id="1301">1301</a>
+<a href="#1302" id="1302">1302</a>
 </pre></div><pre class="rust"><code><span class="comment">// Copyright 2022 Parity Technologies (UK) Ltd.
 // This file is part of Cumulus.
 
@@ -2213,7 +2222,16 @@
 			<span class="kw">use </span>frame_benchmarking::{Benchmarking, BenchmarkBatch, BenchmarkError, TrackedStorageKey};
 
 			<span class="kw">use </span>frame_system_benchmarking::Pallet <span class="kw">as </span>SystemBench;
-			<span class="kw">impl </span>frame_system_benchmarking::Config <span class="kw">for </span>Runtime {}
+			<span class="kw">impl </span>frame_system_benchmarking::Config <span class="kw">for </span>Runtime {
+				<span class="kw">fn </span>setup_set_code_requirements(code: <span class="kw-2">&amp;</span>sp_std::vec::Vec&lt;u8&gt;) -&gt; <span class="prelude-ty">Result</span>&lt;(), BenchmarkError&gt; {
+					ParachainSystem::initialize_for_set_code_benchmark(code.len() <span class="kw">as </span>u32);
+					<span class="prelude-val">Ok</span>(())
+				}
+
+				<span class="kw">fn </span>verify_set_code() {
+					System::assert_last_event(cumulus_pallet_parachain_system::Event::&lt;Runtime&gt;::ValidationFunctionStored.into());
+				}
+			}
 
 			<span class="kw">use </span>cumulus_pallet_session_benchmarking::Pallet <span class="kw">as </span>SessionBench;
 			<span class="kw">impl </span>cumulus_pallet_session_benchmarking::Config <span class="kw">for </span>Runtime {}
