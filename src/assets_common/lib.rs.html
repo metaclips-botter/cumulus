@@ -306,6 +306,21 @@
 <a href="#306" id="306">306</a>
 <a href="#307" id="307">307</a>
 <a href="#308" id="308">308</a>
+<a href="#309" id="309">309</a>
+<a href="#310" id="310">310</a>
+<a href="#311" id="311">311</a>
+<a href="#312" id="312">312</a>
+<a href="#313" id="313">313</a>
+<a href="#314" id="314">314</a>
+<a href="#315" id="315">315</a>
+<a href="#316" id="316">316</a>
+<a href="#317" id="317">317</a>
+<a href="#318" id="318">318</a>
+<a href="#319" id="319">319</a>
+<a href="#320" id="320">320</a>
+<a href="#321" id="321">321</a>
+<a href="#322" id="322">322</a>
+<a href="#323" id="323">323</a>
 </pre></div><pre class="rust"><code><span class="comment">// Copyright (C) 2023 Parity Technologies (UK) Ltd.
 // SPDX-License-Identifier: Apache-2.0
 
@@ -325,6 +340,7 @@
 
 </span><span class="kw">pub mod </span>foreign_creators;
 <span class="kw">pub mod </span>fungible_conversion;
+<span class="kw">pub mod </span>local_and_foreign_assets;
 <span class="kw">pub mod </span>matching;
 <span class="kw">pub mod </span>runtime_api;
 
@@ -382,6 +398,20 @@
 			</span>AdditionalMultiLocationExclusionFilter,
 		)&gt;,
 		Balance,
+	&gt;;
+
+<span class="kw">type </span>AssetIdForPoolAssets = u32;
+<span class="doccomment">/// `MultiLocation` vs `AssetIdForPoolAssets` converter for `PoolAssets`.
+</span><span class="kw">pub type </span>AssetIdForPoolAssetsConvert&lt;PoolAssetsPalletLocation&gt; =
+	AsPrefixedGeneralIndex&lt;PoolAssetsPalletLocation, AssetIdForPoolAssets, JustTry&gt;;
+<span class="doccomment">/// [`MatchedConvertedConcreteId`] converter dedicated for `PoolAssets`
+</span><span class="kw">pub type </span>PoolAssetsConvertedConcreteId&lt;PoolAssetsPalletLocation, Balance&gt; =
+	MatchedConvertedConcreteId&lt;
+		AssetIdForPoolAssets,
+		Balance,
+		StartsWith&lt;PoolAssetsPalletLocation&gt;,
+		AssetIdForPoolAssetsConvert&lt;PoolAssetsPalletLocation&gt;,
+		JustTry,
 	&gt;;
 
 <span class="attr">#[cfg(test)]
