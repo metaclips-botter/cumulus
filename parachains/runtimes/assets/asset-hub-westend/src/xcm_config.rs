@@ -18,7 +18,7 @@ use super::{
 	ParachainSystem, PolkadotXcm, PoolAssets, Runtime, RuntimeCall, RuntimeEvent, RuntimeOrigin,
 	TrustBackedAssetsInstance, WeightToFee, XcmpQueue,
 };
-use crate::ForeignAssets;
+use crate::{ForeignAssets};
 use assets_common::matching::{
 	FromSiblingParachain, IsForeignConcreteAsset, StartsWith, StartsWithExplicitGlobalConsensus,
 };
@@ -27,6 +27,7 @@ use frame_support::{
 	traits::{ConstU32, Contains, Everything, Nothing, PalletInfoAccess},
 };
 use frame_system::EnsureRoot;
+use pallet_asset_conversion_tx_payment::AssetConversionAdapter;
 use pallet_xcm::XcmPassthrough;
 use parachains_common::{impls::ToStakingPot, xcm_config::AssetFeeAsExistentialDepositMultiplier};
 use polkadot_parachain::primitives::Sibling;
@@ -45,6 +46,7 @@ use xcm_executor::{traits::WithOriginFilter, XcmExecutor};
 
 #[cfg(feature = "runtime-benchmarks")]
 use {cumulus_primitives_core::ParaId, sp_core::Get};
+use assets_common::local_and_foreign_assets::LocalAndForeignAssets;
 
 parameter_types! {
 	pub const WestendLocation: MultiLocation = MultiLocation::parent();
@@ -137,6 +139,9 @@ pub type ForeignFungiblesTransactor = FungiblesAdapter<
 	// The account to use for tracking teleports.
 	CheckingAccount,
 >;
+
+/// `AssetId/Balance` converter for `MultiAssets` (any asset)
+pub type MultiAssetsConvertedConcreteId = assets_common::MultiLocationConvertedConcreteId<(), Balance>;
 
 /// `AssetId/Balance` converter for `PoolAssets`
 pub type PoolAssetsConvertedConcreteId =
@@ -437,12 +442,14 @@ impl xcm_executor::Config for XcmConfig {
 	>;
 	type Trader = (
 		UsingComponents<WeightToFee, WestendLocation, AccountId, Balances, ToStakingPot<Runtime>>,
-		cumulus_primitives_utility::TakeFirstAssetTrader<
+		cumulus_primitives_utility::SwapFirstAssetTrader<
 			AccountId,
-			AssetFeeAsExistentialDepositMultiplierFeeCharger,
-			TrustBackedAssetsConvertedConcreteId,
-			Assets,
+			Runtime,
+			AssetConversionAdapter<Balance, AssetConversion>,
+			MultiAssetsConvertedConcreteId,
+			LocalAndForeignAssets<Assets, ForeignAssets, TrustBackedAssetsPalletLocation>,
 			cumulus_primitives_utility::XcmFeesTo32ByteAccount<
+				// Revenue could also be Foreign Fungible? Maybe with multi-asset treasury..?
 				FungiblesTransactor,
 				AccountId,
 				XcmAssetFeesReceiver,
