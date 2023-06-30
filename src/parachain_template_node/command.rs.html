@@ -436,14 +436,6 @@
 <a href="#436" id="436">436</a>
 <a href="#437" id="437">437</a>
 <a href="#438" id="438">438</a>
-<a href="#439" id="439">439</a>
-<a href="#440" id="440">440</a>
-<a href="#441" id="441">441</a>
-<a href="#442" id="442">442</a>
-<a href="#443" id="443">443</a>
-<a href="#444" id="444">444</a>
-<a href="#445" id="445">445</a>
-<a href="#446" id="446">446</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::net::SocketAddr;
 
 <span class="kw">use </span>codec::Encode;
@@ -463,7 +455,7 @@
 <span class="kw">use crate</span>::{
 	chain_spec,
 	cli::{Cli, RelayChainCli, Subcommand},
-	service::{new_partial, ParachainNativeExecutor},
+	service::new_partial,
 };
 
 <span class="kw">fn </span>load_spec(id: <span class="kw-2">&amp;</span>str) -&gt; std::result::Result&lt;Box&lt;<span class="kw">dyn </span>ChainSpec&gt;, String&gt; {
@@ -640,7 +632,7 @@
 			</span><span class="kw">match </span>cmd {
 				BenchmarkCmd::Pallet(cmd) =&gt;
 					<span class="kw">if </span><span class="macro">cfg!</span>(feature = <span class="string">&quot;runtime-benchmarks&quot;</span>) {
-						runner.sync_run(|config| cmd.run::&lt;Block, ParachainNativeExecutor&gt;(config))
+						runner.sync_run(|config| cmd.run::&lt;Block, ()&gt;(config))
 					} <span class="kw">else </span>{
 						<span class="prelude-val">Err</span>(<span class="string">&quot;Benchmarking wasn&#39;t enabled when building the node. \
 					You can enable it with `--features runtime-benchmarks`.&quot;
@@ -676,15 +668,12 @@
 		<span class="attr">#[cfg(feature = <span class="string">&quot;try-runtime&quot;</span>)]
 		</span><span class="prelude-val">Some</span>(Subcommand::TryRuntime(cmd)) =&gt; {
 			<span class="kw">use </span>parachain_template_runtime::MILLISECS_PER_BLOCK;
-			<span class="kw">use </span>sc_executor::{sp_wasm_interface::ExtendedHostFunctions, NativeExecutionDispatch};
 			<span class="kw">use </span>try_runtime_cli::block_building_info::timestamp_with_aura_info;
 
 			<span class="kw">let </span>runner = cli.create_runner(cmd)<span class="question-mark">?</span>;
 
-			<span class="kw">type </span>HostFunctionsOf&lt;E&gt; = ExtendedHostFunctions&lt;
-				sp_io::SubstrateHostFunctions,
-				&lt;E <span class="kw">as </span>NativeExecutionDispatch&gt;::ExtendHostFunctions,
-			&gt;;
+			<span class="kw">type </span>HostFunctions =
+				(sp_io::SubstrateHostFunctions, frame_benchmarking::benchmarking::HostFunctions);
 
 			<span class="comment">// grab the task manager.
 			</span><span class="kw">let </span>registry = <span class="kw-2">&amp;</span>runner.config().prometheus_config.as_ref().map(|cfg| <span class="kw-2">&amp;</span>cfg.registry);
@@ -695,12 +684,7 @@
 			<span class="kw">let </span>info_provider = timestamp_with_aura_info(MILLISECS_PER_BLOCK);
 
 			runner.async_run(|<span class="kw">_</span>| {
-				<span class="prelude-val">Ok</span>((
-					cmd.run::&lt;Block, HostFunctionsOf&lt;ParachainNativeExecutor&gt;, <span class="kw">_</span>&gt;(<span class="prelude-val">Some</span>(
-						info_provider,
-					)),
-					task_manager,
-				))
+				<span class="prelude-val">Ok</span>((cmd.run::&lt;Block, HostFunctions, <span class="kw">_</span>&gt;(<span class="prelude-val">Some</span>(info_provider)), task_manager))
 			})
 		},
 		<span class="attr">#[cfg(not(feature = <span class="string">&quot;try-runtime&quot;</span>))]

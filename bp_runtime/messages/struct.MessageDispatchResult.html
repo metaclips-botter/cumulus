@@ -5,8 +5,8 @@
 </div></details><h2 id="fields" class="fields small-section-header">Fields<a href="#fields" class="anchor">§</a></h2><span id="structfield.unspent_weight" class="structfield small-section-header"><a href="#structfield.unspent_weight" class="anchor field">§</a><code>unspent_weight: Weight</code></span><div class="docblock"><p>Unspent dispatch weight. This weight that will be deducted from total delivery transaction
 weight, thus reducing the transaction cost. This shall not be zero in (at least) two cases:</p>
 <ol>
-<li>if message has been dispatched successfully, but post-dispatch weight is less than
-the weight, declared by the message sender;</li>
+<li>if message has been dispatched successfully, but post-dispatch weight is less than the
+weight, declared by the message sender;</li>
 <li>if message has not been dispatched at all.</li>
 </ol>
 </div><span id="structfield.dispatch_level_result" class="structfield small-section-header"><a href="#structfield.dispatch_level_result" class="anchor field">§</a><code>dispatch_level_result: DispatchLevelResult</code></span><div class="docblock"><p>Fine-grained result of single message dispatch (for better diagnostic purposes)</p>
