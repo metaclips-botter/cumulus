@@ -958,6 +958,8 @@
 <a href="#958" id="958">958</a>
 <a href="#959" id="959">959</a>
 <a href="#960" id="960">960</a>
+<a href="#961" id="961">961</a>
+<a href="#962" id="962">962</a>
 </pre></div><pre class="rust"><code><span class="comment">// Copyright 2023 Parity Technologies (UK) Ltd.
 // This file is part of Polkadot.
 
@@ -1740,7 +1742,9 @@
 					<span class="kw">while let </span><span class="prelude-val">Some</span>((to_para_id, messages))
 						= <span class="macro-nonterminal">$crate::DOWNWARD_MESSAGES</span>.with(|b| b.borrow_mut().get_mut(<span class="macro">stringify!</span>(<span class="macro-nonterminal">$name</span>)).unwrap().pop_front()) {
 						$(
-							<span class="kw">if </span><span class="macro-nonterminal">$crate::PARA_IDS</span>.with(|b| b.borrow_mut().get_mut(<span class="macro">stringify!</span>(<span class="macro-nonterminal">$name</span>)).unwrap().contains(<span class="kw-2">&amp;</span>to_para_id)) {
+							<span class="kw">let </span>para_id: u32 = &lt;<span class="macro-nonterminal">$parachain</span>&gt;::para_id().into();
+
+							<span class="kw">if </span><span class="macro-nonterminal">$crate::PARA_IDS</span>.with(|b| b.borrow_mut().get_mut(<span class="macro">stringify!</span>(<span class="macro-nonterminal">$name</span>)).unwrap().contains(<span class="kw-2">&amp;</span>to_para_id)) &amp;&amp; para_id == to_para_id {
 								<span class="kw">let </span><span class="kw-2">mut </span>msg_dedup: Vec&lt;(RelayChainBlockNumber, Vec&lt;u8&gt;)&gt; = Vec::new();
 								<span class="kw">for </span>m <span class="kw">in </span><span class="kw-2">&amp;</span>messages {
 									msg_dedup.push((m.<span class="number">0</span>, m.<span class="number">1</span>.clone()));
@@ -1756,8 +1760,6 @@
 										<span class="macro-nonterminal">$crate::DMP_DONE</span>.with(|b| b.borrow_mut().get_mut(<span class="macro">stringify!</span>(<span class="macro-nonterminal">$name</span>)).unwrap().push_back((to_para_id, m.<span class="number">0</span>, m.<span class="number">1</span>)));
 									}
 								}
-							} <span class="kw">else </span>{
-								<span class="macro">unreachable!</span>();
 							}
 						)*
 					}
@@ -1770,7 +1772,9 @@
 						= <span class="macro-nonterminal">$crate::HORIZONTAL_MESSAGES</span>.with(|b| b.borrow_mut().get_mut(<span class="macro">stringify!</span>(<span class="macro-nonterminal">$name</span>)).unwrap().pop_front()) {
 						<span class="kw">let </span>iter = messages.iter().map(|(p, b, m)| (<span class="kw-2">*</span>p, <span class="kw-2">*</span>b, <span class="kw-2">&amp;</span>m[..])).collect::&lt;Vec&lt;<span class="kw">_</span>&gt;&gt;().into_iter();
 						$(
-							<span class="kw">if </span><span class="macro-nonterminal">$crate::PARA_IDS</span>.with(|b| b.borrow_mut().get_mut(<span class="macro">stringify!</span>(<span class="macro-nonterminal">$name</span>)).unwrap().contains(<span class="kw-2">&amp;</span>to_para_id)) {
+							<span class="kw">let </span>para_id: u32 = &lt;<span class="macro-nonterminal">$parachain</span>&gt;::para_id().into();
+
+							<span class="kw">if </span><span class="macro-nonterminal">$crate::PARA_IDS</span>.with(|b| b.borrow_mut().get_mut(<span class="macro">stringify!</span>(<span class="macro-nonterminal">$name</span>)).unwrap().contains(<span class="kw-2">&amp;</span>to_para_id)) &amp;&amp; para_id == to_para_id {
 								&lt;<span class="macro-nonterminal">$parachain</span>&gt;::handle_xcmp_messages(iter.clone(), <span class="macro-nonterminal">$crate::Weight::max_value</span>());
 							}
 						)*
