@@ -211,6 +211,10 @@
 <a href="#211" id="211">211</a>
 <a href="#212" id="212">212</a>
 <a href="#213" id="213">213</a>
+<a href="#214" id="214">214</a>
+<a href="#215" id="215">215</a>
+<a href="#216" id="216">216</a>
+<a href="#217" id="217">217</a>
 </pre></div><pre class="rust"><code><span class="comment">// Copyright 2022 Parity Technologies (UK) Ltd.
 // This file is part of Cumulus.
 
@@ -230,8 +234,8 @@
 </span><span class="doccomment">//! Bridge definitions that are used on Wococo to bridge with Rococo.
 
 </span><span class="kw">use crate</span>::{
-	BridgeParachainRococoInstance, ParachainInfo, Runtime, WithBridgeHubRococoMessagesInstance,
-	XcmRouter,
+	BridgeParachainRococoInstance, BridgeRococoMessages, ParachainInfo, Runtime,
+	WithBridgeHubRococoMessagesInstance, XcmRouter,
 };
 <span class="kw">use </span>bp_messages::LaneId;
 <span class="kw">use </span>bridge_runtime_common::{
@@ -246,7 +250,7 @@
 		RefundableParachain,
 	},
 };
-<span class="kw">use </span>frame_support::{parameter_types, RuntimeDebug};
+<span class="kw">use </span>frame_support::{parameter_types, traits::PalletInfoAccess, RuntimeDebug};
 <span class="kw">use </span>xcm::{
 	latest::prelude::<span class="kw-2">*</span>,
 	prelude::{InteriorMultiLocation, NetworkId},
@@ -260,6 +264,7 @@
 		bp_bridge_hub_wococo::MAX_UNCONFIRMED_MESSAGES_IN_CONFIRMATION_TX;
 	<span class="kw">pub const </span>BridgeHubRococoChainId: bp_runtime::ChainId = bp_runtime::BRIDGE_HUB_ROCOCO_CHAIN_ID;
 	<span class="kw">pub </span>BridgeHubWococoUniversalLocation: InteriorMultiLocation = X2(GlobalConsensus(Wococo), Parachain(ParachainInfo::parachain_id().into()));
+	<span class="kw">pub </span>BridgeRococoMessagesPalletInstance: InteriorMultiLocation = X1(PalletInstance(&lt;BridgeRococoMessages <span class="kw">as </span>PalletInfoAccess&gt;::index() <span class="kw">as </span>u8));
 	<span class="kw">pub </span>RococoGlobalConsensusNetwork: NetworkId = NetworkId::Rococo;
 	<span class="kw">pub </span>ActiveOutboundLanesToBridgeHubRococo: <span class="kw-2">&amp;</span><span class="lifetime">&#39;static </span>[bp_messages::LaneId] = <span class="kw-2">&amp;</span>[DEFAULT_XCM_LANE_TO_BRIDGE_HUB_ROCOCO];
 	<span class="kw">pub </span>PriorityBoostPerMessage: u64 = <span class="number">921_900_294</span>;
@@ -273,8 +278,11 @@
 	FromBridgedChainMessagesDeliveryProof&lt;bp_bridge_hub_rococo::Hash&gt;;
 
 <span class="doccomment">/// Dispatches received XCM messages from other bridge
-</span><span class="kw">pub type </span>OnBridgeHubWococoBlobDispatcher =
-	BridgeBlobDispatcher&lt;XcmRouter, BridgeHubWococoUniversalLocation&gt;;
+</span><span class="kw">pub type </span>OnBridgeHubWococoBlobDispatcher = BridgeBlobDispatcher&lt;
+	XcmRouter,
+	BridgeHubWococoUniversalLocation,
+	BridgeRococoMessagesPalletInstance,
+&gt;;
 
 <span class="doccomment">/// Export XCM messages to be relayed to the otherside
 </span><span class="kw">pub type </span>ToBridgeHubRococoHaulBlobExporter = HaulBlobExporter&lt;

@@ -974,6 +974,28 @@
 <a href="#974" id="974">974</a>
 <a href="#975" id="975">975</a>
 <a href="#976" id="976">976</a>
+<a href="#977" id="977">977</a>
+<a href="#978" id="978">978</a>
+<a href="#979" id="979">979</a>
+<a href="#980" id="980">980</a>
+<a href="#981" id="981">981</a>
+<a href="#982" id="982">982</a>
+<a href="#983" id="983">983</a>
+<a href="#984" id="984">984</a>
+<a href="#985" id="985">985</a>
+<a href="#986" id="986">986</a>
+<a href="#987" id="987">987</a>
+<a href="#988" id="988">988</a>
+<a href="#989" id="989">989</a>
+<a href="#990" id="990">990</a>
+<a href="#991" id="991">991</a>
+<a href="#992" id="992">992</a>
+<a href="#993" id="993">993</a>
+<a href="#994" id="994">994</a>
+<a href="#995" id="995">995</a>
+<a href="#996" id="996">996</a>
+<a href="#997" id="997">997</a>
+<a href="#998" id="998">998</a>
 </pre></div><pre class="rust"><code><span class="comment">// Copyright 2023 Parity Technologies (UK) Ltd.
 // This file is part of Cumulus.
 
@@ -1012,7 +1034,7 @@
 <span class="kw">use </span>codec::Encode;
 <span class="kw">use </span>frame_support::{
 	assert_ok,
-	traits::{Get, OriginTrait},
+	traits::{Get, OriginTrait, PalletInfoAccess},
 };
 <span class="kw">use </span>pallet_bridge_grandpa::BridgedHeader;
 <span class="kw">use </span>parachains_runtimes_test_utils::{
@@ -1439,7 +1461,18 @@
 			<span class="kw">let </span>relayer_id_on_source: AccountId32 = relayer_at_source.public().into();
 
 			<span class="kw">let </span>xcm = <span class="macro">vec!</span>[xcm::v3::Instruction::&lt;()&gt;::ClearOrigin; <span class="number">42</span>];
-			<span class="kw">let </span>expected_dispatch = xcm::latest::Xcm::&lt;()&gt;(xcm.clone());
+			<span class="kw">let </span>expected_dispatch = xcm::latest::Xcm::&lt;()&gt;({
+				<span class="kw">let </span><span class="kw-2">mut </span>expected_instructions = xcm.clone();
+				<span class="comment">// dispatch prepends bridge pallet instance
+				</span>expected_instructions.insert(
+					<span class="number">0</span>,
+					DescendOrigin(X1(PalletInstance(
+						&lt;pallet_bridge_messages::Pallet&lt;Runtime, MPI&gt; <span class="kw">as </span>PalletInfoAccess&gt;::index()
+							<span class="kw">as </span>u8,
+					))),
+				);
+				expected_instructions
+			});
 			<span class="comment">// generate bridged relay chain finality, parachain heads and message proofs,
 			// to be submitted by relayer to this chain.
 			</span><span class="kw">let </span>(
@@ -1648,7 +1681,18 @@
 			<span class="kw">let </span>relay_header_number = <span class="number">1</span>;
 
 			<span class="kw">let </span>xcm = <span class="macro">vec!</span>[xcm::latest::Instruction::&lt;()&gt;::ClearOrigin; <span class="number">42</span>];
-			<span class="kw">let </span>expected_dispatch = xcm::latest::Xcm::&lt;()&gt;(xcm.clone());
+			<span class="kw">let </span>expected_dispatch = xcm::latest::Xcm::&lt;()&gt;({
+				<span class="kw">let </span><span class="kw-2">mut </span>expected_instructions = xcm.clone();
+				<span class="comment">// dispatch prepends bridge pallet instance
+				</span>expected_instructions.insert(
+					<span class="number">0</span>,
+					DescendOrigin(X1(PalletInstance(
+						&lt;pallet_bridge_messages::Pallet&lt;Runtime, MPI&gt; <span class="kw">as </span>PalletInfoAccess&gt;::index()
+							<span class="kw">as </span>u8,
+					))),
+				);
+				expected_instructions
+			});
 			<span class="comment">// generate bridged relay chain finality, parachain heads and message proofs,
 			// to be submitted by relayer to this chain.
 			</span><span class="kw">let </span>(
