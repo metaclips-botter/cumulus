@@ -294,6 +294,14 @@
 <a href="#294" id="294">294</a>
 <a href="#295" id="295">295</a>
 <a href="#296" id="296">296</a>
+<a href="#297" id="297">297</a>
+<a href="#298" id="298">298</a>
+<a href="#299" id="299">299</a>
+<a href="#300" id="300">300</a>
+<a href="#301" id="301">301</a>
+<a href="#302" id="302">302</a>
+<a href="#303" id="303">303</a>
+<a href="#304" id="304">304</a>
 </pre></div><pre class="rust"><code><span class="comment">// Copyright 2021 Parity Technologies (UK) Ltd.
 // This file is part of Cumulus.
 
@@ -322,6 +330,7 @@
 <span class="kw">use </span>parity_scale_codec::Error <span class="kw">as </span>CodecError;
 <span class="kw">use </span>sp_api::ApiError;
 
+<span class="kw">use </span>cumulus_primitives_core::relay_chain::BlockId;
 <span class="kw">pub use </span>cumulus_primitives_core::{
 	relay_chain::{
 		CommittedCandidateReceipt, Hash <span class="kw">as </span>PHash, Header <span class="kw">as </span>PHeader, InboundHrmpMessage,
@@ -405,6 +414,9 @@
 
 	<span class="doccomment">/// Get the hash of the current best block.
 	</span><span class="kw">async fn </span>best_block_hash(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; RelayChainResult&lt;PHash&gt;;
+
+	<span class="doccomment">/// Fetch the block header of a given height
+	</span><span class="kw">async fn </span>header(<span class="kw-2">&amp;</span><span class="self">self</span>, block_id: BlockId) -&gt; RelayChainResult&lt;<span class="prelude-ty">Option</span>&lt;PHeader&gt;&gt;;
 
 	<span class="doccomment">/// Get the hash of the finalized block.
 	</span><span class="kw">async fn </span>finalized_block_hash(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; RelayChainResult&lt;PHash&gt;;
@@ -588,6 +600,10 @@
 		<span class="kw-2">&amp;</span><span class="self">self</span>,
 	) -&gt; RelayChainResult&lt;Pin&lt;Box&lt;<span class="kw">dyn </span>Stream&lt;Item = PHeader&gt; + Send&gt;&gt;&gt; {
 		(<span class="kw-2">**</span><span class="self">self</span>).new_best_notification_stream().<span class="kw">await
+	</span>}
+
+	<span class="kw">async fn </span>header(<span class="kw-2">&amp;</span><span class="self">self</span>, block_id: BlockId) -&gt; RelayChainResult&lt;<span class="prelude-ty">Option</span>&lt;PHeader&gt;&gt; {
+		(<span class="kw-2">**</span><span class="self">self</span>).header(block_id).<span class="kw">await
 	</span>}
 }
 </code></pre></div></section></main></body></html>

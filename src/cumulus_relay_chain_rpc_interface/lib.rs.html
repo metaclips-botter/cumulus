@@ -202,6 +202,22 @@
 <a href="#202" id="202">202</a>
 <a href="#203" id="203">203</a>
 <a href="#204" id="204">204</a>
+<a href="#205" id="205">205</a>
+<a href="#206" id="206">206</a>
+<a href="#207" id="207">207</a>
+<a href="#208" id="208">208</a>
+<a href="#209" id="209">209</a>
+<a href="#210" id="210">210</a>
+<a href="#211" id="211">211</a>
+<a href="#212" id="212">212</a>
+<a href="#213" id="213">213</a>
+<a href="#214" id="214">214</a>
+<a href="#215" id="215">215</a>
+<a href="#216" id="216">216</a>
+<a href="#217" id="217">217</a>
+<a href="#218" id="218">218</a>
+<a href="#219" id="219">219</a>
+<a href="#220" id="220">220</a>
 </pre></div><pre class="rust"><code><span class="comment">// Copyright 2022 Parity Technologies (UK) Ltd.
 // This file is part of Cumulus.
 
@@ -227,7 +243,9 @@
 	},
 	InboundDownwardMessage, ParaId, PersistedValidationData,
 };
-<span class="kw">use </span>cumulus_relay_chain_interface::{RelayChainError, RelayChainInterface, RelayChainResult};
+<span class="kw">use </span>cumulus_relay_chain_interface::{
+	PHeader, RelayChainError, RelayChainInterface, RelayChainResult,
+};
 <span class="kw">use </span>futures::{FutureExt, Stream, StreamExt};
 <span class="kw">use </span>polkadot_overseer::Handle;
 
@@ -237,6 +255,7 @@
 <span class="kw">use </span>sp_storage::StorageKey;
 <span class="kw">use </span>std::pin::Pin;
 
+<span class="kw">use </span>cumulus_primitives_core::relay_chain::BlockId;
 <span class="kw">pub use </span>url::Url;
 
 <span class="kw">mod </span>reconnecting_ws_client;
@@ -278,6 +297,19 @@
 			.parachain_host_inbound_hrmp_channels_contents(para_id, relay_parent)
 			.<span class="kw">await
 	</span>}
+
+	<span class="kw">async fn </span>header(<span class="kw-2">&amp;</span><span class="self">self</span>, block_id: BlockId) -&gt; RelayChainResult&lt;<span class="prelude-ty">Option</span>&lt;PHeader&gt;&gt; {
+		<span class="kw">let </span>hash = <span class="kw">match </span>block_id {
+			BlockId::Hash(hash) =&gt; hash,
+			BlockId::Number(num) =&gt;
+				<span class="self">self</span>.rpc_client.chain_get_block_hash(<span class="prelude-val">Some</span>(num)).<span class="kw">await</span><span class="question-mark">?</span>.ok_or_else(|| {
+					RelayChainError::GenericError(<span class="macro">format!</span>(<span class="string">&quot;block with number {num} not found&quot;</span>))
+				})<span class="question-mark">?</span>,
+		};
+		<span class="kw">let </span>header = <span class="self">self</span>.rpc_client.chain_get_header(<span class="prelude-val">Some</span>(hash)).<span class="kw">await</span><span class="question-mark">?</span>;
+
+		<span class="prelude-val">Ok</span>(header)
+	}
 
 	<span class="kw">async fn </span>persisted_validation_data(
 		<span class="kw-2">&amp;</span><span class="self">self</span>,
