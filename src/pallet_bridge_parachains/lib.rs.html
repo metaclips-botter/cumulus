@@ -1580,6 +1580,28 @@
 <a href="#1580" id="1580">1580</a>
 <a href="#1581" id="1581">1581</a>
 <a href="#1582" id="1582">1582</a>
+<a href="#1583" id="1583">1583</a>
+<a href="#1584" id="1584">1584</a>
+<a href="#1585" id="1585">1585</a>
+<a href="#1586" id="1586">1586</a>
+<a href="#1587" id="1587">1587</a>
+<a href="#1588" id="1588">1588</a>
+<a href="#1589" id="1589">1589</a>
+<a href="#1590" id="1590">1590</a>
+<a href="#1591" id="1591">1591</a>
+<a href="#1592" id="1592">1592</a>
+<a href="#1593" id="1593">1593</a>
+<a href="#1594" id="1594">1594</a>
+<a href="#1595" id="1595">1595</a>
+<a href="#1596" id="1596">1596</a>
+<a href="#1597" id="1597">1597</a>
+<a href="#1598" id="1598">1598</a>
+<a href="#1599" id="1599">1599</a>
+<a href="#1600" id="1600">1600</a>
+<a href="#1601" id="1601">1601</a>
+<a href="#1602" id="1602">1602</a>
+<a href="#1603" id="1603">1603</a>
+<a href="#1604" id="1604">1604</a>
 </pre></div><pre class="rust"><code><span class="comment">// Copyright 2021 Parity Technologies (UK) Ltd.
 // This file is part of Parity Bridges Common.
 
@@ -1889,12 +1911,13 @@
 			parachains.len() <span class="kw">as _</span>,
 		))]
 		</span><span class="kw">pub fn </span>submit_parachain_heads(
-			_origin: OriginFor&lt;T&gt;,
+			origin: OriginFor&lt;T&gt;,
 			at_relay_block: (RelayBlockNumber, RelayBlockHash),
 			parachains: Vec&lt;(ParaId, ParaHash)&gt;,
 			parachain_heads_proof: ParaHeadsProof,
 		) -&gt; DispatchResultWithPostInfo {
 			<span class="self">Self</span>::ensure_not_halted().map_err(Error::&lt;T, I&gt;::BridgeModule)<span class="question-mark">?</span>;
+			ensure_signed(origin)<span class="question-mark">?</span>;
 
 			<span class="comment">// we&#39;ll need relay chain header to verify that parachains heads are always increasing.
 			</span><span class="kw">let </span>(relay_block_number, relay_block_hash) = at_relay_block;
@@ -1999,7 +2022,7 @@
 					});
 
 				<span class="comment">// we&#39;re refunding weight if update has not happened and if pruning has not happened
-				</span><span class="kw">let </span>is_update_happened = <span class="macro">matches!</span>(update_result, <span class="prelude-val">Ok</span>(<span class="kw">_</span>));
+				</span><span class="kw">let </span>is_update_happened = update_result.is_ok();
 				<span class="kw">if </span>!is_update_happened {
 					actual_weight = actual_weight.saturating_sub(
 						WeightInfoOf::&lt;T, I&gt;::parachain_head_storage_write_weight(
@@ -3160,6 +3183,27 @@
 			MaybeMaxTotalParachainHashes::&lt;TestRuntime, ()&gt;::get(),
 			<span class="prelude-val">Some</span>(mock::TOTAL_PARACHAINS * mock::HeadsToKeep::get()),
 		);
+	}
+
+	<span class="attr">#[test]
+	</span><span class="kw">fn </span>submit_finality_proof_requires_signed_origin() {
+		run_test(|| {
+			<span class="kw">let </span>(state_root, proof, parachains) =
+				prepare_parachain_heads_proof::&lt;RegularParachainHeader&gt;(<span class="macro">vec!</span>[(<span class="number">1</span>, head_data(<span class="number">1</span>, <span class="number">0</span>))]);
+
+			initialize(state_root);
+
+			<span class="comment">// `submit_parachain_heads()` should fail when the pallet is halted.
+			</span><span class="macro">assert_noop!</span>(
+				Pallet::&lt;TestRuntime&gt;::submit_parachain_heads(
+					RuntimeOrigin::root(),
+					(<span class="number">0</span>, test_relay_header(<span class="number">0</span>, state_root).hash()),
+					parachains,
+					proof,
+				),
+				DispatchError::BadOrigin
+			);
+		})
 	}
 }
 </code></pre></div></section></main></body></html>

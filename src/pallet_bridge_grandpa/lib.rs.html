@@ -1415,6 +1415,26 @@
 <a href="#1415" id="1415">1415</a>
 <a href="#1416" id="1416">1416</a>
 <a href="#1417" id="1417">1417</a>
+<a href="#1418" id="1418">1418</a>
+<a href="#1419" id="1419">1419</a>
+<a href="#1420" id="1420">1420</a>
+<a href="#1421" id="1421">1421</a>
+<a href="#1422" id="1422">1422</a>
+<a href="#1423" id="1423">1423</a>
+<a href="#1424" id="1424">1424</a>
+<a href="#1425" id="1425">1425</a>
+<a href="#1426" id="1426">1426</a>
+<a href="#1427" id="1427">1427</a>
+<a href="#1428" id="1428">1428</a>
+<a href="#1429" id="1429">1429</a>
+<a href="#1430" id="1430">1430</a>
+<a href="#1431" id="1431">1431</a>
+<a href="#1432" id="1432">1432</a>
+<a href="#1433" id="1433">1433</a>
+<a href="#1434" id="1434">1434</a>
+<a href="#1435" id="1435">1435</a>
+<a href="#1436" id="1436">1436</a>
+<a href="#1437" id="1437">1437</a>
 </pre></div><pre class="rust"><code><span class="comment">// Copyright 2021 Parity Technologies (UK) Ltd.
 // This file is part of Parity Bridges Common.
 
@@ -1593,11 +1613,12 @@
 			justification.votes_ancestries.len().saturated_into(),
 		))]
 		</span><span class="kw">pub fn </span>submit_finality_proof(
-			_origin: OriginFor&lt;T&gt;,
+			origin: OriginFor&lt;T&gt;,
 			finality_target: Box&lt;BridgedHeader&lt;T, I&gt;&gt;,
 			justification: GrandpaJustification&lt;BridgedHeader&lt;T, I&gt;&gt;,
 		) -&gt; DispatchResultWithPostInfo {
 			<span class="self">Self</span>::ensure_not_halted().map_err(Error::&lt;T, I&gt;::BridgeModule)<span class="question-mark">?</span>;
+			ensure_signed(origin)<span class="question-mark">?</span>;
 
 			<span class="kw">let </span>(hash, number) = (finality_target.hash(), <span class="kw-2">*</span>finality_target.number());
 			<span class="macro">log::trace!</span>(
@@ -2830,6 +2851,25 @@
 	<span class="attr">#[test]
 	</span><span class="kw">fn </span>maybe_headers_to_keep_returns_correct_value() {
 		<span class="macro">assert_eq!</span>(MaybeHeadersToKeep::&lt;TestRuntime, ()&gt;::get(), <span class="prelude-val">Some</span>(mock::HeadersToKeep::get()));
+	}
+
+	<span class="attr">#[test]
+	</span><span class="kw">fn </span>submit_finality_proof_requires_signed_origin() {
+		run_test(|| {
+			initialize_substrate_bridge();
+
+			<span class="kw">let </span>header = test_header(<span class="number">1</span>);
+			<span class="kw">let </span>justification = make_default_justification(<span class="kw-2">&amp;</span>header);
+
+			<span class="macro">assert_noop!</span>(
+				Pallet::&lt;TestRuntime&gt;::submit_finality_proof(
+					RuntimeOrigin::root(),
+					Box::new(header),
+					justification,
+				),
+				DispatchError::BadOrigin,
+			);
+		})
 	}
 }
 </code></pre></div></section></main></body></html>

@@ -214,6 +214,10 @@
 <a href="#214" id="214">214</a>
 <a href="#215" id="215">215</a>
 <a href="#216" id="216">216</a>
+<a href="#217" id="217">217</a>
+<a href="#218" id="218">218</a>
+<a href="#219" id="219">219</a>
+<a href="#220" id="220">220</a>
 </pre></div><pre class="rust"><code><span class="comment">// Copyright 2022 Parity Technologies (UK) Ltd.
 // This file is part of Parity Bridges Common.
 
@@ -340,9 +344,13 @@
 // `ensure_able_to_receive_confirmation` test.
 
 </span><span class="doccomment">/// Maximal number of unrewarded relayer entries at inbound lane for Cumulus-based parachains.
+/// Note: this value is security-relevant, decreasing it should not be done without careful
+/// analysis (like the one above).
 </span><span class="kw">pub const </span>MAX_UNREWARDED_RELAYERS_IN_CONFIRMATION_TX: MessageNonce = <span class="number">1024</span>;
 
 <span class="doccomment">/// Maximal number of unconfirmed messages at inbound lane for Cumulus-based parachains.
+/// Note: this value is security-relevant, decreasing it should not be done without careful
+/// analysis (like the one above).
 </span><span class="kw">pub const </span>MAX_UNCONFIRMED_MESSAGES_IN_CONFIRMATION_TX: MessageNonce = <span class="number">4096</span>;
 
 <span class="doccomment">/// Extra signed extension data that is used by all bridge hubs.
