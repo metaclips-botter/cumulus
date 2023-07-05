@@ -1637,8 +1637,6 @@
 <a href="#1637" id="1637">1637</a>
 <a href="#1638" id="1638">1638</a>
 <a href="#1639" id="1639">1639</a>
-<a href="#1640" id="1640">1640</a>
-<a href="#1641" id="1641">1641</a>
 </pre></div><pre class="rust"><code><span class="comment">// Copyright 2019-2021 Parity Technologies (UK) Ltd.
 // This file is part of Cumulus.
 
@@ -1958,7 +1956,7 @@
 		<span class="kw-2">&amp;</span>task_manager,
 	)<span class="question-mark">?</span>;
 
-	<span class="kw">let </span>params = PartialComponents {
+	<span class="prelude-val">Ok</span>(PartialComponents {
 		backend,
 		client,
 		import_queue,
@@ -1967,9 +1965,7 @@
 		transaction_pool,
 		select_chain: (),
 		other: (block_import, telemetry, telemetry_worker_handle),
-	};
-
-	<span class="prelude-val">Ok</span>(params)
+	})
 }
 
 <span class="doccomment">/// Start a shell node with the given parachain `Configuration` and relay chain `Configuration`.

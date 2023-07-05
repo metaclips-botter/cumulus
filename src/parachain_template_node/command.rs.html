@@ -427,30 +427,18 @@
 <a href="#427" id="427">427</a>
 <a href="#428" id="428">428</a>
 <a href="#429" id="429">429</a>
-<a href="#430" id="430">430</a>
-<a href="#431" id="431">431</a>
-<a href="#432" id="432">432</a>
-<a href="#433" id="433">433</a>
-<a href="#434" id="434">434</a>
-<a href="#435" id="435">435</a>
-<a href="#436" id="436">436</a>
-<a href="#437" id="437">437</a>
-<a href="#438" id="438">438</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::net::SocketAddr;
 
-<span class="kw">use </span>codec::Encode;
-<span class="kw">use </span>cumulus_client_cli::generate_genesis_block;
 <span class="kw">use </span>cumulus_primitives_core::ParaId;
 <span class="kw">use </span>frame_benchmarking_cli::{BenchmarkCmd, SUBSTRATE_REFERENCE_HARDWARE};
 <span class="kw">use </span>log::{info, warn};
 <span class="kw">use </span>parachain_template_runtime::Block;
 <span class="kw">use </span>sc_cli::{
 	ChainSpec, CliConfiguration, DefaultConfigurationValues, ImportParams, KeystoreParams,
-	NetworkParams, <span class="prelude-ty">Result</span>, RuntimeVersion, SharedParams, SubstrateCli,
+	NetworkParams, <span class="prelude-ty">Result</span>, SharedParams, SubstrateCli,
 };
 <span class="kw">use </span>sc_service::config::{BasePath, PrometheusConfig};
-<span class="kw">use </span>sp_core::hexdisplay::HexDisplay;
-<span class="kw">use </span>sp_runtime::traits::{AccountIdConversion, Block <span class="kw">as </span>BlockT};
+<span class="kw">use </span>sp_runtime::traits::AccountIdConversion;
 
 <span class="kw">use crate</span>::{
 	chain_spec,
@@ -501,10 +489,6 @@
 	<span class="kw">fn </span>load_spec(<span class="kw-2">&amp;</span><span class="self">self</span>, id: <span class="kw-2">&amp;</span>str) -&gt; std::result::Result&lt;Box&lt;<span class="kw">dyn </span>sc_service::ChainSpec&gt;, String&gt; {
 		load_spec(id)
 	}
-
-	<span class="kw">fn </span>native_runtime_version(<span class="kw">_</span>: <span class="kw-2">&amp;</span>Box&lt;<span class="kw">dyn </span>ChainSpec&gt;) -&gt; <span class="kw-2">&amp;</span><span class="lifetime">&#39;static </span>RuntimeVersion {
-		<span class="kw-2">&amp;</span>parachain_template_runtime::VERSION
-	}
 }
 
 <span class="kw">impl </span>SubstrateCli <span class="kw">for </span>RelayChainCli {
@@ -540,10 +524,6 @@
 
 	<span class="kw">fn </span>load_spec(<span class="kw-2">&amp;</span><span class="self">self</span>, id: <span class="kw-2">&amp;</span>str) -&gt; std::result::Result&lt;Box&lt;<span class="kw">dyn </span>sc_service::ChainSpec&gt;, String&gt; {
 		polkadot_cli::Cli::from_iter([RelayChainCli::executable_name()].iter()).load_spec(id)
-	}
-
-	<span class="kw">fn </span>native_runtime_version(chain_spec: <span class="kw-2">&amp;</span>Box&lt;<span class="kw">dyn </span>ChainSpec&gt;) -&gt; <span class="kw-2">&amp;</span><span class="lifetime">&#39;static </span>RuntimeVersion {
-		polkadot_cli::Cli::native_runtime_version(chain_spec)
 	}
 }
 
@@ -613,10 +593,10 @@
 		},
 		<span class="prelude-val">Some</span>(Subcommand::ExportGenesisState(cmd)) =&gt; {
 			<span class="kw">let </span>runner = cli.create_runner(cmd)<span class="question-mark">?</span>;
-			runner.sync_run(|_config| {
-				<span class="kw">let </span>spec = cli.load_spec(<span class="kw-2">&amp;</span>cmd.shared_params.chain.clone().unwrap_or_default())<span class="question-mark">?</span>;
-				<span class="kw">let </span>state_version = Cli::native_runtime_version(<span class="kw-2">&amp;</span>spec).state_version();
-				cmd.run::&lt;Block&gt;(<span class="kw-2">&amp;*</span>spec, state_version)
+			runner.sync_run(|config| {
+				<span class="kw">let </span>partials = new_partial(<span class="kw-2">&amp;</span>config)<span class="question-mark">?</span>;
+
+				cmd.run(<span class="kw-2">&amp;*</span>config.chain_spec, <span class="kw-2">&amp;*</span>partials.client)
 			})
 		},
 		<span class="prelude-val">Some</span>(Subcommand::ExportGenesisWasm(cmd)) =&gt; {
@@ -696,11 +676,12 @@
 			<span class="kw">let </span>collator_options = cli.run.collator_options();
 
 			runner.run_node_until_exit(|config| <span class="kw">async move </span>{
-				<span class="kw">let </span>hwbench = (!cli.no_hardware_benchmarks).then_some(
-					config.database.path().map(|database_path| {
+				<span class="kw">let </span>hwbench = (!cli.no_hardware_benchmarks)
+					.then_some(config.database.path().map(|database_path| {
 						<span class="kw">let _ </span>= std::fs::create_dir_all(database_path);
 						sc_sysinfo::gather_hwbench(<span class="prelude-val">Some</span>(database_path))
-					})).flatten();
+					}))
+					.flatten();
 
 				<span class="kw">let </span>para_id = chain_spec::Extensions::try_get(<span class="kw-2">&amp;*</span>config.chain_spec)
 					.map(|e| e.para_id)
@@ -714,25 +695,26 @@
 				<span class="kw">let </span>id = ParaId::from(para_id);
 
 				<span class="kw">let </span>parachain_account =
-					AccountIdConversion::&lt;polkadot_primitives::AccountId&gt;::into_account_truncating(<span class="kw-2">&amp;</span>id);
-
-				<span class="kw">let </span>state_version = Cli::native_runtime_version(<span class="kw-2">&amp;</span>config.chain_spec).state_version();
-				<span class="kw">let </span>block: Block = generate_genesis_block(<span class="kw-2">&amp;*</span>config.chain_spec, state_version)
-					.map_err(|e| <span class="macro">format!</span>(<span class="string">&quot;{:?}&quot;</span>, e))<span class="question-mark">?</span>;
-				<span class="kw">let </span>genesis_state = <span class="macro">format!</span>(<span class="string">&quot;0x{:?}&quot;</span>, HexDisplay::from(<span class="kw-2">&amp;</span>block.header().encode()));
+					AccountIdConversion::&lt;polkadot_primitives::AccountId&gt;::into_account_truncating(
+						<span class="kw-2">&amp;</span>id,
+					);
 
 				<span class="kw">let </span>tokio_handle = config.tokio_handle.clone();
 				<span class="kw">let </span>polkadot_config =
 					SubstrateCli::create_configuration(<span class="kw-2">&amp;</span>polkadot_cli, <span class="kw-2">&amp;</span>polkadot_cli, tokio_handle)
 						.map_err(|err| <span class="macro">format!</span>(<span class="string">&quot;Relay chain argument error: {}&quot;</span>, err))<span class="question-mark">?</span>;
 
-				<span class="macro">info!</span>(<span class="string">&quot;Parachain id: {:?}&quot;</span>, id);
-				<span class="macro">info!</span>(<span class="string">&quot;Parachain Account: {}&quot;</span>, parachain_account);
-				<span class="macro">info!</span>(<span class="string">&quot;Parachain genesis state: {}&quot;</span>, genesis_state);
+				<span class="macro">info!</span>(<span class="string">&quot;Parachain Account: {parachain_account}&quot;</span>);
 				<span class="macro">info!</span>(<span class="string">&quot;Is collating: {}&quot;</span>, <span class="kw">if </span>config.role.is_authority() { <span class="string">&quot;yes&quot; </span>} <span class="kw">else </span>{ <span class="string">&quot;no&quot; </span>});
 
-				<span class="kw">if </span>!collator_options.relay_chain_rpc_urls.is_empty() &amp;&amp; !cli.relay_chain_args.is_empty() {
-					<span class="macro">warn!</span>(<span class="string">&quot;Detected relay chain node arguments together with --relay-chain-rpc-url. This command starts a minimal Polkadot node that only uses a network-related subset of all relay chain CLI options.&quot;</span>);
+				<span class="kw">if </span>!collator_options.relay_chain_rpc_urls.is_empty() &amp;&amp;
+					!cli.relay_chain_args.is_empty()
+				{
+					<span class="macro">warn!</span>(
+						<span class="string">&quot;Detected relay chain node arguments together with --relay-chain-rpc-url. \
+						   This command starts a minimal Polkadot node that only uses a \
+						   network-related subset of all relay chain CLI options.&quot;
+					</span>);
 				}
 
 				<span class="kw">crate</span>::service::start_parachain_node(
