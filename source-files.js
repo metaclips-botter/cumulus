@@ -21,10 +21,11 @@ var sourcesIndex = JSON.parse('{\
 "bp_wococo":["",[],["lib.rs"]],\
 "bridge_hub_kusama_runtime":["",[["weights",[["xcm",[],["mod.rs","pallet_xcm_benchmarks_fungible.rs","pallet_xcm_benchmarks_generic.rs"]]],["block_weights.rs","cumulus_pallet_xcmp_queue.rs","extrinsic_weights.rs","frame_system.rs","mod.rs","pallet_balances.rs","pallet_collator_selection.rs","pallet_multisig.rs","pallet_session.rs","pallet_timestamp.rs","pallet_utility.rs","pallet_xcm.rs","paritydb_weights.rs","rocksdb_weights.rs"]]],["constants.rs","lib.rs","xcm_config.rs"]],\
 "bridge_hub_polkadot_runtime":["",[["weights",[["xcm",[],["mod.rs","pallet_xcm_benchmarks_fungible.rs","pallet_xcm_benchmarks_generic.rs"]]],["block_weights.rs","cumulus_pallet_xcmp_queue.rs","extrinsic_weights.rs","frame_system.rs","mod.rs","pallet_balances.rs","pallet_collator_selection.rs","pallet_multisig.rs","pallet_session.rs","pallet_timestamp.rs","pallet_utility.rs","pallet_xcm.rs","paritydb_weights.rs","rocksdb_weights.rs"]]],["constants.rs","lib.rs","xcm_config.rs"]],\
+"bridge_hub_rococo_integration_tests":["",[],["lib.rs"]],\
 "bridge_hub_rococo_runtime":["",[["weights",[["xcm",[],["mod.rs","pallet_xcm_benchmarks_fungible.rs","pallet_xcm_benchmarks_generic.rs"]]],["block_weights.rs","cumulus_pallet_xcmp_queue.rs","extrinsic_weights.rs","frame_system.rs","mod.rs","pallet_balances.rs","pallet_bridge_grandpa_bridge_rococo_grandpa.rs","pallet_bridge_grandpa_bridge_wococo_grandpa.rs","pallet_bridge_messages_bridge_messages_bench_runtime_with_bridge_hub_rococo_messages_instance.rs","pallet_bridge_messages_bridge_messages_bench_runtime_with_bridge_hub_wococo_messages_instance.rs","pallet_bridge_parachains_bridge_parachains_bench_runtime_bridge_parachain_rococo_instance.rs","pallet_bridge_parachains_bridge_parachains_bench_runtime_bridge_parachain_wococo_instance.rs","pallet_bridge_relayers.rs","pallet_collator_selection.rs","pallet_multisig.rs","pallet_session.rs","pallet_timestamp.rs","pallet_utility.rs","pallet_xcm.rs","paritydb_weights.rs","rocksdb_weights.rs"]]],["bridge_hub_rococo_config.rs","bridge_hub_wococo_config.rs","constants.rs","lib.rs","xcm_config.rs"]],\
 "bridge_hub_test_utils":["",[],["lib.rs","test_cases.rs"]],\
 "bridge_runtime_common":["",[],["lib.rs","messages.rs","messages_api.rs","messages_call_ext.rs","messages_generation.rs","messages_xcm_extension.rs","priority_calculator.rs","refund_relayer_extension.rs"]],\
-"collectives_polkadot_it":["",[],["lib.rs"]],\
+"collectives_polkadot_integration_tests":["",[],["lib.rs"]],\
 "collectives_polkadot_runtime":["",[["fellowship",[],["migration.rs","mod.rs","origins.rs","tracks.rs"]],["weights",[],["block_weights.rs","cumulus_pallet_xcmp_queue.rs","extrinsic_weights.rs","frame_system.rs","mod.rs","pallet_alliance.rs","pallet_balances.rs","pallet_collator_selection.rs","pallet_collective.rs","pallet_core_fellowship.rs","pallet_multisig.rs","pallet_preimage.rs","pallet_proxy.rs","pallet_ranked_collective.rs","pallet_referenda.rs","pallet_salary.rs","pallet_scheduler.rs","pallet_session.rs","pallet_timestamp.rs","pallet_utility.rs","pallet_xcm.rs","paritydb_weights.rs","rocksdb_weights.rs"]]],["constants.rs","impls.rs","lib.rs","xcm_config.rs"]],\
 "contracts_rococo_runtime":["",[["weights",[],["block_weights.rs","extrinsic_weights.rs","mod.rs","paritydb_weights.rs","rocksdb_weights.rs"]]],["constants.rs","contracts.rs","lib.rs","xcm_config.rs"]],\
 "cumulus_client_cli":["",[],["lib.rs"]],\
@@ -59,7 +60,7 @@ var sourcesIndex = JSON.parse('{\
 "cumulus_test_runtime":["",[],["lib.rs","test_pallet.rs"]],\
 "cumulus_test_service":["",[],["bench_utils.rs","chain_spec.rs","genesis.rs","lib.rs"]],\
 "glutton_runtime":["",[["weights",[],["mod.rs","pallet_glutton.rs"]]],["lib.rs","xcm_config.rs"]],\
-"integration_tests_common":["",[],["constants.rs","lib.rs"]],\
+"integration_tests_common":["",[],["constants.rs","impls.rs","lib.rs"]],\
 "pallet_bridge_grandpa":["",[],["call_ext.rs","lib.rs","storage_types.rs","weights.rs"]],\
 "pallet_bridge_messages":["",[],["inbound_lane.rs","lib.rs","outbound_lane.rs","weights.rs","weights_ext.rs"]],\
 "pallet_bridge_parachains":["",[],["call_ext.rs","lib.rs","weights.rs","weights_ext.rs"]],\

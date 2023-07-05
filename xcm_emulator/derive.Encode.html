@@ -5,7 +5,7 @@
 }
 </code></pre><details class="toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><p>Derive <code>parity_scale_codec::Encode</code> and <code>parity_scale_codec::EncodeLike</code> for struct and enum.</p>
 <h2 id="top-level-attributes"><a href="#top-level-attributes">Top level attributes</a></h2>
-<p>By default the macro will add <a href="derive.Encode.html" title="derive xcm_emulator::Encode"><code>Encode</code></a> and [<code>Decode</code>] bounds to all types, but the bounds can
+<p>By default the macro will add <a href="derive.Encode.html" title="derive xcm_emulator::Encode"><code>Encode</code></a> and <a href="derive.Decode.html" title="derive xcm_emulator::Decode"><code>Decode</code></a> bounds to all types, but the bounds can
 be specified manually with the top level attributes:</p>
 <ul>
 <li><code>#[codec(encode_bound(T: Encode))]</code>: a custom bound added to the <code>where</code>-clause when deriving
