@@ -218,6 +218,8 @@
 <a href="#218" id="218">218</a>
 <a href="#219" id="219">219</a>
 <a href="#220" id="220">220</a>
+<a href="#221" id="221">221</a>
+<a href="#222" id="222">222</a>
 </pre></div><pre class="rust"><code><span class="comment">// Copyright 2022 Parity Technologies (UK) Ltd.
 // This file is part of Cumulus.
 
@@ -302,9 +304,11 @@
 		<span class="kw">let </span>hash = <span class="kw">match </span>block_id {
 			BlockId::Hash(hash) =&gt; hash,
 			BlockId::Number(num) =&gt;
-				<span class="self">self</span>.rpc_client.chain_get_block_hash(<span class="prelude-val">Some</span>(num)).<span class="kw">await</span><span class="question-mark">?</span>.ok_or_else(|| {
-					RelayChainError::GenericError(<span class="macro">format!</span>(<span class="string">&quot;block with number {num} not found&quot;</span>))
-				})<span class="question-mark">?</span>,
+				<span class="kw">if let </span><span class="prelude-val">Some</span>(hash) = <span class="self">self</span>.rpc_client.chain_get_block_hash(<span class="prelude-val">Some</span>(num)).<span class="kw">await</span><span class="question-mark">? </span>{
+					hash
+				} <span class="kw">else </span>{
+					<span class="kw">return </span><span class="prelude-val">Ok</span>(<span class="prelude-val">None</span>)
+				},
 		};
 		<span class="kw">let </span>header = <span class="self">self</span>.rpc_client.chain_get_header(<span class="prelude-val">Some</span>(hash)).<span class="kw">await</span><span class="question-mark">?</span>;
 
