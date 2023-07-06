@@ -1302,6 +1302,10 @@
 <a href="#1302" id="1302">1302</a>
 <a href="#1303" id="1303">1303</a>
 <a href="#1304" id="1304">1304</a>
+<a href="#1305" id="1305">1305</a>
+<a href="#1306" id="1306">1306</a>
+<a href="#1307" id="1307">1307</a>
+<a href="#1308" id="1308">1308</a>
 </pre></div><pre class="rust"><code><span class="comment">// Copyright (C) 2021-2022 Parity Technologies (UK) Ltd.
 // SPDX-License-Identifier: Apache-2.0
 
@@ -1750,6 +1754,7 @@
 					RuntimeCall::Assets(TrustBackedAssetsCall::set_team { .. }) |
 					RuntimeCall::Assets(TrustBackedAssetsCall::set_metadata { .. }) |
 					RuntimeCall::Assets(TrustBackedAssetsCall::clear_metadata { .. }) |
+					RuntimeCall::Assets(TrustBackedAssetsCall::set_min_balance { .. }) |
 					RuntimeCall::Nfts(pallet_nfts::Call::create { .. }) |
 					RuntimeCall::Nfts(pallet_nfts::Call::destroy { .. }) |
 					RuntimeCall::Nfts(pallet_nfts::Call::redeposit { .. }) |
@@ -1776,9 +1781,12 @@
 				RuntimeCall::Assets(TrustBackedAssetsCall::mint { .. }) |
 					RuntimeCall::Assets(TrustBackedAssetsCall::burn { .. }) |
 					RuntimeCall::Assets(TrustBackedAssetsCall::freeze { .. }) |
+					RuntimeCall::Assets(TrustBackedAssetsCall::block { .. }) |
 					RuntimeCall::Assets(TrustBackedAssetsCall::thaw { .. }) |
 					RuntimeCall::Assets(TrustBackedAssetsCall::freeze_asset { .. }) |
 					RuntimeCall::Assets(TrustBackedAssetsCall::thaw_asset { .. }) |
+					RuntimeCall::Assets(TrustBackedAssetsCall::touch_other { .. }) |
+					RuntimeCall::Assets(TrustBackedAssetsCall::refund_other { .. }) |
 					RuntimeCall::Nfts(pallet_nfts::Call::force_mint { .. }) |
 					RuntimeCall::Nfts(pallet_nfts::Call::update_mint_settings { .. }) |
 					RuntimeCall::Nfts(pallet_nfts::Call::mint_pre_signed { .. }) |
