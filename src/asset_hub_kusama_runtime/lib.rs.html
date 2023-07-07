@@ -1368,9 +1368,6 @@
 <a href="#1368" id="1368">1368</a>
 <a href="#1369" id="1369">1369</a>
 <a href="#1370" id="1370">1370</a>
-<a href="#1371" id="1371">1371</a>
-<a href="#1372" id="1372">1372</a>
-<a href="#1373" id="1373">1373</a>
 </pre></div><pre class="rust"><code><span class="comment">// Copyright (C) 2021-2022 Parity Technologies (UK) Ltd.
 // SPDX-License-Identifier: Apache-2.0
 
@@ -1971,10 +1968,7 @@
 
 <span class="macro">parameter_types! </span>{
 	<span class="kw">pub const </span>PotId: PalletId = PalletId(<span class="kw-2">*</span><span class="string">b&quot;PotStake&quot;</span>);
-	<span class="kw">pub const </span>MaxCandidates: u32 = <span class="number">1000</span>;
-	<span class="kw">pub const </span>MinCandidates: u32 = <span class="number">5</span>;
 	<span class="kw">pub const </span>SessionLength: BlockNumber = <span class="number">6 </span>* HOURS;
-	<span class="kw">pub const </span>MaxInvulnerables: u32 = <span class="number">100</span>;
 	<span class="comment">// StakingAdmin pluralistic body.
 	</span><span class="kw">pub const </span>StakingAdminBodyId: BodyId = BodyId::Defense;
 }
@@ -1990,9 +1984,9 @@
 	<span class="kw">type </span>Currency = Balances;
 	<span class="kw">type </span>UpdateOrigin = CollatorSelectionUpdateOrigin;
 	<span class="kw">type </span>PotId = PotId;
-	<span class="kw">type </span>MaxCandidates = MaxCandidates;
-	<span class="kw">type </span>MinCandidates = MinCandidates;
-	<span class="kw">type </span>MaxInvulnerables = MaxInvulnerables;
+	<span class="kw">type </span>MaxCandidates = ConstU32&lt;<span class="number">100</span>&gt;;
+	<span class="kw">type </span>MinEligibleCollators = ConstU32&lt;<span class="number">4</span>&gt;;
+	<span class="kw">type </span>MaxInvulnerables = ConstU32&lt;<span class="number">20</span>&gt;;
 	<span class="comment">// should be a multiple of session or things will get inconsistent
 	</span><span class="kw">type </span>KickThreshold = Period;
 	<span class="kw">type </span>ValidatorId = &lt;<span class="self">Self </span><span class="kw">as </span>frame_system::Config&gt;::AccountId;

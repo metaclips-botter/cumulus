@@ -758,9 +758,6 @@
 <a href="#758" id="758">758</a>
 <a href="#759" id="759">759</a>
 <a href="#760" id="760">760</a>
-<a href="#761" id="761">761</a>
-<a href="#762" id="762">762</a>
-<a href="#763" id="763">763</a>
 </pre></div><pre class="rust"><code><span class="attr">#![cfg_attr(not(feature = <span class="string">&quot;std&quot;</span>), no_std)]
 </span><span class="comment">// `construct_runtime!` does a lot of recursion and requires us to increase the limit to 256.
 </span><span class="attr">#![recursion_limit = <span class="string">&quot;256&quot;</span>]
@@ -1196,10 +1193,7 @@
 
 <span class="macro">parameter_types! </span>{
 	<span class="kw">pub const </span>PotId: PalletId = PalletId(<span class="kw-2">*</span><span class="string">b&quot;PotStake&quot;</span>);
-	<span class="kw">pub const </span>MaxCandidates: u32 = <span class="number">1000</span>;
-	<span class="kw">pub const </span>MinCandidates: u32 = <span class="number">5</span>;
 	<span class="kw">pub const </span>SessionLength: BlockNumber = <span class="number">6 </span>* HOURS;
-	<span class="kw">pub const </span>MaxInvulnerables: u32 = <span class="number">100</span>;
 	<span class="comment">// StakingAdmin pluralistic body.
 	</span><span class="kw">pub const </span>StakingAdminBodyId: BodyId = BodyId::Defense;
 }
@@ -1215,9 +1209,9 @@
 	<span class="kw">type </span>Currency = Balances;
 	<span class="kw">type </span>UpdateOrigin = CollatorSelectionUpdateOrigin;
 	<span class="kw">type </span>PotId = PotId;
-	<span class="kw">type </span>MaxCandidates = MaxCandidates;
-	<span class="kw">type </span>MinCandidates = MinCandidates;
-	<span class="kw">type </span>MaxInvulnerables = MaxInvulnerables;
+	<span class="kw">type </span>MaxCandidates = ConstU32&lt;<span class="number">100</span>&gt;;
+	<span class="kw">type </span>MinEligibleCollators = ConstU32&lt;<span class="number">4</span>&gt;;
+	<span class="kw">type </span>MaxInvulnerables = ConstU32&lt;<span class="number">20</span>&gt;;
 	<span class="comment">// should be a multiple of session or things will get inconsistent
 	</span><span class="kw">type </span>KickThreshold = Period;
 	<span class="kw">type </span>ValidatorId = &lt;<span class="self">Self </span><span class="kw">as </span>frame_system::Config&gt;::AccountId;

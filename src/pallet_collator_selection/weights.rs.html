@@ -195,6 +195,22 @@
 <a href="#195" id="195">195</a>
 <a href="#196" id="196">196</a>
 <a href="#197" id="197">197</a>
+<a href="#198" id="198">198</a>
+<a href="#199" id="199">199</a>
+<a href="#200" id="200">200</a>
+<a href="#201" id="201">201</a>
+<a href="#202" id="202">202</a>
+<a href="#203" id="203">203</a>
+<a href="#204" id="204">204</a>
+<a href="#205" id="205">205</a>
+<a href="#206" id="206">206</a>
+<a href="#207" id="207">207</a>
+<a href="#208" id="208">208</a>
+<a href="#209" id="209">209</a>
+<a href="#210" id="210">210</a>
+<a href="#211" id="211">211</a>
+<a href="#212" id="212">212</a>
+<a href="#213" id="213">213</a>
 </pre></div><pre class="rust"><code><span class="comment">// This file is part of Substrate.
 
 // Copyright (C) 2021 Parity Technologies (UK) Ltd.
@@ -224,7 +240,7 @@
 <span class="comment">// The weight info trait for `pallet_collator_selection`.
 </span><span class="kw">pub trait </span>WeightInfo {
 	<span class="kw">fn </span>set_invulnerables(_b: u32) -&gt; Weight;
-	<span class="kw">fn </span>add_invulnerable(_b: u32) -&gt; Weight;
+	<span class="kw">fn </span>add_invulnerable(_b: u32, _c: u32) -&gt; Weight;
 	<span class="kw">fn </span>remove_invulnerable(_b: u32) -&gt; Weight;
 	<span class="kw">fn </span>set_desired_candidates() -&gt; Weight;
 	<span class="kw">fn </span>set_candidacy_bond() -&gt; Weight;
@@ -279,23 +295,31 @@
 			.saturating_add(T::DbWeight::get().writes(<span class="number">2_u64</span>.saturating_mul(r <span class="kw">as </span>u64)))
 			.saturating_add(T::DbWeight::get().writes(<span class="number">2_u64</span>.saturating_mul(c <span class="kw">as </span>u64)))
 	}
-	<span class="doccomment">/// Storage: CollatorSelection Invulnerables (r:1 w:1)
-	/// Proof: CollatorSelection Invulnerables (max_values: Some(1), max_size: Some(3202), added: 3697, mode: MaxEncodedLen)
-	/// Storage: Session NextKeys (r:1 w:0)
+	<span class="doccomment">/// Storage: Session NextKeys (r:1 w:0)
 	/// Proof Skipped: Session NextKeys (max_values: None, max_size: None, mode: Measured)
-	/// The range of component `b` is `[1, 99]`.
-	</span><span class="kw">fn </span>add_invulnerable(b: u32) -&gt; Weight {
+	/// Storage: CollatorSelection Invulnerables (r:1 w:1)
+	/// Proof: CollatorSelection Invulnerables (max_values: Some(1), max_size: Some(641), added: 1136, mode: MaxEncodedLen)
+	/// Storage: CollatorSelection Candidates (r:1 w:1)
+	/// Proof: CollatorSelection Candidates (max_values: Some(1), max_size: Some(4802), added: 5297, mode: MaxEncodedLen)
+	/// Storage: System Account (r:1 w:1)
+	/// Proof: System Account (max_values: None, max_size: Some(128), added: 2603, mode: MaxEncodedLen)
+	/// The range of component `b` is `[1, 19]`.
+	/// The range of component `c` is `[1, 99]`.
+	</span><span class="kw">fn </span>add_invulnerable(b: u32, c: u32) -&gt; Weight {
 		<span class="comment">// Proof Size summary in bytes:
-		//  Measured:  `581 + b * (37 ±0)`
-		//  Estimated: `4687 + b * (37 ±0)`
-		// Minimum execution time: 269_126_000 picoseconds.
-		</span>Weight::from_parts(<span class="number">286_711_880</span>, <span class="number">0</span>)
-			.saturating_add(Weight::from_parts(<span class="number">0</span>, <span class="number">4687</span>))
-			<span class="comment">// Standard Error: 22_887
-			</span>.saturating_add(Weight::from_parts(<span class="number">813_399</span>, <span class="number">0</span>).saturating_mul(b.into()))
-			.saturating_add(T::DbWeight::get().reads(<span class="number">2</span>))
-			.saturating_add(T::DbWeight::get().writes(<span class="number">1</span>))
+		//  Measured:  `757 + b * (32 ±0) + c * (53 ±0)`
+		//  Estimated: `6287 + b * (37 ±0) + c * (53 ±0)`
+		// Minimum execution time: 52_720_000 picoseconds.
+		</span>Weight::from_parts(<span class="number">56_102_459</span>, <span class="number">0</span>)
+			.saturating_add(Weight::from_parts(<span class="number">0</span>, <span class="number">6287</span>))
+			<span class="comment">// Standard Error: 12_957
+			</span>.saturating_add(Weight::from_parts(<span class="number">26_422</span>, <span class="number">0</span>).saturating_mul(b.into()))
+			<span class="comment">// Standard Error: 2_456
+			</span>.saturating_add(Weight::from_parts(<span class="number">128_528</span>, <span class="number">0</span>).saturating_mul(c.into()))
+			.saturating_add(T::DbWeight::get().reads(<span class="number">4</span>))
+			.saturating_add(T::DbWeight::get().writes(<span class="number">3</span>))
 			.saturating_add(Weight::from_parts(<span class="number">0</span>, <span class="number">37</span>).saturating_mul(b.into()))
+			.saturating_add(Weight::from_parts(<span class="number">0</span>, <span class="number">53</span>).saturating_mul(c.into()))
 	}
 	<span class="doccomment">/// Storage: CollatorSelection Invulnerables (r:1 w:1)
 	/// Proof: CollatorSelection Invulnerables (max_values: Some(1), max_size: Some(3202), added: 3697, mode: MaxEncodedLen)
@@ -358,23 +382,31 @@
 			.saturating_add(RocksDbWeight::get().writes(<span class="number">2_u64</span>.saturating_mul(r <span class="kw">as </span>u64)))
 			.saturating_add(RocksDbWeight::get().writes(<span class="number">2_u64</span>.saturating_mul(c <span class="kw">as </span>u64)))
 	}
-	<span class="doccomment">/// Storage: CollatorSelection Invulnerables (r:1 w:1)
-	/// Proof: CollatorSelection Invulnerables (max_values: Some(1), max_size: Some(3202), added: 3697, mode: MaxEncodedLen)
-	/// Storage: Session NextKeys (r:1 w:0)
+	<span class="doccomment">/// Storage: Session NextKeys (r:1 w:0)
 	/// Proof Skipped: Session NextKeys (max_values: None, max_size: None, mode: Measured)
-	/// The range of component `b` is `[1, 99]`.
-	</span><span class="kw">fn </span>add_invulnerable(b: u32) -&gt; Weight {
+	/// Storage: CollatorSelection Invulnerables (r:1 w:1)
+	/// Proof: CollatorSelection Invulnerables (max_values: Some(1), max_size: Some(641), added: 1136, mode: MaxEncodedLen)
+	/// Storage: CollatorSelection Candidates (r:1 w:1)
+	/// Proof: CollatorSelection Candidates (max_values: Some(1), max_size: Some(4802), added: 5297, mode: MaxEncodedLen)
+	/// Storage: System Account (r:1 w:1)
+	/// Proof: System Account (max_values: None, max_size: Some(128), added: 2603, mode: MaxEncodedLen)
+	/// The range of component `b` is `[1, 19]`.
+	/// The range of component `c` is `[1, 99]`.
+	</span><span class="kw">fn </span>add_invulnerable(b: u32, c: u32) -&gt; Weight {
 		<span class="comment">// Proof Size summary in bytes:
-		//  Measured:  `581 + b * (37 ±0)`
-		//  Estimated: `4687 + b * (37 ±0)`
-		// Minimum execution time: 269_126_000 picoseconds.
-		</span>Weight::from_parts(<span class="number">286_711_880</span>, <span class="number">0</span>)
-			.saturating_add(Weight::from_parts(<span class="number">0</span>, <span class="number">4687</span>))
-			<span class="comment">// Standard Error: 22_887
-			</span>.saturating_add(Weight::from_parts(<span class="number">813_399</span>, <span class="number">0</span>).saturating_mul(b.into()))
-			.saturating_add(RocksDbWeight::get().reads(<span class="number">2</span>))
-			.saturating_add(RocksDbWeight::get().writes(<span class="number">1</span>))
+		//  Measured:  `757 + b * (32 ±0) + c * (53 ±0)`
+		//  Estimated: `6287 + b * (37 ±0) + c * (53 ±0)`
+		// Minimum execution time: 52_720_000 picoseconds.
+		</span>Weight::from_parts(<span class="number">56_102_459</span>, <span class="number">0</span>)
+			.saturating_add(Weight::from_parts(<span class="number">0</span>, <span class="number">6287</span>))
+			<span class="comment">// Standard Error: 12_957
+			</span>.saturating_add(Weight::from_parts(<span class="number">26_422</span>, <span class="number">0</span>).saturating_mul(b.into()))
+			<span class="comment">// Standard Error: 2_456
+			</span>.saturating_add(Weight::from_parts(<span class="number">128_528</span>, <span class="number">0</span>).saturating_mul(c.into()))
+			.saturating_add(RocksDbWeight::get().reads(<span class="number">4</span>))
+			.saturating_add(RocksDbWeight::get().writes(<span class="number">3</span>))
 			.saturating_add(Weight::from_parts(<span class="number">0</span>, <span class="number">37</span>).saturating_mul(b.into()))
+			.saturating_add(Weight::from_parts(<span class="number">0</span>, <span class="number">53</span>).saturating_mul(c.into()))
 	}
 	<span class="doccomment">/// Storage: CollatorSelection Invulnerables (r:1 w:1)
 	/// Proof: CollatorSelection Invulnerables (max_values: Some(1), max_size: Some(3202), added: 3697, mode: MaxEncodedLen)
