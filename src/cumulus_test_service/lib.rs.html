@@ -900,14 +900,6 @@
 <a href="#900" id="900">900</a>
 <a href="#901" id="901">901</a>
 <a href="#902" id="902">902</a>
-<a href="#903" id="903">903</a>
-<a href="#904" id="904">904</a>
-<a href="#905" id="905">905</a>
-<a href="#906" id="906">906</a>
-<a href="#907" id="907">907</a>
-<a href="#908" id="908">908</a>
-<a href="#909" id="909">909</a>
-<a href="#910" id="910">910</a>
 </pre></div><pre class="rust"><code><span class="comment">// Copyright 2019-2021 Parity Technologies (UK) Ltd.
 // This file is part of Cumulus.
 
@@ -965,7 +957,6 @@
 <span class="kw">use </span>polkadot_overseer::Handle <span class="kw">as </span>OverseerHandle;
 <span class="kw">use </span>polkadot_primitives::{CollatorPair, Hash <span class="kw">as </span>PHash, PersistedValidationData};
 <span class="kw">use </span>polkadot_service::ProvideRuntimeApi;
-<span class="kw">use </span>sc_client_api::execution_extensions::ExecutionStrategies;
 <span class="kw">use </span>sc_consensus::ImportQueue;
 <span class="kw">use </span>sc_network::{
 	config::{FullNetworkConfiguration, TransportConfig},
@@ -1667,13 +1658,6 @@
 		chain_spec: spec,
 		wasm_method: WasmExecutionMethod::Compiled {
 			instantiation_strategy: sc_executor_wasmtime::InstantiationStrategy::PoolingCopyOnWrite,
-		},
-		execution_strategies: ExecutionStrategies {
-			syncing: sc_client_api::ExecutionStrategy::AlwaysWasm,
-			importing: sc_client_api::ExecutionStrategy::AlwaysWasm,
-			block_construction: sc_client_api::ExecutionStrategy::AlwaysWasm,
-			offchain_worker: sc_client_api::ExecutionStrategy::AlwaysWasm,
-			other: sc_client_api::ExecutionStrategy::AlwaysWasm,
 		},
 		rpc_addr: <span class="prelude-val">None</span>,
 		rpc_max_connections: Default::default(),

@@ -435,6 +435,22 @@
 <a href="#435" id="435">435</a>
 <a href="#436" id="436">436</a>
 <a href="#437" id="437">437</a>
+<a href="#438" id="438">438</a>
+<a href="#439" id="439">439</a>
+<a href="#440" id="440">440</a>
+<a href="#441" id="441">441</a>
+<a href="#442" id="442">442</a>
+<a href="#443" id="443">443</a>
+<a href="#444" id="444">444</a>
+<a href="#445" id="445">445</a>
+<a href="#446" id="446">446</a>
+<a href="#447" id="447">447</a>
+<a href="#448" id="448">448</a>
+<a href="#449" id="449">449</a>
+<a href="#450" id="450">450</a>
+<a href="#451" id="451">451</a>
+<a href="#452" id="452">452</a>
+<a href="#453" id="453">453</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! Service and ServiceFactory implementation. Specialized wrapper over substrate service.
 
 </span><span class="comment">// std
@@ -458,6 +474,7 @@
 
 <span class="comment">// Substrate Imports
 </span><span class="kw">use </span>frame_benchmarking_cli::SUBSTRATE_REFERENCE_HARDWARE;
+<span class="kw">use </span>sc_client_api::Backend;
 <span class="kw">use </span>sc_consensus::ImportQueue;
 <span class="kw">use </span>sc_executor::{
 	HeapAllocStrategy, NativeElseWasmExecutor, WasmExecutor, DEFAULT_HEAP_ALLOC_STRATEGY,
@@ -466,6 +483,7 @@
 <span class="kw">use </span>sc_network_sync::SyncingService;
 <span class="kw">use </span>sc_service::{Configuration, PartialComponents, TFullBackend, TFullClient, TaskManager};
 <span class="kw">use </span>sc_telemetry::{Telemetry, TelemetryHandle, TelemetryWorker, TelemetryWorkerHandle};
+<span class="kw">use </span>sc_transaction_pool_api::OffchainTransactionPoolFactory;
 <span class="kw">use </span>sp_keystore::KeystorePtr;
 <span class="kw">use </span>substrate_prometheus_endpoint::Registry;
 
@@ -631,11 +649,25 @@
 		.<span class="kw">await</span><span class="question-mark">?</span>;
 
 	<span class="kw">if </span>parachain_config.offchain_worker.enabled {
-		sc_service::build_offchain_workers(
-			<span class="kw-2">&amp;</span>parachain_config,
-			task_manager.spawn_handle(),
-			client.clone(),
-			network.clone(),
+		<span class="kw">use </span>futures::FutureExt;
+
+		task_manager.spawn_handle().spawn(
+			<span class="string">&quot;offchain-workers-runner&quot;</span>,
+			<span class="string">&quot;offchain-work&quot;</span>,
+			sc_offchain::OffchainWorkers::new(sc_offchain::OffchainWorkerOptions {
+				runtime_api_provider: client.clone(),
+				keystore: <span class="prelude-val">Some</span>(params.keystore_container.keystore()),
+				offchain_db: backend.offchain_storage(),
+				transaction_pool: <span class="prelude-val">Some</span>(OffchainTransactionPoolFactory::new(
+					transaction_pool.clone(),
+				)),
+				network_provider: network.clone(),
+				is_validator: parachain_config.role.is_authority(),
+				enable_http_requests: <span class="bool-val">false</span>,
+				custom_extensions: <span class="kw">move </span>|<span class="kw">_</span>| <span class="macro">vec!</span>[],
+			})
+			.run(client.clone(), task_manager.spawn_handle())
+			.boxed(),
 		);
 	}
 
