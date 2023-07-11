@@ -30,7 +30,7 @@ var sourcesIndex = JSON.parse('{\
 "contracts_rococo_runtime":["",[["weights",[],["block_weights.rs","extrinsic_weights.rs","mod.rs","paritydb_weights.rs","rocksdb_weights.rs"]]],["constants.rs","contracts.rs","lib.rs","xcm_config.rs"]],\
 "cumulus_client_cli":["",[],["lib.rs"]],\
 "cumulus_client_collator":["",[],["lib.rs","service.rs"]],\
-"cumulus_client_consensus_aura":["",[],["import_queue.rs","lib.rs","unstable_reimpl.rs"]],\
+"cumulus_client_consensus_aura":["",[["collators",[],["basic.rs","lookahead.rs","mod.rs"]]],["collator.rs","equivocation_import_queue.rs","import_queue.rs","lib.rs"]],\
 "cumulus_client_consensus_common":["",[],["import_queue.rs","level_monitor.rs","lib.rs","parachain_consensus.rs"]],\
 "cumulus_client_consensus_proposer":["",[],["lib.rs"]],\
 "cumulus_client_consensus_relay_chain":["",[],["import_queue.rs","lib.rs"]],\
@@ -46,6 +46,7 @@ var sourcesIndex = JSON.parse('{\
 "cumulus_pallet_xcm":["",[],["lib.rs"]],\
 "cumulus_pallet_xcmp_queue":["",[],["lib.rs","migration.rs","weights.rs"]],\
 "cumulus_ping":["",[],["lib.rs"]],\
+"cumulus_primitives_aura":["",[],["lib.rs"]],\
 "cumulus_primitives_core":["",[],["lib.rs"]],\
 "cumulus_primitives_parachain_inherent":["",[],["client_side.rs","lib.rs","mock.rs"]],\
 "cumulus_primitives_timestamp":["",[],["lib.rs"]],\

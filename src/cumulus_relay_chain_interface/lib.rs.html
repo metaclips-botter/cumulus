@@ -415,7 +415,7 @@
 	<span class="doccomment">/// Get the hash of the current best block.
 	</span><span class="kw">async fn </span>best_block_hash(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; RelayChainResult&lt;PHash&gt;;
 
-	<span class="doccomment">/// Fetch the block header of a given height
+	<span class="doccomment">/// Fetch the block header of a given hash or height, if it exists.
 	</span><span class="kw">async fn </span>header(<span class="kw-2">&amp;</span><span class="self">self</span>, block_id: BlockId) -&gt; RelayChainResult&lt;<span class="prelude-ty">Option</span>&lt;PHeader&gt;&gt;;
 
 	<span class="doccomment">/// Get the hash of the finalized block.

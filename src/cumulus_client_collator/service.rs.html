@@ -316,6 +316,19 @@
 <a href="#316" id="316">316</a>
 <a href="#317" id="317">317</a>
 <a href="#318" id="318">318</a>
+<a href="#319" id="319">319</a>
+<a href="#320" id="320">320</a>
+<a href="#321" id="321">321</a>
+<a href="#322" id="322">322</a>
+<a href="#323" id="323">323</a>
+<a href="#324" id="324">324</a>
+<a href="#325" id="325">325</a>
+<a href="#326" id="326">326</a>
+<a href="#327" id="327">327</a>
+<a href="#328" id="328">328</a>
+<a href="#329" id="329">329</a>
+<a href="#330" id="330">330</a>
+<a href="#331" id="331">331</a>
 </pre></div><pre class="rust"><code><span class="comment">// Copyright 2023 Parity Technologies (UK) Ltd.
 // This file is part of Cumulus.
 
@@ -376,12 +389,18 @@
 		candidate: ParachainCandidate&lt;Block&gt;,
 	) -&gt; <span class="prelude-ty">Option</span>&lt;(Collation, ParachainBlockData&lt;Block&gt;)&gt;;
 
-	<span class="doccomment">/// Inform networking systems that the block should be announced after an appropriate
-	/// signal has been received. This returns the sending half of the signal.
+	<span class="doccomment">/// Inform networking systems that the block should be announced after a signal has
+	/// been received to indicate the block has been seconded by a relay-chain validator.
+	///
+	/// This sets up the barrier and returns the sending side of a channel, for the signal
+	/// to be passed through.
 	</span><span class="kw">fn </span>announce_with_barrier(
 		<span class="kw-2">&amp;</span><span class="self">self</span>,
 		block_hash: Block::Hash,
 	) -&gt; oneshot::Sender&lt;CollationSecondedSignal&gt;;
+
+	<span class="doccomment">/// Directly announce a block on the network.
+	</span><span class="kw">fn </span>announce_block(<span class="kw-2">&amp;</span><span class="self">self</span>, block_hash: Block::Hash, data: <span class="prelude-ty">Option</span>&lt;Vec&lt;u8&gt;&gt;);
 }
 
 <span class="doccomment">/// The [`CollatorService`] provides common utilities for parachain consensus and authoring.
@@ -392,6 +411,7 @@
 </span><span class="kw">pub struct </span>CollatorService&lt;Block: BlockT, BS, RA&gt; {
 	block_status: Arc&lt;BS&gt;,
 	wait_to_announce: Arc&lt;Mutex&lt;WaitToAnnounce&lt;Block&gt;&gt;&gt;,
+	announce_block: Arc&lt;<span class="kw">dyn </span>Fn(Block::Hash, <span class="prelude-ty">Option</span>&lt;Vec&lt;u8&gt;&gt;) + Send + Sync&gt;,
 	runtime_api: Arc&lt;RA&gt;,
 }
 
@@ -400,6 +420,7 @@
 		<span class="self">Self </span>{
 			block_status: <span class="self">self</span>.block_status.clone(),
 			wait_to_announce: <span class="self">self</span>.wait_to_announce.clone(),
+			announce_block: <span class="self">self</span>.announce_block.clone(),
 			runtime_api: <span class="self">self</span>.runtime_api.clone(),
 		}
 	}
@@ -419,9 +440,10 @@
 		announce_block: Arc&lt;<span class="kw">dyn </span>Fn(Block::Hash, <span class="prelude-ty">Option</span>&lt;Vec&lt;u8&gt;&gt;) + Send + Sync&gt;,
 		runtime_api: Arc&lt;RA&gt;,
 	) -&gt; <span class="self">Self </span>{
-		<span class="kw">let </span>wait_to_announce = Arc::new(Mutex::new(WaitToAnnounce::new(spawner, announce_block)));
+		<span class="kw">let </span>wait_to_announce =
+			Arc::new(Mutex::new(WaitToAnnounce::new(spawner, announce_block.clone())));
 
-		<span class="self">Self </span>{ block_status, wait_to_announce, runtime_api }
+		<span class="self">Self </span>{ block_status, wait_to_announce, announce_block, runtime_api }
 	}
 
 	<span class="doccomment">/// Checks the status of the given block hash in the Parachain.
@@ -632,6 +654,10 @@
 		block_hash: Block::Hash,
 	) -&gt; oneshot::Sender&lt;CollationSecondedSignal&gt; {
 		CollatorService::announce_with_barrier(<span class="self">self</span>, block_hash)
+	}
+
+	<span class="kw">fn </span>announce_block(<span class="kw-2">&amp;</span><span class="self">self</span>, block_hash: Block::Hash, data: <span class="prelude-ty">Option</span>&lt;Vec&lt;u8&gt;&gt;) {
+		(<span class="self">self</span>.announce_block)(block_hash, data)
 	}
 }
 </code></pre></div></section></main></body></html>
