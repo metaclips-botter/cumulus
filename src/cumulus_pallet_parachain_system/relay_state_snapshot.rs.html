@@ -336,6 +336,13 @@
 <a href="#336" id="336">336</a>
 <a href="#337" id="337">337</a>
 <a href="#338" id="338">338</a>
+<a href="#339" id="339">339</a>
+<a href="#340" id="340">340</a>
+<a href="#341" id="341">341</a>
+<a href="#342" id="342">342</a>
+<a href="#343" id="343">343</a>
+<a href="#344" id="344">344</a>
+<a href="#345" id="345">345</a>
 </pre></div><pre class="rust"><code><span class="comment">// Copyright 2021 Parity Technologies (UK) Ltd.
 // This file is part of Cumulus.
 
@@ -366,7 +373,7 @@
 </span><span class="comment">// The field order should stay the same as the data can be found in the proof to ensure both are
 // have the same encoded representation.
 </span><span class="attr">#[derive(Clone, Encode, Decode, TypeInfo, Default)]
-</span><span class="kw">pub struct </span>RelayDispachQueueSize {
+</span><span class="kw">pub struct </span>RelayDispatchQueueRemainingCapacity {
 	<span class="doccomment">/// The number of additional messages that can be enqueued.
 	</span><span class="kw">pub </span>remaining_count: u32,
 	<span class="doccomment">/// The total size of additional messages that can be enqueued.
@@ -386,7 +393,7 @@
 	</span><span class="kw">pub </span>dmq_mqc_head: relay_chain::Hash,
 
 	<span class="doccomment">/// The current capacity of the upward message queue of the current parachain on the relay chain.
-	</span><span class="kw">pub </span>relay_dispatch_queue_size: RelayDispachQueueSize,
+	</span><span class="kw">pub </span>relay_dispatch_queue_remaining_capacity: RelayDispatchQueueRemainingCapacity,
 
 	<span class="doccomment">/// Information about all the inbound HRMP channels.
 	///
@@ -424,7 +431,7 @@
 	<span class="doccomment">/// The DMQ MQC head cannot be extracted.
 	</span>DmqMqcHead(ReadEntryErr),
 	<span class="doccomment">/// Relay dispatch queue cannot be extracted.
-	</span>RelayDispatchQueueSize(ReadEntryErr),
+	</span>RelayDispatchQueueRemainingCapacity(ReadEntryErr),
 	<span class="doccomment">/// The hrmp inress channel index cannot be extracted.
 	</span>HrmpIngressChannelIndex(ReadEntryErr),
 	<span class="doccomment">/// The hrmp egress channel index cannot be extracted.
@@ -521,7 +528,10 @@
 		)
 		.map_err(Error::DmqMqcHead)<span class="question-mark">?</span>;
 
-		<span class="kw">let </span>relay_dispatch_queue_size = read_optional_entry::&lt;RelayDispachQueueSize, <span class="kw">_</span>&gt;(
+		<span class="kw">let </span>relay_dispatch_queue_remaining_capacity = read_optional_entry::&lt;
+			RelayDispatchQueueRemainingCapacity,
+			<span class="kw">_</span>,
+		&gt;(
 			<span class="kw-2">&amp;</span><span class="self">self</span>.trie_backend,
 			<span class="kw-2">&amp;</span>relay_chain::well_known_keys::relay_dispatch_queue_remaining_capacity(<span class="self">self</span>.para_id)
 				.key,
@@ -533,22 +543,26 @@
 		// this code here needs to be removed and above needs to be changed to `read_entry` that
 		// returns an error if `relay_dispatch_queue_remaining_capacity` can not be found/decoded.
 		//
-		// For now we just fallback to the old dispatch queue size if there is an error.
-		</span><span class="kw">let </span>relay_dispatch_queue_size = <span class="kw">match </span>relay_dispatch_queue_size {
+		// For now we just fallback to the old dispatch queue size on `ReadEntryErr::Absent`.
+		// `ReadEntryErr::Decode` and `ReadEntryErr::Proof` are potentially subject to meddling
+		// by malicious collators, so we reject the block in those cases.
+		</span><span class="kw">let </span>relay_dispatch_queue_remaining_capacity = <span class="kw">match </span>relay_dispatch_queue_remaining_capacity
+		{
 			<span class="prelude-val">Ok</span>(<span class="prelude-val">Some</span>(r)) =&gt; r,
-			<span class="kw">_ </span>=&gt; {
+			<span class="prelude-val">Ok</span>(<span class="prelude-val">None</span>) =&gt; {
 				<span class="kw">let </span>res = read_entry::&lt;(u32, u32), <span class="kw">_</span>&gt;(
 					<span class="kw-2">&amp;</span><span class="self">self</span>.trie_backend,
 					<span class="attr">#[allow(deprecated)]
 					</span><span class="kw-2">&amp;</span>relay_chain::well_known_keys::relay_dispatch_queue_size(<span class="self">self</span>.para_id),
 					<span class="prelude-val">Some</span>((<span class="number">0</span>, <span class="number">0</span>)),
 				)
-				.map_err(Error::RelayDispatchQueueSize)<span class="question-mark">?</span>;
+				.map_err(Error::RelayDispatchQueueRemainingCapacity)<span class="question-mark">?</span>;
 
 				<span class="kw">let </span>remaining_count = host_config.max_upward_queue_count.saturating_sub(res.<span class="number">0</span>);
 				<span class="kw">let </span>remaining_size = host_config.max_upward_queue_size.saturating_sub(res.<span class="number">1</span>);
-				RelayDispachQueueSize { remaining_count, remaining_size }
+				RelayDispatchQueueRemainingCapacity { remaining_count, remaining_size }
 			},
+			<span class="prelude-val">Err</span>(e) =&gt; <span class="kw">return </span><span class="prelude-val">Err</span>(Error::RelayDispatchQueueRemainingCapacity(e)),
 		};
 
 		<span class="kw">let </span>ingress_channel_index: Vec&lt;ParaId&gt; = read_entry(
@@ -593,7 +607,7 @@
 		// by relying on the fact that `ingress_channel_index` and `egress_channel_index` are themselves sorted.
 		</span><span class="prelude-val">Ok</span>(MessagingStateSnapshot {
 			dmq_mqc_head,
-			relay_dispatch_queue_size,
+			relay_dispatch_queue_remaining_capacity,
 			ingress_channels,
 			egress_channels,
 		})

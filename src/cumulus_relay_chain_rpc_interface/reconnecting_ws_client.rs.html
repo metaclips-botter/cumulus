@@ -991,12 +991,12 @@
 		<span class="kw">let </span>urls = std::mem::take(<span class="kw-2">&amp;mut </span><span class="self">self</span>.ws_urls);
 		<span class="kw">let </span><span class="prelude-val">Ok</span>(<span class="kw-2">mut </span>client_manager) = ClientManager::new(urls).<span class="kw">await else </span>{
 			<span class="macro">tracing::error!</span>(target: LOG_TARGET, <span class="string">&quot;No valid RPC url found. Stopping RPC worker.&quot;</span>);
-			<span class="kw">return</span>;
-		};
+			<span class="kw">return
+		</span>};
 		<span class="kw">let </span><span class="prelude-val">Ok</span>(<span class="kw-2">mut </span>subscriptions) = client_manager.get_subscriptions().<span class="kw">await else </span>{
 			<span class="macro">tracing::error!</span>(target: LOG_TARGET, <span class="string">&quot;Unable to fetch subscriptions on initial connection.&quot;</span>);
-			<span class="kw">return</span>;
-		};
+			<span class="kw">return
+		</span>};
 
 		<span class="kw">let </span><span class="kw-2">mut </span>imported_blocks_cache =
 			LruCache::new(NonZeroUsize::new(<span class="number">40</span>).expect(<span class="string">&quot;40 is nonzero; qed.&quot;</span>));

@@ -179,6 +179,8 @@
 <a href="#179" id="179">179</a>
 <a href="#180" id="180">180</a>
 <a href="#181" id="181">181</a>
+<a href="#182" id="182">182</a>
+<a href="#183" id="183">183</a>
 </pre></div><pre class="rust"><code><span class="comment">// Copyright 2021 Parity Technologies (UK) Ltd.
 // This file is part of Cumulus.
 
@@ -305,13 +307,15 @@
 					dmq_mqc_head.encode(),
 				);
 			}
-			<span class="kw">if let </span><span class="prelude-val">Some</span>(relay_dispatch_queue_size) = <span class="self">self</span>.relay_dispatch_queue_remaining_capacity {
+			<span class="kw">if let </span><span class="prelude-val">Some</span>(relay_dispatch_queue_remaining_capacity) =
+				<span class="self">self</span>.relay_dispatch_queue_remaining_capacity
+			{
 				insert(
 					relay_chain::well_known_keys::relay_dispatch_queue_remaining_capacity(
 						<span class="self">self</span>.para_id,
 					)
 					.key,
-					relay_dispatch_queue_size.encode(),
+					relay_dispatch_queue_remaining_capacity.encode(),
 				);
 			}
 			<span class="kw">if let </span><span class="prelude-val">Some</span>(upgrade_go_ahead) = <span class="self">self</span>.upgrade_go_ahead {

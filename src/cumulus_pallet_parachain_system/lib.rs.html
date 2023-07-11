@@ -1497,7 +1497,7 @@
 			};
 
 			&lt;PendingUpwardMessages&lt;T&gt;&gt;::mutate(|up| {
-				<span class="kw">let </span>queue_size = relevant_messaging_state.relay_dispatch_queue_size;
+				<span class="kw">let </span>queue_size = relevant_messaging_state.relay_dispatch_queue_remaining_capacity;
 
 				<span class="kw">let </span>available_capacity = cmp::min(
 					queue_size.remaining_count,
@@ -2320,7 +2320,7 @@
 	</span><span class="kw">pub fn </span>open_outbound_hrmp_channel_for_benchmarks(target_parachain: ParaId) {
 		RelevantMessagingState::&lt;T&gt;::put(MessagingStateSnapshot {
 			dmq_mqc_head: Default::default(),
-			relay_dispatch_queue_size: Default::default(),
+			relay_dispatch_queue_remaining_capacity: Default::default(),
 			ingress_channels: Default::default(),
 			egress_channels: <span class="macro">vec!</span>[(
 				target_parachain,
