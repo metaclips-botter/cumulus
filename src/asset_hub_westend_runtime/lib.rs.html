@@ -2133,13 +2133,13 @@
 		UncheckedExtrinsic = UncheckedExtrinsic,
 	{
 		<span class="comment">// System support stuff.
-		</span>System: frame_system::{Pallet, Call, Config, Storage, Event&lt;T&gt;} = <span class="number">0</span>,
+		</span>System: frame_system::{Pallet, Call, Config&lt;T&gt;, Storage, Event&lt;T&gt;} = <span class="number">0</span>,
 		ParachainSystem: cumulus_pallet_parachain_system::{
-			Pallet, Call, Config, Storage, Inherent, Event&lt;T&gt;, ValidateUnsigned,
+			Pallet, Call, Config&lt;T&gt;, Storage, Inherent, Event&lt;T&gt;, ValidateUnsigned,
 		} = <span class="number">1</span>,
 		<span class="comment">// RandomnessCollectiveFlip = 2 removed
 		</span>Timestamp: pallet_timestamp::{Pallet, Call, Storage, Inherent} = <span class="number">3</span>,
-		ParachainInfo: parachain_info::{Pallet, Storage, Config} = <span class="number">4</span>,
+		ParachainInfo: parachain_info::{Pallet, Storage, Config&lt;T&gt;} = <span class="number">4</span>,
 
 		<span class="comment">// Monetary stuff.
 		</span>Balances: pallet_balances::{Pallet, Call, Storage, Config&lt;T&gt;, Event&lt;T&gt;} = <span class="number">10</span>,
@@ -2152,11 +2152,11 @@
 		CollatorSelection: pallet_collator_selection::{Pallet, Call, Storage, Event&lt;T&gt;, Config&lt;T&gt;} = <span class="number">21</span>,
 		Session: pallet_session::{Pallet, Call, Storage, Event, Config&lt;T&gt;} = <span class="number">22</span>,
 		Aura: pallet_aura::{Pallet, Storage, Config&lt;T&gt;} = <span class="number">23</span>,
-		AuraExt: cumulus_pallet_aura_ext::{Pallet, Storage, Config} = <span class="number">24</span>,
+		AuraExt: cumulus_pallet_aura_ext::{Pallet, Storage, Config&lt;T&gt;} = <span class="number">24</span>,
 
 		<span class="comment">// XCM helpers.
 		</span>XcmpQueue: cumulus_pallet_xcmp_queue::{Pallet, Call, Storage, Event&lt;T&gt;} = <span class="number">30</span>,
-		PolkadotXcm: pallet_xcm::{Pallet, Call, Storage, Event&lt;T&gt;, Origin, Config} = <span class="number">31</span>,
+		PolkadotXcm: pallet_xcm::{Pallet, Call, Storage, Event&lt;T&gt;, Origin, Config&lt;T&gt;} = <span class="number">31</span>,
 		CumulusXcm: cumulus_pallet_xcm::{Pallet, Event&lt;T&gt;, Origin} = <span class="number">32</span>,
 		DmpQueue: cumulus_pallet_dmp_queue::{Pallet, Call, Storage, Event&lt;T&gt;} = <span class="number">33</span>,
 

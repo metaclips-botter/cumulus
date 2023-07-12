@@ -523,13 +523,13 @@
 		NodeBlock = generic::Block&lt;Header, sp_runtime::OpaqueExtrinsic&gt;,
 		UncheckedExtrinsic = UncheckedExtrinsic,
 	{
-		System: frame_system::{Pallet, Call, Storage, Config, Event&lt;T&gt;},
+		System: frame_system::{Pallet, Call, Storage, Config&lt;T&gt;, Event&lt;T&gt;},
 		Sudo: pallet_sudo::{Pallet, Call, Storage, Config&lt;T&gt;, Event&lt;T&gt;},
 
 		ParachainSystem: cumulus_pallet_parachain_system::{
-			Pallet, Call, Config, Storage, Inherent, Event&lt;T&gt;, ValidateUnsigned,
+			Pallet, Call, Config&lt;T&gt;, Storage, Inherent, Event&lt;T&gt;, ValidateUnsigned,
 		},
-		ParachainInfo: parachain_info::{Pallet, Storage, Config},
+		ParachainInfo: parachain_info::{Pallet, Storage, Config&lt;T&gt;},
 		SoloToPara: cumulus_pallet_solo_to_para::{Pallet, Call, Storage, Event},
 	}
 }

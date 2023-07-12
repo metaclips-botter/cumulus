@@ -224,6 +224,11 @@
 <a href="#224" id="224">224</a>
 <a href="#225" id="225">225</a>
 <a href="#226" id="226">226</a>
+<a href="#227" id="227">227</a>
+<a href="#228" id="228">228</a>
+<a href="#229" id="229">229</a>
+<a href="#230" id="230">230</a>
+<a href="#231" id="231">231</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>cumulus_primitives_core::ParaId;
 <span class="kw">use </span>parachain_template_runtime::{AccountId, AuraId, Signature, EXISTENTIAL_DEPOSIT};
 <span class="kw">use </span>sc_chain_spec::{ChainSpecExtension, ChainSpecGroup};
@@ -416,11 +421,15 @@
 			code: parachain_template_runtime::WASM_BINARY
 				.expect(<span class="string">&quot;WASM binary was not build, please build it!&quot;</span>)
 				.to_vec(),
+			..Default::default()
 		},
 		balances: parachain_template_runtime::BalancesConfig {
 			balances: endowed_accounts.iter().cloned().map(|k| (k, <span class="number">1 </span>&lt;&lt; <span class="number">60</span>)).collect(),
 		},
-		parachain_info: parachain_template_runtime::ParachainInfoConfig { parachain_id: id },
+		parachain_info: parachain_template_runtime::ParachainInfoConfig {
+			parachain_id: id,
+			..Default::default()
+		},
 		collator_selection: parachain_template_runtime::CollatorSelectionConfig {
 			invulnerables: invulnerables.iter().cloned().map(|(acc, <span class="kw">_</span>)| acc).collect(),
 			candidacy_bond: EXISTENTIAL_DEPOSIT * <span class="number">16</span>,
@@ -445,6 +454,7 @@
 		parachain_system: Default::default(),
 		polkadot_xcm: parachain_template_runtime::PolkadotXcmConfig {
 			safe_xcm_version: <span class="prelude-val">Some</span>(SAFE_XCM_VERSION),
+			..Default::default()
 		},
 		transaction_payment: Default::default(),
 		sudo: parachain_template_runtime::SudoConfig { key: <span class="prelude-val">Some</span>(root) },

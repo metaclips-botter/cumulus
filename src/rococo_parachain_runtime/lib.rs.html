@@ -1379,25 +1379,25 @@
 		NodeBlock = generic::Block&lt;Header, sp_runtime::OpaqueExtrinsic&gt;,
 		UncheckedExtrinsic = UncheckedExtrinsic,
 	{
-		System: frame_system::{Pallet, Call, Storage, Config, Event&lt;T&gt;},
+		System: frame_system::{Pallet, Call, Storage, Config&lt;T&gt;, Event&lt;T&gt;},
 		Timestamp: pallet_timestamp::{Pallet, Call, Storage, Inherent},
 		Sudo: pallet_sudo::{Pallet, Call, Storage, Config&lt;T&gt;, Event&lt;T&gt;},
 		TransactionPayment: pallet_transaction_payment::{Pallet, Storage, Event&lt;T&gt;},
 
 		ParachainSystem: cumulus_pallet_parachain_system::{
-			Pallet, Call, Config, Storage, Inherent, Event&lt;T&gt;, ValidateUnsigned,
+			Pallet, Call, Config&lt;T&gt;, Storage, Inherent, Event&lt;T&gt;, ValidateUnsigned,
 		} = <span class="number">20</span>,
-		ParachainInfo: parachain_info::{Pallet, Storage, Config} = <span class="number">21</span>,
+		ParachainInfo: parachain_info::{Pallet, Storage, Config&lt;T&gt;} = <span class="number">21</span>,
 
 		Balances: pallet_balances::{Pallet, Call, Storage, Config&lt;T&gt;, Event&lt;T&gt;} = <span class="number">30</span>,
 		Assets: pallet_assets::{Pallet, Call, Storage, Event&lt;T&gt;} = <span class="number">31</span>,
 
 		Aura: pallet_aura::{Pallet, Config&lt;T&gt;},
-		AuraExt: cumulus_pallet_aura_ext::{Pallet, Config},
+		AuraExt: cumulus_pallet_aura_ext::{Pallet, Config&lt;T&gt;},
 
 		<span class="comment">// XCM helpers.
 		</span>XcmpQueue: cumulus_pallet_xcmp_queue::{Pallet, Call, Storage, Event&lt;T&gt;} = <span class="number">50</span>,
-		PolkadotXcm: pallet_xcm::{Pallet, Call, Event&lt;T&gt;, Origin, Config} = <span class="number">51</span>,
+		PolkadotXcm: pallet_xcm::{Pallet, Call, Event&lt;T&gt;, Origin, Config&lt;T&gt;} = <span class="number">51</span>,
 		CumulusXcm: cumulus_pallet_xcm::{Pallet, Call, Event&lt;T&gt;, Origin} = <span class="number">52</span>,
 		DmpQueue: cumulus_pallet_dmp_queue::{Pallet, Call, Storage, Event&lt;T&gt;} = <span class="number">53</span>,
 

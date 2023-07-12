@@ -607,6 +607,21 @@
 <a href="#607" id="607">607</a>
 <a href="#608" id="608">608</a>
 <a href="#609" id="609">609</a>
+<a href="#610" id="610">610</a>
+<a href="#611" id="611">611</a>
+<a href="#612" id="612">612</a>
+<a href="#613" id="613">613</a>
+<a href="#614" id="614">614</a>
+<a href="#615" id="615">615</a>
+<a href="#616" id="616">616</a>
+<a href="#617" id="617">617</a>
+<a href="#618" id="618">618</a>
+<a href="#619" id="619">619</a>
+<a href="#620" id="620">620</a>
+<a href="#621" id="621">621</a>
+<a href="#622" id="622">622</a>
+<a href="#623" id="623">623</a>
+<a href="#624" id="624">624</a>
 </pre></div><pre class="rust"><code><span class="comment">// Copyright 2022 Parity Technologies (UK) Ltd.
 // This file is part of Cumulus.
 
@@ -883,11 +898,15 @@
 				code: bridge_hub_rococo_runtime::WASM_BINARY
 					.expect(<span class="string">&quot;WASM binary was not build, please build it!&quot;</span>)
 					.to_vec(),
+				..Default::default()
 			},
 			balances: bridge_hub_rococo_runtime::BalancesConfig {
 				balances: endowed_accounts.iter().cloned().map(|k| (k, <span class="number">1 </span>&lt;&lt; <span class="number">60</span>)).collect(),
 			},
-			parachain_info: bridge_hub_rococo_runtime::ParachainInfoConfig { parachain_id: id },
+			parachain_info: bridge_hub_rococo_runtime::ParachainInfoConfig {
+				parachain_id: id,
+				..Default::default()
+			},
 			collator_selection: bridge_hub_rococo_runtime::CollatorSelectionConfig {
 				invulnerables: invulnerables.iter().cloned().map(|(acc, <span class="kw">_</span>)| acc).collect(),
 				candidacy_bond: BRIDGE_HUB_ROCOCO_ED * <span class="number">16</span>,
@@ -910,6 +929,7 @@
 			parachain_system: Default::default(),
 			polkadot_xcm: bridge_hub_rococo_runtime::PolkadotXcmConfig {
 				safe_xcm_version: <span class="prelude-val">Some</span>(SAFE_XCM_VERSION),
+				..Default::default()
 			},
 			bridge_wococo_grandpa: bridge_hub_rococo_runtime::BridgeWococoGrandpaConfig {
 				owner: bridges_pallet_owner.clone(),
@@ -1049,6 +1069,7 @@
 				code: bridge_hub_kusama_runtime::WASM_BINARY
 					.expect(<span class="string">&quot;WASM binary was not build, please build it!&quot;</span>)
 					.to_vec(),
+				..Default::default()
 			},
 			balances: bridge_hub_kusama_runtime::BalancesConfig {
 				balances: endowed_accounts
@@ -1057,7 +1078,10 @@
 					.map(|k| (k, BRIDGE_HUB_KUSAMA_ED * <span class="number">524_288</span>))
 					.collect(),
 			},
-			parachain_info: bridge_hub_kusama_runtime::ParachainInfoConfig { parachain_id: id },
+			parachain_info: bridge_hub_kusama_runtime::ParachainInfoConfig {
+				parachain_id: id,
+				..Default::default()
+			},
 			collator_selection: bridge_hub_kusama_runtime::CollatorSelectionConfig {
 				invulnerables: invulnerables.iter().cloned().map(|(acc, <span class="kw">_</span>)| acc).collect(),
 				candidacy_bond: BRIDGE_HUB_KUSAMA_ED * <span class="number">16</span>,
@@ -1080,6 +1104,7 @@
 			parachain_system: Default::default(),
 			polkadot_xcm: bridge_hub_kusama_runtime::PolkadotXcmConfig {
 				safe_xcm_version: <span class="prelude-val">Some</span>(SAFE_XCM_VERSION),
+				..Default::default()
 			},
 		}
 	}
@@ -1181,6 +1206,7 @@
 				code: bridge_hub_polkadot_runtime::WASM_BINARY
 					.expect(<span class="string">&quot;WASM binary was not build, please build it!&quot;</span>)
 					.to_vec(),
+				..Default::default()
 			},
 			balances: bridge_hub_polkadot_runtime::BalancesConfig {
 				balances: endowed_accounts
@@ -1189,7 +1215,10 @@
 					.map(|k| (k, BRIDGE_HUB_POLKADOT_ED * <span class="number">4096</span>))
 					.collect(),
 			},
-			parachain_info: bridge_hub_polkadot_runtime::ParachainInfoConfig { parachain_id: id },
+			parachain_info: bridge_hub_polkadot_runtime::ParachainInfoConfig {
+				parachain_id: id,
+				..Default::default()
+			},
 			collator_selection: bridge_hub_polkadot_runtime::CollatorSelectionConfig {
 				invulnerables: invulnerables.iter().cloned().map(|(acc, <span class="kw">_</span>)| acc).collect(),
 				candidacy_bond: BRIDGE_HUB_POLKADOT_ED * <span class="number">16</span>,
@@ -1212,6 +1241,7 @@
 			parachain_system: Default::default(),
 			polkadot_xcm: bridge_hub_polkadot_runtime::PolkadotXcmConfig {
 				safe_xcm_version: <span class="prelude-val">Some</span>(SAFE_XCM_VERSION),
+				..Default::default()
 			},
 		}
 	}

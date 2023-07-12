@@ -917,6 +917,7 @@
 <a href="#917" id="917">917</a>
 <a href="#918" id="918">918</a>
 <a href="#919" id="919">919</a>
+<a href="#920" id="920">920</a>
 </pre></div><pre class="rust"><code><span class="comment">// Copyright 2020-2021 Parity Technologies (UK) Ltd.
 // This file is part of Cumulus.
 
@@ -1335,6 +1336,7 @@
 	<span class="kw">use </span>sp_runtime::{
 		testing::Header,
 		traits::{BlakeTwo256, IdentityLookup},
+		BuildStorage,
 		DispatchError::BadOrigin,
 	};
 	<span class="kw">use </span>sp_version::RuntimeVersion;
@@ -1351,7 +1353,7 @@
 			NodeBlock = Block,
 			UncheckedExtrinsic = UncheckedExtrinsic,
 		{
-			System: frame_system::{Pallet, Call, Config, Storage, Event&lt;T&gt;},
+			System: frame_system::{Pallet, Call, Config&lt;T&gt;, Storage, Event&lt;T&gt;},
 			DmpQueue: dmp_queue::{Pallet, Call, Storage, Event&lt;T&gt;},
 		}
 	);
@@ -1461,7 +1463,7 @@
 	}
 
 	<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>new_test_ext() -&gt; sp_io::TestExternalities {
-		frame_system::GenesisConfig::default().build_storage::&lt;Test&gt;().unwrap().into()
+		frame_system::GenesisConfig::&lt;Test&gt;::default().build_storage().unwrap().into()
 	}
 
 	<span class="kw">fn </span>enqueue(enqueued: <span class="kw-2">&amp;</span>[Xcm]) {

@@ -426,7 +426,7 @@
 	<span class="kw">use </span>pallet_ranked_collective::Rank;
 	<span class="kw">use </span>parachains_common::AccountId;
 	<span class="kw">use </span>sp_core::crypto::Ss58Codec;
-	<span class="kw">use </span>sp_runtime::AccountId32;
+	<span class="kw">use </span>sp_runtime::{AccountId32, BuildStorage};
 
 	<span class="attr">#[test]
 	</span><span class="kw">fn </span>check_fellowship_addresses() {
@@ -497,7 +497,7 @@
 		<span class="kw">use </span><span class="kw">super</span>::import_kusama_fellowship::Migration;
 		<span class="kw">use </span>pallet_ranked_collective::{IdToIndex, IndexToId, MemberCount, MemberRecord, Members};
 
-		<span class="kw">let </span>t = frame_system::GenesisConfig::default().build_storage::&lt;Runtime&gt;().unwrap();
+		<span class="kw">let </span>t = frame_system::GenesisConfig::&lt;Runtime&gt;::default().build_storage().unwrap();
 		<span class="kw">let </span><span class="kw-2">mut </span>ext = sp_io::TestExternalities::new(t);
 		ext.execute_with(|| System::set_block_number(<span class="number">1</span>));
 		ext.execute_with(|| {

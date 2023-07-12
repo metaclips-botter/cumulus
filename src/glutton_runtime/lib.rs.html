@@ -623,17 +623,17 @@
 		NodeBlock = generic::Block&lt;Header, sp_runtime::OpaqueExtrinsic&gt;,
 		UncheckedExtrinsic = UncheckedExtrinsic,
 	{
-		System: frame_system::{Pallet, Call, Storage, Config, Event&lt;T&gt;} = <span class="number">0</span>,
+		System: frame_system::{Pallet, Call, Storage, Config&lt;T&gt;, Event&lt;T&gt;} = <span class="number">0</span>,
 		ParachainSystem: cumulus_pallet_parachain_system::{
-			Pallet, Call, Config, Storage, Inherent, Event&lt;T&gt;, ValidateUnsigned,
+			Pallet, Call, Config&lt;T&gt;, Storage, Inherent, Event&lt;T&gt;, ValidateUnsigned,
 		} = <span class="number">1</span>,
-		ParachainInfo: parachain_info::{Pallet, Storage, Config} = <span class="number">2</span>,
+		ParachainInfo: parachain_info::{Pallet, Storage, Config&lt;T&gt;} = <span class="number">2</span>,
 
 		<span class="comment">// DMP handler.
 		</span>CumulusXcm: cumulus_pallet_xcm::{Pallet, Call, Storage, Event&lt;T&gt;, Origin} = <span class="number">10</span>,
 
 		<span class="comment">// The main stage.
-		</span>Glutton: pallet_glutton::{Pallet, Call, Storage, Event, Config} = <span class="number">20</span>,
+		</span>Glutton: pallet_glutton::{Pallet, Call, Storage, Event, Config&lt;T&gt;} = <span class="number">20</span>,
 
 		<span class="comment">// Sudo.
 		</span>Sudo: pallet_sudo::{Pallet, Call, Storage, Event&lt;T&gt;, Config&lt;T&gt;} = <span class="number">255</span>,

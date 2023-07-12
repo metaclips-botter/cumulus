@@ -72,6 +72,8 @@
 <a href="#72" id="72">72</a>
 <a href="#73" id="73">73</a>
 <a href="#74" id="74">74</a>
+<a href="#75" id="75">75</a>
+<a href="#76" id="76">76</a>
 </pre></div><pre class="rust"><code><span class="comment">// Copyright 2020-2021 Parity Technologies (UK) Ltd.
 // This file is part of Cumulus.
 
@@ -113,18 +115,20 @@
 	</span><span class="kw">impl</span>&lt;T: Config&gt; Pallet&lt;T&gt; {}
 
 	<span class="attr">#[pallet::genesis_config]
-	</span><span class="kw">pub struct </span>GenesisConfig {
+	</span><span class="kw">pub struct </span>GenesisConfig&lt;T: Config&gt; {
+		<span class="attr">#[serde(skip)]
+		</span><span class="kw">pub </span>_config: sp_std::marker::PhantomData&lt;T&gt;,
 		<span class="kw">pub </span>parachain_id: ParaId,
 	}
 
-	<span class="kw">impl </span>Default <span class="kw">for </span>GenesisConfig {
+	<span class="kw">impl</span>&lt;T: Config&gt; Default <span class="kw">for </span>GenesisConfig&lt;T&gt; {
 		<span class="kw">fn </span>default() -&gt; <span class="self">Self </span>{
-			<span class="self">Self </span>{ parachain_id: <span class="number">100</span>.into() }
+			<span class="self">Self </span>{ parachain_id: <span class="number">100</span>.into(), _config: Default::default() }
 		}
 	}
 
 	<span class="attr">#[pallet::genesis_build]
-	</span><span class="kw">impl</span>&lt;T: Config&gt; GenesisBuild&lt;T&gt; <span class="kw">for </span>GenesisConfig {
+	</span><span class="kw">impl</span>&lt;T: Config&gt; BuildGenesisConfig <span class="kw">for </span>GenesisConfig&lt;T&gt; {
 		<span class="kw">fn </span>build(<span class="kw-2">&amp;</span><span class="self">self</span>) {
 			&lt;ParachainId&lt;T&gt;&gt;::put(<span class="self">self</span>.parachain_id);
 		}

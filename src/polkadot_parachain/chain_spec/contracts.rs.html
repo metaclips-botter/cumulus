@@ -277,6 +277,11 @@
 <a href="#277" id="277">277</a>
 <a href="#278" id="278">278</a>
 <a href="#279" id="279">279</a>
+<a href="#280" id="280">280</a>
+<a href="#281" id="281">281</a>
+<a href="#282" id="282">282</a>
+<a href="#283" id="283">283</a>
+<a href="#284" id="284">284</a>
 </pre></div><pre class="rust"><code><span class="comment">// Copyright 2019-2021 Parity Technologies (UK) Ltd.
 // This file is part of Cumulus.
 
@@ -519,11 +524,15 @@
 			code: contracts_rococo_runtime::WASM_BINARY
 				.expect(<span class="string">&quot;WASM binary was not build, please build it!&quot;</span>)
 				.to_vec(),
+			..Default::default()
 		},
 		balances: contracts_rococo_runtime::BalancesConfig {
 			balances: endowed_accounts.iter().cloned().map(|k| (k, <span class="number">1 </span>&lt;&lt; <span class="number">60</span>)).collect(),
 		},
-		parachain_info: contracts_rococo_runtime::ParachainInfoConfig { parachain_id: id },
+		parachain_info: contracts_rococo_runtime::ParachainInfoConfig {
+			parachain_id: id,
+			..Default::default()
+		},
 		collator_selection: contracts_rococo_runtime::CollatorSelectionConfig {
 			invulnerables: invulnerables.iter().cloned().map(|(acc, <span class="kw">_</span>)| acc).collect(),
 			candidacy_bond: CONTRACTS_ROCOCO_ED * <span class="number">16</span>,
@@ -548,6 +557,7 @@
 		parachain_system: Default::default(),
 		polkadot_xcm: contracts_rococo_runtime::PolkadotXcmConfig {
 			safe_xcm_version: <span class="prelude-val">Some</span>(SAFE_XCM_VERSION),
+			..Default::default()
 		},
 		sudo: contracts_rococo_runtime::SudoConfig {
 			key: <span class="prelude-val">Some</span>(

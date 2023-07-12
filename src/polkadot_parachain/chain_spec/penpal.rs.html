@@ -136,6 +136,11 @@
 <a href="#136" id="136">136</a>
 <a href="#137" id="137">137</a>
 <a href="#138" id="138">138</a>
+<a href="#139" id="139">139</a>
+<a href="#140" id="140">140</a>
+<a href="#141" id="141">141</a>
+<a href="#142" id="142">142</a>
+<a href="#143" id="143">143</a>
 </pre></div><pre class="rust"><code><span class="comment">// Copyright 2019-2021 Parity Technologies (UK) Ltd.
 // This file is part of Cumulus.
 
@@ -228,6 +233,7 @@
 			code: penpal_runtime::WASM_BINARY
 				.expect(<span class="string">&quot;WASM binary was not build, please build it!&quot;</span>)
 				.to_vec(),
+			..Default::default()
 		},
 		balances: penpal_runtime::BalancesConfig {
 			balances: endowed_accounts
@@ -236,7 +242,10 @@
 				.map(|k| (k, penpal_runtime::EXISTENTIAL_DEPOSIT * <span class="number">4096</span>))
 				.collect(),
 		},
-		parachain_info: penpal_runtime::ParachainInfoConfig { parachain_id: id },
+		parachain_info: penpal_runtime::ParachainInfoConfig {
+			parachain_id: id,
+			..Default::default()
+		},
 		collator_selection: penpal_runtime::CollatorSelectionConfig {
 			invulnerables: invulnerables.iter().cloned().map(|(acc, <span class="kw">_</span>)| acc).collect(),
 			candidacy_bond: penpal_runtime::EXISTENTIAL_DEPOSIT * <span class="number">16</span>,
@@ -261,6 +270,7 @@
 		parachain_system: Default::default(),
 		polkadot_xcm: penpal_runtime::PolkadotXcmConfig {
 			safe_xcm_version: <span class="prelude-val">Some</span>(SAFE_XCM_VERSION),
+			..Default::default()
 		},
 		sudo: penpal_runtime::SudoConfig {
 			key: <span class="prelude-val">Some</span>(get_account_id_from_seed::&lt;sr25519::Public&gt;(<span class="string">&quot;Alice&quot;</span>)),

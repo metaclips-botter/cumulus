@@ -97,6 +97,8 @@
 <a href="#97" id="97">97</a>
 <a href="#98" id="98">98</a>
 <a href="#99" id="99">99</a>
+<a href="#100" id="100">100</a>
+<a href="#101" id="101">101</a>
 </pre></div><pre class="rust"><code><span class="comment">// Copyright Parity Technologies (UK) Ltd.
 // This file is part of Cumulus.
 
@@ -183,13 +185,15 @@
 			code: glutton_runtime::WASM_BINARY
 				.expect(<span class="string">&quot;WASM binary was not build, please build it!&quot;</span>)
 				.to_vec(),
+			..Default::default()
 		},
-		parachain_info: glutton_runtime::ParachainInfoConfig { parachain_id },
+		parachain_info: glutton_runtime::ParachainInfoConfig { parachain_id, ..Default::default() },
 		parachain_system: Default::default(),
 		glutton: glutton_runtime::GluttonConfig {
 			compute: Default::default(),
 			storage: Default::default(),
 			trash_data_count: Default::default(),
+			..Default::default()
 		},
 		sudo: glutton_runtime::SudoConfig {
 			key: <span class="prelude-val">Some</span>(get_account_id_from_seed::&lt;sr25519::Public&gt;(<span class="string">&quot;Alice&quot;</span>)),

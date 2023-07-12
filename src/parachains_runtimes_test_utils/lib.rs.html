@@ -478,6 +478,8 @@
 <a href="#478" id="478">478</a>
 <a href="#479" id="479">479</a>
 <a href="#480" id="480">480</a>
+<a href="#481" id="481">481</a>
+<a href="#482" id="482">482</a>
 </pre></div><pre class="rust"><code><span class="comment">// Copyright (C) Parity Technologies (UK) Ltd.
 // SPDX-License-Identifier: Apache-2.0
 
@@ -502,14 +504,14 @@
 <span class="kw">use </span>frame_support::{
 	dispatch::{DispatchResult, RawOrigin, UnfilteredDispatchable},
 	inherent::{InherentData, ProvideInherent},
-	traits::{GenesisBuild, OriginTrait},
+	traits::OriginTrait,
 	weights::Weight,
 };
 <span class="kw">use </span>parachains_common::AccountId;
 <span class="kw">use </span>polkadot_parachain::primitives::{HrmpChannelId, RelayChainBlockNumber, XcmpMessageFormat};
 <span class="kw">use </span>sp_consensus_aura::AURA_ENGINE_ID;
 <span class="kw">use </span>sp_core::Encode;
-<span class="kw">use </span>sp_runtime::{Digest, DigestItem};
+<span class="kw">use </span>sp_runtime::{BuildStorage, Digest, DigestItem};
 <span class="kw">use </span>xcm::{
 	latest::{MultiAsset, MultiLocation, XcmContext, XcmHash},
 	prelude::<span class="kw-2">*</span>,
@@ -641,20 +643,22 @@
 			pallet_collator_selection::Config + pallet_balances::Config + pallet_session::Config,
 		ValidatorIdOf&lt;Runtime&gt;: From&lt;AccountIdOf&lt;Runtime&gt;&gt;,
 	{
-		<span class="kw">let </span><span class="kw-2">mut </span>t = frame_system::GenesisConfig::default().build_storage::&lt;Runtime&gt;().unwrap();
+		<span class="kw">let </span><span class="kw-2">mut </span>t = frame_system::GenesisConfig::&lt;Runtime&gt;::default().build_storage().unwrap();
 
-		&lt;pallet_xcm::GenesisConfig <span class="kw">as </span>GenesisBuild&lt;Runtime&gt;&gt;::assimilate_storage(
-			<span class="kw-2">&amp;</span>pallet_xcm::GenesisConfig { safe_xcm_version: <span class="self">self</span>.safe_xcm_version },
-			<span class="kw-2">&amp;mut </span>t,
-		)
+		pallet_xcm::GenesisConfig::&lt;Runtime&gt; {
+			safe_xcm_version: <span class="self">self</span>.safe_xcm_version,
+			..Default::default()
+		}
+		.assimilate_storage(<span class="kw-2">&amp;mut </span>t)
 		.unwrap();
 
 		<span class="kw">if let </span><span class="prelude-val">Some</span>(para_id) = <span class="self">self</span>.para_id {
-			&lt;parachain_info::GenesisConfig <span class="kw">as </span>frame_support::traits::GenesisBuild&lt;Runtime&gt;&gt;::assimilate_storage(
-				<span class="kw-2">&amp;</span>parachain_info::GenesisConfig { parachain_id: para_id },
-				<span class="kw-2">&amp;mut </span>t,
-			)
-				.unwrap();
+			parachain_info::GenesisConfig::&lt;Runtime&gt; {
+				parachain_id: para_id,
+				..Default::default()
+			}
+			.assimilate_storage(<span class="kw-2">&amp;mut </span>t)
+			.unwrap();
 		}
 
 		pallet_balances::GenesisConfig::&lt;Runtime&gt; { balances: <span class="self">self</span>.balances }

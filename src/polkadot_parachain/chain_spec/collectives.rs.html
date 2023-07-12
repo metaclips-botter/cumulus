@@ -176,6 +176,11 @@
 <a href="#176" id="176">176</a>
 <a href="#177" id="177">177</a>
 <a href="#178" id="178">178</a>
+<a href="#179" id="179">179</a>
+<a href="#180" id="180">180</a>
+<a href="#181" id="181">181</a>
+<a href="#182" id="182">182</a>
+<a href="#183" id="183">183</a>
 </pre></div><pre class="rust"><code><span class="comment">// Copyright 2022 Parity Technologies (UK) Ltd.
 // This file is part of Cumulus.
 
@@ -316,6 +321,7 @@
 			code: collectives_polkadot_runtime::WASM_BINARY
 				.expect(<span class="string">&quot;WASM binary was not build, please build it!&quot;</span>)
 				.to_vec(),
+			..Default::default()
 		},
 		balances: collectives_polkadot_runtime::BalancesConfig {
 			balances: endowed_accounts
@@ -324,7 +330,10 @@
 				.map(|k| (k, COLLECTIVES_POLKADOT_ED * <span class="number">4096</span>))
 				.collect(),
 		},
-		parachain_info: collectives_polkadot_runtime::ParachainInfoConfig { parachain_id: id },
+		parachain_info: collectives_polkadot_runtime::ParachainInfoConfig {
+			parachain_id: id,
+			..Default::default()
+		},
 		collator_selection: collectives_polkadot_runtime::CollatorSelectionConfig {
 			invulnerables: invulnerables.iter().cloned().map(|(acc, <span class="kw">_</span>)| acc).collect(),
 			candidacy_bond: COLLECTIVES_POLKADOT_ED * <span class="number">16</span>,
@@ -349,6 +358,7 @@
 		parachain_system: Default::default(),
 		polkadot_xcm: collectives_polkadot_runtime::PolkadotXcmConfig {
 			safe_xcm_version: <span class="prelude-val">Some</span>(SAFE_XCM_VERSION),
+			..Default::default()
 		},
 		alliance: Default::default(),
 		alliance_motion: Default::default(),
