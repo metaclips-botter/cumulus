@@ -309,6 +309,8 @@
 <a href="#309" id="309">309</a>
 <a href="#310" id="310">310</a>
 <a href="#311" id="311">311</a>
+<a href="#312" id="312">312</a>
+<a href="#313" id="313">313</a>
 </pre></div><pre class="rust"><code><span class="comment">// Copyright 2021 Parity Technologies (UK) Ltd.
 // This file is part of Parity Bridges Common.
 
@@ -330,6 +332,7 @@
 <span class="kw">use </span>bp_runtime::BlockNumberOf;
 <span class="kw">use </span>codec::Encode;
 <span class="kw">use </span>frame_support::{dispatch::CallableCallFor, traits::IsSubType, weights::Weight, RuntimeDebug};
+<span class="kw">use </span>frame_system::pallet_prelude::HeaderFor;
 <span class="kw">use </span>sp_runtime::{
 	traits::{Header, Zero},
 	transaction_validity::{InvalidTransaction, TransactionValidity, ValidTransaction},
@@ -489,8 +492,9 @@
 
 <span class="doccomment">/// Returns maximal expected size of `submit_finality_proof` call arguments.
 </span><span class="kw">fn </span>max_expected_call_size&lt;T: Config&lt;I&gt;, I: <span class="lifetime">&#39;static</span>&gt;(required_precommits: u32) -&gt; u32 {
-	<span class="kw">let </span>max_expected_justification_size =
-		GrandpaJustification::max_reasonable_size::&lt;T::BridgedChain&gt;(required_precommits);
+	<span class="kw">let </span>max_expected_justification_size = GrandpaJustification::&lt;HeaderFor&lt;T&gt;&gt;::max_reasonable_size::&lt;
+		T::BridgedChain,
+	&gt;(required_precommits);
 
 	<span class="comment">// call arguments are header and justification
 	</span>T::BridgedChain::MAX_HEADER_SIZE.saturating_add(max_expected_justification_size)

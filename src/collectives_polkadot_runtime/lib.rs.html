@@ -925,10 +925,6 @@
 <a href="#925" id="925">925</a>
 <a href="#926" id="926">926</a>
 <a href="#927" id="927">927</a>
-<a href="#928" id="928">928</a>
-<a href="#929" id="929">929</a>
-<a href="#930" id="930">930</a>
-<a href="#931" id="931">931</a>
 </pre></div><pre class="rust"><code><span class="comment">// Copyright (C) 2022 Parity Technologies (UK) Ltd.
 // SPDX-License-Identifier: Apache-2.0
 
@@ -1011,9 +1007,9 @@
 };
 <span class="kw">pub use </span>parachains_common <span class="kw">as </span>common;
 <span class="kw">use </span>parachains_common::{
-	impls::DealWithFees, opaque, AccountId, AuraId, Balance, BlockNumber, Hash, Header, Index,
-	Signature, AVERAGE_ON_INITIALIZE_RATIO, DAYS, HOURS, MAXIMUM_BLOCK_WEIGHT, MINUTES,
-	NORMAL_DISPATCH_RATIO, SLOT_DURATION,
+	impls::DealWithFees, AccountId, AuraId, Balance, BlockNumber, Hash, Header, Index, Signature,
+	AVERAGE_ON_INITIALIZE_RATIO, DAYS, HOURS, MAXIMUM_BLOCK_WEIGHT, MINUTES, NORMAL_DISPATCH_RATIO,
+	SLOT_DURATION,
 };
 <span class="kw">use </span>xcm_config::{GovernanceLocation, XcmConfig, XcmOriginToTransactDispatchOrigin};
 
@@ -1091,10 +1087,9 @@
 	<span class="kw">type </span>RuntimeCall = RuntimeCall;
 	<span class="kw">type </span>Lookup = AccountIdLookup&lt;AccountId, ()&gt;;
 	<span class="kw">type </span>Index = Index;
-	<span class="kw">type </span>BlockNumber = BlockNumber;
 	<span class="kw">type </span>Hash = Hash;
 	<span class="kw">type </span>Hashing = BlakeTwo256;
-	<span class="kw">type </span>Header = Header;
+	<span class="kw">type </span>Block = Block;
 	<span class="kw">type </span>RuntimeEvent = RuntimeEvent;
 	<span class="kw">type </span>RuntimeOrigin = RuntimeOrigin;
 	<span class="kw">type </span>BlockHashCount = BlockHashCount;
@@ -1482,10 +1477,7 @@
 
 <span class="comment">// Create the runtime by composing the FRAME pallets that were previously configured.
 </span><span class="macro">construct_runtime!</span>(
-	<span class="kw">pub enum </span>Runtime <span class="kw">where
-		</span>Block = Block,
-		NodeBlock = opaque::Block,
-		UncheckedExtrinsic = UncheckedExtrinsic,
+	<span class="kw">pub enum </span>Runtime
 	{
 		<span class="comment">// System support stuff.
 		</span>System: frame_system::{Pallet, Call, Config&lt;T&gt;, Storage, Event&lt;T&gt;} = <span class="number">0</span>,

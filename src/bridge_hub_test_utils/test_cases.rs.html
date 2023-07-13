@@ -1036,6 +1036,7 @@
 	assert_ok,
 	traits::{Get, OriginTrait, PalletInfoAccess},
 };
+<span class="kw">use </span>frame_system::pallet_prelude::{BlockNumberFor, HeaderFor};
 <span class="kw">use </span>pallet_bridge_grandpa::BridgedHeader;
 <span class="kw">use </span>parachains_runtimes_test_utils::{
 	mock_open_hrmp_channel, AccountIdOf, BalanceOf, CollatorSessionKeys, ExtBuilder, RuntimeHelper,
@@ -1588,7 +1589,7 @@
 	local_relay_chain_id: NetworkId,
 	lane_id: LaneId,
 	existential_deposit: BalanceOf&lt;Runtime&gt;,
-	executive_init_block: <span class="kw">fn</span>(<span class="kw-2">&amp;</span>&lt;Runtime <span class="kw">as </span>frame_system::Config&gt;::Header),
+	executive_init_block: <span class="kw">fn</span>(<span class="kw-2">&amp;</span>HeaderFor&lt;Runtime&gt;),
 	construct_and_apply_extrinsic: <span class="kw">fn</span>(
 		sp_keyring::AccountKeyring,
 		pallet_utility::Call::&lt;Runtime&gt;
@@ -1651,10 +1652,9 @@
 		.with_tracing()
 		.build()
 		.execute_with(|| {
-			<span class="kw">let </span>zero: &lt;Runtime <span class="kw">as </span>frame_system::Config&gt;::BlockNumber = <span class="number">0u32</span>.into();
+			<span class="kw">let </span>zero: BlockNumberFor&lt;Runtime&gt; = <span class="number">0u32</span>.into();
 			<span class="kw">let </span>genesis_hash = frame_system::Pallet::&lt;Runtime&gt;::block_hash(zero);
-			<span class="kw">let </span><span class="kw-2">mut </span>header: &lt;Runtime <span class="kw">as </span>frame_system::Config&gt;::Header =
-				bp_test_utils::test_header(<span class="number">1u32</span>.into());
+			<span class="kw">let </span><span class="kw-2">mut </span>header: HeaderFor&lt;Runtime&gt; = bp_test_utils::test_header(<span class="number">1u32</span>.into());
 			header.set_parent_hash(genesis_hash);
 			executive_init_block(<span class="kw-2">&amp;</span>header);
 

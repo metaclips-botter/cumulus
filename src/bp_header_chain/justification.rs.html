@@ -398,15 +398,6 @@
 <a href="#398" id="398">398</a>
 <a href="#399" id="399">399</a>
 <a href="#400" id="400">400</a>
-<a href="#401" id="401">401</a>
-<a href="#402" id="402">402</a>
-<a href="#403" id="403">403</a>
-<a href="#404" id="404">404</a>
-<a href="#405" id="405">405</a>
-<a href="#406" id="406">406</a>
-<a href="#407" id="407">407</a>
-<a href="#408" id="408">408</a>
-<a href="#409" id="409">409</a>
 </pre></div><pre class="rust"><code><span class="comment">// Copyright 2019-2021 Parity Technologies (UK) Ltd.
 // This file is part of Parity Bridges Common.
 
@@ -484,7 +475,7 @@
 	/// any precise calculations - that&#39;s just an estimation.
 	</span><span class="kw">pub fn </span>max_reasonable_size&lt;C&gt;(required_precommits: u32) -&gt; u32
 	<span class="kw">where
-		</span>C: Chain&lt;Header = H&gt; + ChainWithGrandpa,
+		</span>C: Chain + ChainWithGrandpa,
 	{
 		<span class="comment">// we don&#39;t need precise results here - just estimations, so some details
 		// are removed from computations (e.g. bytes required to encode vector length)
@@ -568,10 +559,7 @@
 	authorities_set_id: SetId,
 	authorities_set: <span class="kw-2">&amp;</span>VoterSet&lt;AuthorityId&gt;,
 	justification: GrandpaJustification&lt;Header&gt;,
-) -&gt; <span class="prelude-ty">Result</span>&lt;GrandpaJustification&lt;Header&gt;, Error&gt;
-<span class="kw">where
-	</span>Header::Number: finality_grandpa::BlockNumberOps,
-{
+) -&gt; <span class="prelude-ty">Result</span>&lt;GrandpaJustification&lt;Header&gt;, Error&gt; {
 	<span class="kw">let </span><span class="kw-2">mut </span>optimizer = OptimizationCallbacks(Vec::new());
 	verify_justification_with_callbacks(
 		finalized_target,
@@ -589,10 +577,7 @@
 	authorities_set_id: SetId,
 	authorities_set: <span class="kw-2">&amp;</span>VoterSet&lt;AuthorityId&gt;,
 	justification: <span class="kw-2">&amp;</span>GrandpaJustification&lt;Header&gt;,
-) -&gt; <span class="prelude-ty">Result</span>&lt;(), Error&gt;
-<span class="kw">where
-	</span>Header::Number: finality_grandpa::BlockNumberOps,
-{
+) -&gt; <span class="prelude-ty">Result</span>&lt;(), Error&gt; {
 	verify_justification_with_callbacks(
 		finalized_target,
 		authorities_set_id,
@@ -668,10 +653,7 @@
 	authorities_set: <span class="kw-2">&amp;</span>VoterSet&lt;AuthorityId&gt;,
 	justification: <span class="kw-2">&amp;</span>GrandpaJustification&lt;Header&gt;,
 	callbacks: <span class="kw-2">&amp;mut </span>C,
-) -&gt; <span class="prelude-ty">Result</span>&lt;(), Error&gt;
-<span class="kw">where
-	</span>Header::Number: finality_grandpa::BlockNumberOps,
-{
+) -&gt; <span class="prelude-ty">Result</span>&lt;(), Error&gt; {
 	<span class="comment">// ensure that it is justification for the expected header
 	</span><span class="kw">if </span>(justification.commit.target_hash, justification.commit.target_number) != finalized_target {
 		<span class="kw">return </span><span class="prelude-val">Err</span>(Error::InvalidJustificationTarget)

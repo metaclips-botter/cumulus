@@ -1299,10 +1299,6 @@
 <a href="#1299" id="1299">1299</a>
 <a href="#1300" id="1300">1300</a>
 <a href="#1301" id="1301">1301</a>
-<a href="#1302" id="1302">1302</a>
-<a href="#1303" id="1303">1303</a>
-<a href="#1304" id="1304">1304</a>
-<a href="#1305" id="1305">1305</a>
 </pre></div><pre class="rust"><code><span class="comment">// Copyright (C) 2021-2022 Parity Technologies (UK) Ltd.
 // SPDX-License-Identifier: Apache-2.0
 
@@ -1407,9 +1403,9 @@
 <span class="kw">pub use </span>parachains_common <span class="kw">as </span>common;
 <span class="kw">use </span>parachains_common::{
 	impls::{AssetsToBlockAuthor, DealWithFees},
-	opaque, AccountId, AssetHubPolkadotAuraId <span class="kw">as </span>AuraId, AssetIdForTrustBackedAssets, Balance,
-	BlockNumber, Hash, Header, Index, Signature, AVERAGE_ON_INITIALIZE_RATIO, DAYS, HOURS,
-	MAXIMUM_BLOCK_WEIGHT, NORMAL_DISPATCH_RATIO, SLOT_DURATION,
+	AccountId, AssetHubPolkadotAuraId <span class="kw">as </span>AuraId, AssetIdForTrustBackedAssets, Balance, BlockNumber,
+	Hash, Header, Index, Signature, AVERAGE_ON_INITIALIZE_RATIO, DAYS, HOURS, MAXIMUM_BLOCK_WEIGHT,
+	NORMAL_DISPATCH_RATIO, SLOT_DURATION,
 };
 <span class="kw">use </span>xcm_config::{
 	DotLocation, FellowshipLocation, ForeignAssetsConvertedConcreteId, GovernanceLocation,
@@ -1489,10 +1485,9 @@
 	<span class="kw">type </span>RuntimeCall = RuntimeCall;
 	<span class="kw">type </span>Lookup = AccountIdLookup&lt;AccountId, ()&gt;;
 	<span class="kw">type </span>Index = Index;
-	<span class="kw">type </span>BlockNumber = BlockNumber;
 	<span class="kw">type </span>Hash = Hash;
 	<span class="kw">type </span>Hashing = BlakeTwo256;
-	<span class="kw">type </span>Header = Header;
+	<span class="kw">type </span>Block = Block;
 	<span class="kw">type </span>RuntimeEvent = RuntimeEvent;
 	<span class="kw">type </span>RuntimeOrigin = RuntimeOrigin;
 	<span class="kw">type </span>BlockHashCount = BlockHashCount;
@@ -2028,10 +2023,7 @@
 
 <span class="comment">// Create the runtime by composing the FRAME pallets that were previously configured.
 </span><span class="macro">construct_runtime!</span>(
-	<span class="kw">pub enum </span>Runtime <span class="kw">where
-		</span>Block = Block,
-		NodeBlock = opaque::Block,
-		UncheckedExtrinsic = UncheckedExtrinsic,
+	<span class="kw">pub enum </span>Runtime
 	{
 		<span class="comment">// System support stuff.
 		</span>System: frame_system::{Pallet, Call, Config&lt;T&gt;, Storage, Event&lt;T&gt;} = <span class="number">0</span>,

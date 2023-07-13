@@ -318,7 +318,7 @@
 	<span class="doccomment">/// The sent pings.
 	</span><span class="attr">#[pallet::storage]
 	</span><span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">type </span>Pings&lt;T: Config&gt; =
-		StorageMap&lt;<span class="kw">_</span>, Blake2_128Concat, u32, T::BlockNumber, OptionQuery&gt;;
+		StorageMap&lt;<span class="kw">_</span>, Blake2_128Concat, u32, BlockNumberFor&lt;T&gt;, OptionQuery&gt;;
 
 	<span class="attr">#[pallet::event]
 	#[pallet::generate_deposit(<span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn </span>deposit_event)]
@@ -326,7 +326,7 @@
 		PingSent(ParaId, u32, Vec&lt;u8&gt;, XcmHash, MultiAssets),
 		Pinged(ParaId, u32, Vec&lt;u8&gt;),
 		PongSent(ParaId, u32, Vec&lt;u8&gt;, XcmHash, MultiAssets),
-		Ponged(ParaId, u32, Vec&lt;u8&gt;, T::BlockNumber),
+		Ponged(ParaId, u32, Vec&lt;u8&gt;, BlockNumberFor&lt;T&gt;),
 		ErrorSendingPing(SendError, ParaId, u32, Vec&lt;u8&gt;),
 		ErrorSendingPong(SendError, ParaId, u32, Vec&lt;u8&gt;),
 		UnknownPong(ParaId, u32, Vec&lt;u8&gt;),
@@ -342,7 +342,7 @@
 
 	<span class="attr">#[pallet::hooks]
 	</span><span class="kw">impl</span>&lt;T: Config&gt; Hooks&lt;BlockNumberFor&lt;T&gt;&gt; <span class="kw">for </span>Pallet&lt;T&gt; {
-		<span class="kw">fn </span>on_finalize(n: T::BlockNumber) {
+		<span class="kw">fn </span>on_finalize(n: BlockNumberFor&lt;T&gt;) {
 			<span class="kw">for </span>(para, payload) <span class="kw">in </span>Targets::&lt;T&gt;::get().into_iter() {
 				<span class="kw">let </span>seq = PingCount::&lt;T&gt;::mutate(|seq| {
 					<span class="kw-2">*</span>seq += <span class="number">1</span>;

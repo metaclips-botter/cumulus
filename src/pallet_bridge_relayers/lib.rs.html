@@ -946,7 +946,7 @@
 		<span class="doccomment">/// Pay rewards scheme.
 		</span><span class="kw">type </span>PaymentProcedure: PaymentProcedure&lt;<span class="self">Self</span>::AccountId, <span class="self">Self</span>::Reward&gt;;
 		<span class="doccomment">/// Stake and slash scheme.
-		</span><span class="kw">type </span>StakeAndSlash: StakeAndSlash&lt;<span class="self">Self</span>::AccountId, <span class="self">Self</span>::BlockNumber, <span class="self">Self</span>::Reward&gt;;
+		</span><span class="kw">type </span>StakeAndSlash: StakeAndSlash&lt;<span class="self">Self</span>::AccountId, BlockNumberFor&lt;<span class="self">Self</span>&gt;, <span class="self">Self</span>::Reward&gt;;
 		<span class="doccomment">/// Pallet call weights.
 		</span><span class="kw">type </span>WeightInfo: WeightInfoExt;
 	}
@@ -997,7 +997,7 @@
 		/// Registration allows relayer to get priority boost for its message delivery transactions.
 		</span><span class="attr">#[pallet::call_index(<span class="number">1</span>)]
 		#[pallet::weight(T::WeightInfo::register())]
-		</span><span class="kw">pub fn </span>register(origin: OriginFor&lt;T&gt;, valid_till: T::BlockNumber) -&gt; DispatchResult {
+		</span><span class="kw">pub fn </span>register(origin: OriginFor&lt;T&gt;, valid_till: BlockNumberFor&lt;T&gt;) -&gt; DispatchResult {
 			<span class="kw">let </span>relayer = ensure_signed(origin)<span class="question-mark">?</span>;
 
 			<span class="comment">// valid till must be larger than the current block number and the lease must be larger
@@ -1210,10 +1210,10 @@
 		}
 
 		<span class="doccomment">/// Return required registration lease.
-		</span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>required_registration_lease() -&gt; T::BlockNumber {
+		</span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>required_registration_lease() -&gt; BlockNumberFor&lt;T&gt; {
 			&lt;T::StakeAndSlash <span class="kw">as </span>StakeAndSlash&lt;
 				T::AccountId,
-				T::BlockNumber,
+				BlockNumberFor&lt;T&gt;,
 				T::Reward,
 			&gt;&gt;::RequiredRegistrationLease::get()
 		}
@@ -1222,7 +1222,7 @@
 		</span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>required_stake() -&gt; T::Reward {
 			&lt;T::StakeAndSlash <span class="kw">as </span>StakeAndSlash&lt;
 				T::AccountId,
-				T::BlockNumber,
+				BlockNumberFor&lt;T&gt;,
 				T::Reward,
 			&gt;&gt;::RequiredStake::get()
 		}
@@ -1263,7 +1263,7 @@
 			<span class="doccomment">/// Relayer account that has been registered.
 			</span>relayer: T::AccountId,
 			<span class="doccomment">/// Relayer registration.
-			</span>registration: Registration&lt;T::BlockNumber, T::Reward&gt;,
+			</span>registration: Registration&lt;BlockNumberFor&lt;T&gt;, T::Reward&gt;,
 		},
 		<span class="doccomment">/// Relayer has been `deregistered`.
 		</span>Deregistered {
@@ -1275,7 +1275,7 @@
 			<span class="doccomment">/// Relayer account that has been `deregistered`.
 			</span>relayer: T::AccountId,
 			<span class="doccomment">/// Registration that was removed.
-			</span>registration: Registration&lt;T::BlockNumber, T::Reward&gt;,
+			</span>registration: Registration&lt;BlockNumberFor&lt;T&gt;, T::Reward&gt;,
 		},
 	}
 
@@ -1325,7 +1325,7 @@
 		<span class="kw">_</span>,
 		Blake2_128Concat,
 		T::AccountId,
-		Registration&lt;T::BlockNumber, T::Reward&gt;,
+		Registration&lt;BlockNumberFor&lt;T&gt;, T::Reward&gt;,
 		OptionQuery,
 	&gt;;
 }

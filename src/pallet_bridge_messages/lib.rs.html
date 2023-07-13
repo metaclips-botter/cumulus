@@ -2292,9 +2292,9 @@
 	<span class="attr">#[pallet::hooks]
 	</span><span class="kw">impl</span>&lt;T: Config&lt;I&gt;, I: <span class="lifetime">&#39;static</span>&gt; Hooks&lt;BlockNumberFor&lt;T&gt;&gt; <span class="kw">for </span>Pallet&lt;T, I&gt;
 	<span class="kw">where
-		</span>u32: TryFrom&lt;&lt;T <span class="kw">as </span>frame_system::Config&gt;::BlockNumber&gt;,
+		</span>u32: TryFrom&lt;BlockNumberFor&lt;T&gt;&gt;,
 	{
-		<span class="kw">fn </span>on_idle(_block: T::BlockNumber, remaining_weight: Weight) -&gt; Weight {
+		<span class="kw">fn </span>on_idle(_block: BlockNumberFor&lt;T&gt;, remaining_weight: Weight) -&gt; Weight {
 			<span class="comment">// we&#39;ll need at least to read outbound lane state, kill a message and update lane state
 			</span><span class="kw">let </span>db_weight = T::DbWeight::get();
 			<span class="kw">if </span>!remaining_weight.all_gte(db_weight.reads_writes(<span class="number">1</span>, <span class="number">2</span>)) {

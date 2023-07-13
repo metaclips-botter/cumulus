@@ -843,7 +843,7 @@
 		</span><span class="kw">type </span>MaxInvulnerables: Get&lt;u32&gt;;
 
 		<span class="comment">// Will be kicked if block is not produced in threshold.
-		</span><span class="kw">type </span>KickThreshold: Get&lt;<span class="self">Self</span>::BlockNumber&gt;;
+		</span><span class="kw">type </span>KickThreshold: Get&lt;BlockNumberFor&lt;<span class="self">Self</span>&gt;&gt;;
 
 		<span class="doccomment">/// A stable ID for a validator.
 		</span><span class="kw">type </span>ValidatorId: Member + Parameter;
@@ -895,7 +895,7 @@
 	</span><span class="attr">#[pallet::storage]
 	#[pallet::getter(<span class="kw">fn </span>last_authored_block)]
 	</span><span class="kw">pub type </span>LastAuthoredBlock&lt;T: Config&gt; =
-		StorageMap&lt;<span class="kw">_</span>, Twox64Concat, T::AccountId, T::BlockNumber, ValueQuery&gt;;
+		StorageMap&lt;<span class="kw">_</span>, Twox64Concat, T::AccountId, BlockNumberFor&lt;T&gt;, ValueQuery&gt;;
 
 	<span class="doccomment">/// Desired number of candidates.
 	///
@@ -1348,7 +1348,7 @@
 	<span class="doccomment">/// Keep track of number of authored blocks per authority, uncles are counted as well since
 	/// they&#39;re a valid proof of being online.
 	</span><span class="kw">impl</span>&lt;T: Config + pallet_authorship::Config&gt;
-		pallet_authorship::EventHandler&lt;T::AccountId, T::BlockNumber&gt; <span class="kw">for </span>Pallet&lt;T&gt;
+		pallet_authorship::EventHandler&lt;T::AccountId, BlockNumberFor&lt;T&gt;&gt; <span class="kw">for </span>Pallet&lt;T&gt;
 	{
 		<span class="kw">fn </span>note_author(author: T::AccountId) {
 			<span class="kw">let </span>pot = <span class="self">Self</span>::account_id();

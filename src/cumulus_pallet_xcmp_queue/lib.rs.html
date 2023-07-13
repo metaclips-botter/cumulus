@@ -1309,7 +1309,7 @@
 
 	<span class="attr">#[pallet::hooks]
 	</span><span class="kw">impl</span>&lt;T: Config&gt; Hooks&lt;BlockNumberFor&lt;T&gt;&gt; <span class="kw">for </span>Pallet&lt;T&gt; {
-		<span class="kw">fn </span>on_idle(_now: T::BlockNumber, max_weight: Weight) -&gt; Weight {
+		<span class="kw">fn </span>on_idle(_now: BlockNumberFor&lt;T&gt;, max_weight: Weight) -&gt; Weight {
 			<span class="comment">// on_idle processes additional messages with any remaining block weight.
 			</span><span class="self">Self</span>::service_xcmp_queue(max_weight)
 		}
