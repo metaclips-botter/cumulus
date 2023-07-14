@@ -1384,7 +1384,7 @@
 	messages_xcm_extension::{XcmAsPlainPayload, XcmBlobMessageDispatch},
 };
 <span class="kw">use </span>parachains_common::{
-	impls::DealWithFees, AccountId, Balance, BlockNumber, Hash, Header, Index, Signature,
+	impls::DealWithFees, AccountId, Balance, BlockNumber, Hash, Header, Nonce, Signature,
 	AVERAGE_ON_INITIALIZE_RATIO, HOURS, MAXIMUM_BLOCK_WEIGHT, NORMAL_DISPATCH_RATIO, SLOT_DURATION,
 };
 <span class="kw">use </span>xcm_executor::XcmExecutor;
@@ -1491,7 +1491,7 @@
 	<span class="doccomment">/// The lookup mechanism to get account ID from whatever is passed in dispatchers.
 	</span><span class="kw">type </span>Lookup = AccountIdLookup&lt;AccountId, ()&gt;;
 	<span class="doccomment">/// The index type for storing how many extrinsics an account has signed.
-	</span><span class="kw">type </span>Index = Index;
+	</span><span class="kw">type </span>Nonce = Nonce;
 	<span class="doccomment">/// The type for hashing blocks and tries.
 	</span><span class="kw">type </span>Hash = Hash;
 	<span class="doccomment">/// The hashing algorithm used.
@@ -2020,8 +2020,8 @@
 		}
 	}
 
-	<span class="kw">impl </span>frame_system_rpc_runtime_api::AccountNonceApi&lt;Block, AccountId, Index&gt; <span class="kw">for </span>Runtime {
-		<span class="kw">fn </span>account_nonce(account: AccountId) -&gt; Index {
+	<span class="kw">impl </span>frame_system_rpc_runtime_api::AccountNonceApi&lt;Block, AccountId, Nonce&gt; <span class="kw">for </span>Runtime {
+		<span class="kw">fn </span>account_nonce(account: AccountId) -&gt; Nonce {
 			System::account_nonce(account)
 		}
 	}

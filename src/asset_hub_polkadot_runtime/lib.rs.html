@@ -1404,7 +1404,7 @@
 <span class="kw">use </span>parachains_common::{
 	impls::{AssetsToBlockAuthor, DealWithFees},
 	AccountId, AssetHubPolkadotAuraId <span class="kw">as </span>AuraId, AssetIdForTrustBackedAssets, Balance, BlockNumber,
-	Hash, Header, Index, Signature, AVERAGE_ON_INITIALIZE_RATIO, DAYS, HOURS, MAXIMUM_BLOCK_WEIGHT,
+	Hash, Header, Nonce, Signature, AVERAGE_ON_INITIALIZE_RATIO, DAYS, HOURS, MAXIMUM_BLOCK_WEIGHT,
 	NORMAL_DISPATCH_RATIO, SLOT_DURATION,
 };
 <span class="kw">use </span>xcm_config::{
@@ -1484,7 +1484,7 @@
 	<span class="kw">type </span>AccountId = AccountId;
 	<span class="kw">type </span>RuntimeCall = RuntimeCall;
 	<span class="kw">type </span>Lookup = AccountIdLookup&lt;AccountId, ()&gt;;
-	<span class="kw">type </span>Index = Index;
+	<span class="kw">type </span>Nonce = Nonce;
 	<span class="kw">type </span>Hash = Hash;
 	<span class="kw">type </span>Hashing = BlakeTwo256;
 	<span class="kw">type </span>Block = Block;
@@ -2218,8 +2218,8 @@
 		}
 	}
 
-	<span class="kw">impl </span>frame_system_rpc_runtime_api::AccountNonceApi&lt;Block, AccountId, Index&gt; <span class="kw">for </span>Runtime {
-		<span class="kw">fn </span>account_nonce(account: AccountId) -&gt; Index {
+	<span class="kw">impl </span>frame_system_rpc_runtime_api::AccountNonceApi&lt;Block, AccountId, Nonce&gt; <span class="kw">for </span>Runtime {
+		<span class="kw">fn </span>account_nonce(account: AccountId) -&gt; Nonce {
 			System::account_nonce(account)
 		}
 	}
