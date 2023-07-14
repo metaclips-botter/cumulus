@@ -2592,6 +2592,7 @@ dependencies = [
  "lru 0.10.0",
  "parity-scale-codec 3.6.3",
  "polkadot-node-primitives",
+ "polkadot-node-subsystem",
  "polkadot-overseer",
  "polkadot-primitives",
  "sc-client-api",
