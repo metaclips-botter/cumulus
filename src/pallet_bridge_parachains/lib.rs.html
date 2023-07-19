@@ -1601,6 +1601,7 @@
 <a href="#1601" id="1601">1601</a>
 <a href="#1602" id="1602">1602</a>
 <a href="#1603" id="1603">1603</a>
+<a href="#1604" id="1604">1604</a>
 </pre></div><pre class="rust"><code><span class="comment">// Copyright 2021 Parity Technologies (UK) Ltd.
 // This file is part of Parity Bridges Common.
 
@@ -1666,8 +1667,6 @@
 </span><span class="kw">pub type </span>RelayBlockNumber = bp_polkadot_core::BlockNumber;
 <span class="doccomment">/// Hasher of the bridged relay chain.
 </span><span class="kw">pub type </span>RelayBlockHasher = bp_polkadot_core::Hasher;
-<span class="doccomment">/// Block type of the bridged relay chain.
-</span><span class="kw">pub type </span>RelayBlock = bp_polkadot_core::Block;
 
 <span class="doccomment">/// Artifacts of the parachains head update.
 </span><span class="kw">struct </span>UpdateParachainHeadArtifacts {
@@ -1742,15 +1741,18 @@
 	</span><span class="kw">pub trait </span>BoundedBridgeGrandpaConfig&lt;I: <span class="lifetime">&#39;static</span>&gt;:
 		pallet_bridge_grandpa::Config&lt;I, BridgedChain = <span class="self">Self</span>::BridgedRelayChain&gt;
 	{
-		<span class="kw">type </span>BridgedRelayChain: Chain&lt;Hash = RelayBlockHash, Hasher = RelayBlockHasher&gt;;
+		<span class="kw">type </span>BridgedRelayChain: Chain&lt;
+			BlockNumber = RelayBlockNumber,
+			Hash = RelayBlockHash,
+			Hasher = RelayBlockHasher,
+		&gt;;
 	}
 
 	<span class="kw">impl</span>&lt;T, I: <span class="lifetime">&#39;static</span>&gt; BoundedBridgeGrandpaConfig&lt;I&gt; <span class="kw">for </span>T
 	<span class="kw">where
 		</span>T: pallet_bridge_grandpa::Config&lt;I&gt;,
-		T::BridgedChain: Chain&lt;Hash = RelayBlockHash, Hasher = RelayBlockHasher&gt;,
-		&lt;&lt;T::BridgedChain <span class="kw">as </span>Chain&gt;::Block <span class="kw">as </span>sp_runtime::traits::Block&gt;::Header:
-			sp_runtime::traits::Header&lt;Number = RelayBlockNumber&gt;,
+		T::BridgedChain:
+			Chain&lt;BlockNumber = RelayBlockNumber, Hash = RelayBlockHash, Hasher = RelayBlockHasher&gt;,
 	{
 		<span class="kw">type </span>BridgedRelayChain = T::BridgedChain;
 	}
@@ -1925,7 +1927,7 @@
 			&gt;::get(relay_block_hash)
 			.ok_or(Error::&lt;T, I&gt;::UnknownRelayChainBlock)<span class="question-mark">?</span>;
 			<span class="macro">ensure!</span>(
-				relay_block.number == relay_block_number.into(),
+				relay_block.number == relay_block_number,
 				Error::&lt;T, I&gt;::InvalidRelayChainBlockNumber,
 			);
 

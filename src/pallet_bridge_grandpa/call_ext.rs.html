@@ -332,7 +332,6 @@
 <span class="kw">use </span>bp_runtime::BlockNumberOf;
 <span class="kw">use </span>codec::Encode;
 <span class="kw">use </span>frame_support::{dispatch::CallableCallFor, traits::IsSubType, weights::Weight, RuntimeDebug};
-<span class="kw">use </span>frame_system::pallet_prelude::HeaderFor;
 <span class="kw">use </span>sp_runtime::{
 	traits::{Header, Zero},
 	transaction_validity::{InvalidTransaction, TransactionValidity, ValidTransaction},
@@ -492,9 +491,10 @@
 
 <span class="doccomment">/// Returns maximal expected size of `submit_finality_proof` call arguments.
 </span><span class="kw">fn </span>max_expected_call_size&lt;T: Config&lt;I&gt;, I: <span class="lifetime">&#39;static</span>&gt;(required_precommits: u32) -&gt; u32 {
-	<span class="kw">let </span>max_expected_justification_size = GrandpaJustification::&lt;HeaderFor&lt;T&gt;&gt;::max_reasonable_size::&lt;
-		T::BridgedChain,
-	&gt;(required_precommits);
+	<span class="kw">let </span>max_expected_justification_size =
+		GrandpaJustification::&lt;BridgedHeader&lt;T, I&gt;&gt;::max_reasonable_size::&lt;T::BridgedChain&gt;(
+			required_precommits,
+		);
 
 	<span class="comment">// call arguments are header and justification
 	</span>T::BridgedChain::MAX_HEADER_SIZE.saturating_add(max_expected_justification_size)

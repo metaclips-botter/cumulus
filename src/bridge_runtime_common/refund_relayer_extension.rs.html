@@ -1739,11 +1739,6 @@
 <a href="#1739" id="1739">1739</a>
 <a href="#1740" id="1740">1740</a>
 <a href="#1741" id="1741">1741</a>
-<a href="#1742" id="1742">1742</a>
-<a href="#1743" id="1743">1743</a>
-<a href="#1744" id="1744">1744</a>
-<a href="#1745" id="1745">1745</a>
-<a href="#1746" id="1746">1746</a>
 </pre></div><pre class="rust"><code><span class="comment">// Copyright 2021 Parity Technologies (UK) Ltd.
 // This file is part of Parity Bridges Common.
 
@@ -1770,7 +1765,7 @@
 };
 <span class="kw">use </span>bp_messages::{LaneId, MessageNonce};
 <span class="kw">use </span>bp_relayers::{RewardsAccountOwner, RewardsAccountParams};
-<span class="kw">use </span>bp_runtime::{Chain, Parachain, ParachainIdOf, RangeInclusiveExt, StaticStrProvider};
+<span class="kw">use </span>bp_runtime::{Parachain, ParachainIdOf, RangeInclusiveExt, StaticStrProvider};
 <span class="kw">use </span>codec::{Decode, Encode};
 <span class="kw">use </span>frame_support::{
 	dispatch::{CallableCallFor, DispatchInfo, Dispatchable, PostDispatchInfo},
@@ -1793,10 +1788,7 @@
 <span class="kw">use </span>pallet_utility::{Call <span class="kw">as </span>UtilityCall, Config <span class="kw">as </span>UtilityConfig, Pallet <span class="kw">as </span>UtilityPallet};
 <span class="kw">use </span>scale_info::TypeInfo;
 <span class="kw">use </span>sp_runtime::{
-	traits::{
-		Block <span class="kw">as </span>BlockT, DispatchInfoOf, Get, Header <span class="kw">as </span>HeaderT, PostDispatchInfoOf,
-		SignedExtension, Zero,
-	},
+	traits::{DispatchInfoOf, Get, PostDispatchInfoOf, SignedExtension, Zero},
 	transaction_validity::{
 		TransactionPriority, TransactionValidity, TransactionValidityError, ValidTransactionBuilder,
 	},
@@ -2027,7 +2019,6 @@
 		+ GrandpaCallSubType&lt;Runtime, Runtime::BridgesGrandpaPalletInstance&gt;
 		+ ParachainsCallSubType&lt;Runtime, Para::Instance&gt;
 		+ MessagesCallSubType&lt;Runtime, Msgs::Instance&gt;,
-	&lt;&lt;&lt;Runtime <span class="kw">as </span>BoundedBridgeGrandpaConfig&lt;Runtime::BridgesGrandpaPalletInstance&gt;&gt;::BridgedRelayChain <span class="kw">as </span>Chain&gt;::Block <span class="kw">as </span>BlockT&gt;::Header: HeaderT&lt;Number = RelayBlockNumber&gt;
 {
 	<span class="kw">fn </span>expand_call&lt;<span class="lifetime">&#39;a</span>&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, call: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>CallOf&lt;Runtime&gt;) -&gt; Vec&lt;<span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>CallOf&lt;Runtime&gt;&gt; {
 		<span class="kw">match </span>call.is_sub_type() {
@@ -2275,7 +2266,6 @@
 		+ GrandpaCallSubType&lt;Runtime, Runtime::BridgesGrandpaPalletInstance&gt;
 		+ ParachainsCallSubType&lt;Runtime, Para::Instance&gt;
 		+ MessagesCallSubType&lt;Runtime, Msgs::Instance&gt;,
-	&lt;&lt;&lt;Runtime <span class="kw">as </span>BoundedBridgeGrandpaConfig&lt;Runtime::BridgesGrandpaPalletInstance&gt;&gt;::BridgedRelayChain <span class="kw">as </span>Chain&gt;::Block <span class="kw">as </span>BlockT&gt;::Header: HeaderT&lt;Number = RelayBlockNumber&gt;
 {
 	<span class="kw">const </span>IDENTIFIER: <span class="kw-2">&amp;</span><span class="lifetime">&#39;static </span>str = Id::STR;
 	<span class="kw">type </span>AccountId = Runtime::AccountId;

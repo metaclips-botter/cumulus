@@ -285,6 +285,8 @@
 <a href="#285" id="285">285</a>
 <a href="#286" id="286">286</a>
 <a href="#287" id="287">287</a>
+<a href="#288" id="288">288</a>
+<a href="#289" id="289">289</a>
 </pre></div><pre class="rust"><code><span class="comment">// Copyright 2019-2021 Parity Technologies (UK) Ltd.
 // This file is part of Parity Bridges Common.
 
@@ -489,7 +491,7 @@
 <span class="doccomment">/// Address of account on Polkadot-like chains.
 </span><span class="kw">pub type </span>AccountAddress = MultiAddress&lt;AccountId, ()&gt;;
 
-<span class="doccomment">/// Index of a transaction on the Polkadot-like chains.
+<span class="doccomment">/// Nonce of a transaction on the Polkadot-like chains.
 </span><span class="kw">pub type </span>Nonce = u32;
 
 <span class="doccomment">/// Block type of Polkadot-like chains.
@@ -513,9 +515,11 @@
 </span><span class="kw">pub struct </span>PolkadotLike;
 
 <span class="kw">impl </span>Chain <span class="kw">for </span>PolkadotLike {
+	<span class="kw">type </span>BlockNumber = BlockNumber;
 	<span class="kw">type </span>Hash = Hash;
 	<span class="kw">type </span>Hasher = Hasher;
-	<span class="kw">type </span>Block = Block;
+	<span class="kw">type </span>Header = Header;
+
 	<span class="kw">type </span>AccountId = AccountId;
 	<span class="kw">type </span>Balance = Balance;
 	<span class="kw">type </span>Nonce = Nonce;

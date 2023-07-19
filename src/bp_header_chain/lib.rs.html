@@ -221,6 +221,19 @@
 <a href="#221" id="221">221</a>
 <a href="#222" id="222">222</a>
 <a href="#223" id="223">223</a>
+<a href="#224" id="224">224</a>
+<a href="#225" id="225">225</a>
+<a href="#226" id="226">226</a>
+<a href="#227" id="227">227</a>
+<a href="#228" id="228">228</a>
+<a href="#229" id="229">229</a>
+<a href="#230" id="230">230</a>
+<a href="#231" id="231">231</a>
+<a href="#232" id="232">232</a>
+<a href="#233" id="233">233</a>
+<a href="#234" id="234">234</a>
+<a href="#235" id="235">235</a>
+<a href="#236" id="236">236</a>
 </pre></div><pre class="rust"><code><span class="comment">// Copyright 2019-2021 Parity Technologies (UK) Ltd.
 // This file is part of Parity Bridges Common.
 
@@ -362,7 +375,7 @@
 </span><span class="kw">pub struct </span>GrandpaConsensusLogReader&lt;Number&gt;(sp_std::marker::PhantomData&lt;Number&gt;);
 
 <span class="kw">impl</span>&lt;Number: Codec&gt; GrandpaConsensusLogReader&lt;Number&gt; {
-	<span class="kw">pub fn </span>find_authorities_change(
+	<span class="kw">pub fn </span>find_scheduled_change(
 		digest: <span class="kw-2">&amp;</span>Digest,
 	) -&gt; <span class="prelude-ty">Option</span>&lt;sp_consensus_grandpa::ScheduledChange&lt;Number&gt;&gt; {
 		<span class="comment">// find the first consensus digest with the right ID which converts to
@@ -374,11 +387,24 @@
 				<span class="kw">_ </span>=&gt; <span class="prelude-val">None</span>,
 			})
 	}
+
+	<span class="kw">pub fn </span>find_forced_change(
+		digest: <span class="kw-2">&amp;</span>Digest,
+	) -&gt; <span class="prelude-ty">Option</span>&lt;(Number, sp_consensus_grandpa::ScheduledChange&lt;Number&gt;)&gt; {
+		<span class="comment">// find the first consensus digest with the right ID which converts to
+		// the right kind of consensus log.
+		</span>digest
+			.convert_first(|log| log.consensus_try_to(<span class="kw-2">&amp;</span>GRANDPA_ENGINE_ID))
+			.and_then(|log| <span class="kw">match </span>log {
+				ConsensusLog::ForcedChange(delay, change) =&gt; <span class="prelude-val">Some</span>((delay, change)),
+				<span class="kw">_ </span>=&gt; <span class="prelude-val">None</span>,
+			})
+	}
 }
 
 <span class="kw">impl</span>&lt;Number: Codec&gt; ConsensusLogReader <span class="kw">for </span>GrandpaConsensusLogReader&lt;Number&gt; {
 	<span class="kw">fn </span>schedules_authorities_change(digest: <span class="kw-2">&amp;</span>Digest) -&gt; bool {
-		GrandpaConsensusLogReader::&lt;Number&gt;::find_authorities_change(digest).is_some()
+		GrandpaConsensusLogReader::&lt;Number&gt;::find_scheduled_change(digest).is_some()
 	}
 }
 

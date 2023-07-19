@@ -68,6 +68,8 @@
 <a href="#68" id="68">68</a>
 <a href="#69" id="69">69</a>
 <a href="#70" id="70">70</a>
+<a href="#71" id="71">71</a>
+<a href="#72" id="72">72</a>
 </pre></div><pre class="rust"><code><span class="comment">// Copyright 2019-2021 Parity Technologies (UK) Ltd.
 // This file is part of Parity Bridges Common.
 
@@ -102,9 +104,11 @@
 </span><span class="kw">pub struct </span>BridgeHubWococo;
 
 <span class="kw">impl </span>Chain <span class="kw">for </span>BridgeHubWococo {
+	<span class="kw">type </span>BlockNumber = BlockNumber;
 	<span class="kw">type </span>Hash = Hash;
 	<span class="kw">type </span>Hasher = Hasher;
-	<span class="kw">type </span>Block = Block;
+	<span class="kw">type </span>Header = Header;
+
 	<span class="kw">type </span>AccountId = AccountId;
 	<span class="kw">type </span>Balance = Balance;
 	<span class="kw">type </span>Nonce = Nonce;

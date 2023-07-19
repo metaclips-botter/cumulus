@@ -1405,36 +1405,6 @@
 <a href="#1405" id="1405">1405</a>
 <a href="#1406" id="1406">1406</a>
 <a href="#1407" id="1407">1407</a>
-<a href="#1408" id="1408">1408</a>
-<a href="#1409" id="1409">1409</a>
-<a href="#1410" id="1410">1410</a>
-<a href="#1411" id="1411">1411</a>
-<a href="#1412" id="1412">1412</a>
-<a href="#1413" id="1413">1413</a>
-<a href="#1414" id="1414">1414</a>
-<a href="#1415" id="1415">1415</a>
-<a href="#1416" id="1416">1416</a>
-<a href="#1417" id="1417">1417</a>
-<a href="#1418" id="1418">1418</a>
-<a href="#1419" id="1419">1419</a>
-<a href="#1420" id="1420">1420</a>
-<a href="#1421" id="1421">1421</a>
-<a href="#1422" id="1422">1422</a>
-<a href="#1423" id="1423">1423</a>
-<a href="#1424" id="1424">1424</a>
-<a href="#1425" id="1425">1425</a>
-<a href="#1426" id="1426">1426</a>
-<a href="#1427" id="1427">1427</a>
-<a href="#1428" id="1428">1428</a>
-<a href="#1429" id="1429">1429</a>
-<a href="#1430" id="1430">1430</a>
-<a href="#1431" id="1431">1431</a>
-<a href="#1432" id="1432">1432</a>
-<a href="#1433" id="1433">1433</a>
-<a href="#1434" id="1434">1434</a>
-<a href="#1435" id="1435">1435</a>
-<a href="#1436" id="1436">1436</a>
-<a href="#1437" id="1437">1437</a>
 </pre></div><pre class="rust"><code><span class="comment">// Copyright 2021 Parity Technologies (UK) Ltd.
 // This file is part of Parity Bridges Common.
 
@@ -1476,13 +1446,12 @@
 </span><span class="kw">pub use </span>storage_types::StoredAuthoritySet;
 
 <span class="kw">use </span>bp_header_chain::{
-	justification::GrandpaJustification, ChainWithGrandpa, HeaderChain, InitializationData,
-	StoredHeaderData, StoredHeaderDataBuilder,
+	justification::GrandpaJustification, ChainWithGrandpa, GrandpaConsensusLogReader, HeaderChain,
+	InitializationData, StoredHeaderData, StoredHeaderDataBuilder,
 };
 <span class="kw">use </span>bp_runtime::{BlockNumberOf, HashOf, HasherOf, HeaderId, HeaderOf, OwnedBridgeModule};
 <span class="kw">use </span>finality_grandpa::voter_set::VoterSet;
 <span class="kw">use </span>frame_support::{dispatch::PostDispatchInfo, ensure, DefaultNoBound};
-<span class="kw">use </span>sp_consensus_grandpa::{ConsensusLog, GRANDPA_ENGINE_ID};
 <span class="kw">use </span>sp_runtime::{
 	traits::{Header <span class="kw">as </span>HeaderT, Zero},
 	SaturatedConversion,
@@ -1880,11 +1849,17 @@
 
 		<span class="comment">// We don&#39;t support forced changes - at that point governance intervention is required.
 		</span><span class="macro">ensure!</span>(
-			<span class="kw">super</span>::find_forced_change(header).is_none(),
+			GrandpaConsensusLogReader::&lt;BridgedBlockNumber&lt;T, I&gt;&gt;::find_forced_change(
+				header.digest()
+			)
+			.is_none(),
 			&lt;Error&lt;T, I&gt;&gt;::UnsupportedScheduledChange
 		);
 
-		<span class="kw">if let </span><span class="prelude-val">Some</span>(change) = <span class="kw">super</span>::find_scheduled_change(header) {
+		<span class="kw">if let </span><span class="prelude-val">Some</span>(change) =
+			GrandpaConsensusLogReader::&lt;BridgedBlockNumber&lt;T, I&gt;&gt;::find_scheduled_change(
+				header.digest(),
+			) {
 			<span class="comment">// GRANDPA only includes a `delay` for forced changes, so this isn&#39;t valid.
 			</span><span class="macro">ensure!</span>(change.delay == Zero::zero(), &lt;Error&lt;T, I&gt;&gt;::UnsupportedScheduledChange);
 
@@ -2053,42 +2028,6 @@
 	}
 }
 
-<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>find_scheduled_change&lt;H: HeaderT&gt;(
-	header: <span class="kw-2">&amp;</span>H,
-) -&gt; <span class="prelude-ty">Option</span>&lt;sp_consensus_grandpa::ScheduledChange&lt;H::Number&gt;&gt; {
-	<span class="kw">use </span>sp_runtime::generic::OpaqueDigestItemId;
-
-	<span class="kw">let </span>id = OpaqueDigestItemId::Consensus(<span class="kw-2">&amp;</span>GRANDPA_ENGINE_ID);
-
-	<span class="kw">let </span>filter_log = |log: ConsensusLog&lt;H::Number&gt;| <span class="kw">match </span>log {
-		ConsensusLog::ScheduledChange(change) =&gt; <span class="prelude-val">Some</span>(change),
-		<span class="kw">_ </span>=&gt; <span class="prelude-val">None</span>,
-	};
-
-	<span class="comment">// find the first consensus digest with the right ID which converts to
-	// the right kind of consensus log.
-	</span>header.digest().convert_first(|l| l.try_to(id).and_then(filter_log))
-}
-
-<span class="doccomment">/// Checks the given header for a consensus digest signaling a **forced** scheduled change and
-/// extracts it.
-</span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>find_forced_change&lt;H: HeaderT&gt;(
-	header: <span class="kw-2">&amp;</span>H,
-) -&gt; <span class="prelude-ty">Option</span>&lt;(H::Number, sp_consensus_grandpa::ScheduledChange&lt;H::Number&gt;)&gt; {
-	<span class="kw">use </span>sp_runtime::generic::OpaqueDigestItemId;
-
-	<span class="kw">let </span>id = OpaqueDigestItemId::Consensus(<span class="kw-2">&amp;</span>GRANDPA_ENGINE_ID);
-
-	<span class="kw">let </span>filter_log = |log: ConsensusLog&lt;H::Number&gt;| <span class="kw">match </span>log {
-		ConsensusLog::ForcedChange(delay, change) =&gt; <span class="prelude-val">Some</span>((delay, change)),
-		<span class="kw">_ </span>=&gt; <span class="prelude-val">None</span>,
-	};
-
-	<span class="comment">// find the first consensus digest with the right ID which converts to
-	// the right kind of consensus log.
-	</span>header.digest().convert_first(|l| l.try_to(id).and_then(filter_log))
-}
-
 <span class="doccomment">/// (Re)initialize bridge with given header for using it in `pallet-bridge-messages` benchmarks.
 </span><span class="attr">#[cfg(feature = <span class="string">&quot;runtime-benchmarks&quot;</span>)]
 </span><span class="kw">pub fn </span>initialize_for_benchmarks&lt;T: Config&lt;I&gt;, I: <span class="lifetime">&#39;static</span>&gt;(header: BridgedHeader&lt;T, I&gt;) {
@@ -2122,6 +2061,7 @@
 		storage::generator::StorageValue,
 	};
 	<span class="kw">use </span>frame_system::{EventRecord, Phase};
+	<span class="kw">use </span>sp_consensus_grandpa::{ConsensusLog, GRANDPA_ENGINE_ID};
 	<span class="kw">use </span>sp_core::Get;
 	<span class="kw">use </span>sp_runtime::{Digest, DigestItem, DispatchError};
 

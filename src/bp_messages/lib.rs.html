@@ -519,6 +519,7 @@
 <a href="#519" id="519">519</a>
 <a href="#520" id="520">520</a>
 <a href="#521" id="521">521</a>
+<a href="#522" id="522">522</a>
 </pre></div><pre class="rust"><code><span class="comment">// Copyright 2019-2021 Parity Technologies (UK) Ltd.
 // This file is part of Parity Bridges Common.
 
@@ -551,6 +552,7 @@
 <span class="comment">// Weight is reexported to avoid additional frame-support dependencies in related crates.
 </span><span class="kw">pub use </span>frame_support::weights::Weight;
 <span class="kw">use </span>scale_info::TypeInfo;
+<span class="kw">use </span>serde::{Deserialize, Serialize};
 <span class="kw">use </span>source_chain::RelayersRewards;
 <span class="kw">use </span>sp_core::TypeId;
 <span class="kw">use </span>sp_std::{collections::vec_deque::VecDeque, ops::RangeInclusive, prelude::<span class="kw-2">*</span>};
@@ -570,8 +572,8 @@
 	RuntimeDebug,
 	TypeInfo,
 	MaxEncodedLen,
-	serde::Serialize,
-	serde::Deserialize,
+	Serialize,
+	Deserialize,
 )]
 </span><span class="kw">pub enum </span>MessagesOperatingMode {
 	<span class="doccomment">/// Basic operating mode (Normal/Halted)
