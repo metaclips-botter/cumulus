@@ -1440,7 +1440,7 @@
 					<span class="kw">use </span><span class="macro-nonterminal">$mq </span><span class="kw">as </span>message_queue;
 					<span class="kw">use </span><span class="macro-nonterminal">$runtime_event </span><span class="kw">as </span>runtime_event;
 
-					<span class="self">Self</span>::execute_with(|| {
+					<span class="self">Self</span>::ext_wrapper(|| {
 						&lt;<span class="macro-nonterminal">$mq </span><span class="kw">as </span>EnqueueMessage&lt;AggregateMessageOrigin&gt;&gt;::enqueue_message(
 							msg.try_into().expect(<span class="string">&quot;Message too long&quot;</span>),
 							AggregateMessageOrigin::Ump(UmpQueueId::Para(para.clone()))
@@ -1676,7 +1676,7 @@
 			) -&gt; <span class="macro-nonterminal">$crate::Weight </span>{
 				<span class="kw">use </span><span class="macro-nonterminal">$</span><span class="kw">crate</span>::{<span class="macro-nonterminal">TestExt</span>, XcmpMessageHandler};
 
-				<span class="macro-nonterminal">$name::execute_with</span>(|| {
+				<span class="macro-nonterminal">$name::ext_wrapper</span>(|| {
 					&lt;<span class="self">Self </span><span class="kw">as </span>Parachain&gt;::XcmpMessageHandler::handle_xcmp_messages(iter, max_weight)
 				})
 			}
@@ -1689,7 +1689,7 @@
 			) -&gt; <span class="macro-nonterminal">$crate::Weight </span>{
 				<span class="kw">use </span><span class="macro-nonterminal">$</span><span class="kw">crate</span>::{<span class="macro-nonterminal">DmpMessageHandler</span>, TestExt};
 
-				<span class="macro-nonterminal">$name::execute_with</span>(|| {
+				<span class="macro-nonterminal">$name::ext_wrapper</span>(|| {
 					&lt;<span class="self">Self </span><span class="kw">as </span>Parachain&gt;::DmpMessageHandler::handle_dmp_messages(iter, max_weight)
 				})
 			}
