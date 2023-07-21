@@ -43,9 +43,9 @@ use xcm_builder::{
 };
 use xcm_executor::{traits::WithOriginFilter, XcmExecutor};
 
+use assets_common::local_and_foreign_assets::LocalAndForeignAssets;
 #[cfg(feature = "runtime-benchmarks")]
 use {cumulus_primitives_core::ParaId, sp_core::Get};
-use assets_common::local_and_foreign_assets::LocalAndForeignAssets;
 
 parameter_types! {
 	pub const WestendLocation: MultiLocation = MultiLocation::parent();
@@ -138,9 +138,6 @@ pub type ForeignFungiblesTransactor = FungiblesAdapter<
 	// The account to use for tracking teleports.
 	CheckingAccount,
 >;
-
-/// `AssetId/Balance` converter for `MultiAssets` (any asset)
-pub type MultiAssetsConvertedConcreteId = assets_common::MultiLocationConvertedConcreteId<(), Balance>;
 
 /// `AssetId/Balance` converter for `PoolAssets`
 pub type PoolAssetsConvertedConcreteId =
@@ -446,7 +443,7 @@ impl xcm_executor::Config for XcmConfig {
 			LocationToAccountId,
 			pallet_asset_conversion::Pallet<Runtime>,
 			WeightToFee,
-			MultiAssetsConvertedConcreteId,
+			TrustBackedAssetsConvertedConcreteId,
 			Assets,
 			cumulus_primitives_utility::XcmFeesTo32ByteAccount<
 				// Revenue could also be Foreign Fungible? Maybe with multi-asset treasury..?
@@ -460,7 +457,7 @@ impl xcm_executor::Config for XcmConfig {
 			LocationToAccountId,
 			pallet_asset_conversion::Pallet<Runtime>,
 			WeightToFee,
-			MultiAssetsConvertedConcreteId,
+			ForeignAssetsConvertedConcreteId,
 			ForeignAssets,
 			cumulus_primitives_utility::XcmFeesTo32ByteAccount<
 				// Revenue could also be Foreign Fungible? Maybe with multi-asset treasury..?
