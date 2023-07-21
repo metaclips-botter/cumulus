@@ -2221,8 +2221,8 @@
 
 	<span class="kw">pub fn </span>within_threshold(threshold: u64, expected_value: u64, current_value: u64) -&gt; bool {
 		<span class="kw">let </span>margin = (current_value * threshold) / <span class="number">100</span>;
-		<span class="kw">let </span>lower_limit = expected_value - margin;
-		<span class="kw">let </span>upper_limit = expected_value + margin;
+		<span class="kw">let </span>lower_limit = expected_value.checked_sub(margin).unwrap_or(u64::MIN);
+		<span class="kw">let </span>upper_limit = expected_value.checked_add(margin).unwrap_or(u64::MAX);
 
 		current_value &gt;= lower_limit &amp;&amp; current_value &lt;= upper_limit
 	}

@@ -1,0 +1,3 @@
+(function() {var implementors = {
+"asset_hub_westend_runtime":[["impl MatchesLocalAndForeignAssetsMultiLocation for <a class=\"struct\" href=\"asset_hub_westend_runtime/xcm_config/struct.LocalAndForeignAssetsMultiLocationMatcher.html\" title=\"struct asset_hub_westend_runtime::xcm_config::LocalAndForeignAssetsMultiLocationMatcher\">LocalAndForeignAssetsMultiLocationMatcher</a>"]]
+};if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()

@@ -480,6 +480,8 @@
 <a href="#480" id="480">480</a>
 <a href="#481" id="481">481</a>
 <a href="#482" id="482">482</a>
+<a href="#483" id="483">483</a>
+<a href="#484" id="484">484</a>
 </pre></div><pre class="rust"><code><span class="comment">// Copyright (C) Parity Technologies (UK) Ltd.
 // SPDX-License-Identifier: Apache-2.0
 
@@ -518,6 +520,8 @@
 	VersionedXcm, MAX_XCM_DECODE_DEPTH,
 };
 <span class="kw">use </span>xcm_executor::{traits::TransactAsset, Assets};
+
+<span class="kw">pub mod </span>test_cases;
 
 <span class="kw">pub type </span>BalanceOf&lt;Runtime&gt; = &lt;Runtime <span class="kw">as </span>pallet_balances::Config&gt;::Balance;
 <span class="kw">pub type </span>AccountIdOf&lt;Runtime&gt; = &lt;Runtime <span class="kw">as </span>frame_system::Config&gt;::AccountId;

@@ -1296,6 +1296,9 @@
 <a href="#1296" id="1296">1296</a>
 <a href="#1297" id="1297">1297</a>
 <a href="#1298" id="1298">1298</a>
+<a href="#1299" id="1299">1299</a>
+<a href="#1300" id="1300">1300</a>
+<a href="#1301" id="1301">1301</a>
 </pre></div><pre class="rust"><code><span class="comment">// Copyright (C) 2023 Parity Technologies (UK) Ltd.
 // SPDX-License-Identifier: Apache-2.0
 
@@ -1330,6 +1333,9 @@
 };
 <span class="kw">use </span>xcm::latest::prelude::<span class="kw-2">*</span>;
 <span class="kw">use </span>xcm_executor::{traits::ConvertLocation, XcmExecutor};
+
+<span class="comment">// Re-export test_case from `parachains-runtimes-test-utils`
+</span><span class="kw">pub use </span>parachains_runtimes_test_utils::test_cases::change_storage_constant_by_governance_works;
 
 <span class="doccomment">/// Test-case makes sure that `Runtime` can receive native asset from relay chain
 /// and can teleport it back and to the other parachains

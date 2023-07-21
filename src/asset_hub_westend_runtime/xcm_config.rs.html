@@ -556,6 +556,43 @@
 <a href="#556" id="556">556</a>
 <a href="#557" id="557">557</a>
 <a href="#558" id="558">558</a>
+<a href="#559" id="559">559</a>
+<a href="#560" id="560">560</a>
+<a href="#561" id="561">561</a>
+<a href="#562" id="562">562</a>
+<a href="#563" id="563">563</a>
+<a href="#564" id="564">564</a>
+<a href="#565" id="565">565</a>
+<a href="#566" id="566">566</a>
+<a href="#567" id="567">567</a>
+<a href="#568" id="568">568</a>
+<a href="#569" id="569">569</a>
+<a href="#570" id="570">570</a>
+<a href="#571" id="571">571</a>
+<a href="#572" id="572">572</a>
+<a href="#573" id="573">573</a>
+<a href="#574" id="574">574</a>
+<a href="#575" id="575">575</a>
+<a href="#576" id="576">576</a>
+<a href="#577" id="577">577</a>
+<a href="#578" id="578">578</a>
+<a href="#579" id="579">579</a>
+<a href="#580" id="580">580</a>
+<a href="#581" id="581">581</a>
+<a href="#582" id="582">582</a>
+<a href="#583" id="583">583</a>
+<a href="#584" id="584">584</a>
+<a href="#585" id="585">585</a>
+<a href="#586" id="586">586</a>
+<a href="#587" id="587">587</a>
+<a href="#588" id="588">588</a>
+<a href="#589" id="589">589</a>
+<a href="#590" id="590">590</a>
+<a href="#591" id="591">591</a>
+<a href="#592" id="592">592</a>
+<a href="#593" id="593">593</a>
+<a href="#594" id="594">594</a>
+<a href="#595" id="595">595</a>
 </pre></div><pre class="rust"><code><span class="comment">// Copyright (C) 2022 Parity Technologies (UK) Ltd.
 // SPDX-License-Identifier: Apache-2.0
 
@@ -576,9 +613,12 @@
 	ParachainSystem, PolkadotXcm, PoolAssets, Runtime, RuntimeCall, RuntimeEvent, RuntimeOrigin,
 	TrustBackedAssetsInstance, WeightToFee, XcmpQueue,
 };
-<span class="kw">use </span><span class="kw">crate</span>::ForeignAssets;
-<span class="kw">use </span>assets_common::matching::{
-	FromSiblingParachain, IsForeignConcreteAsset, StartsWith, StartsWithExplicitGlobalConsensus,
+<span class="kw">use crate</span>::{AllowMultiAssetPools, ForeignAssets, LiquidityWithdrawalFee};
+<span class="kw">use </span>assets_common::{
+	local_and_foreign_assets::MatchesLocalAndForeignAssetsMultiLocation,
+	matching::{
+		FromSiblingParachain, IsForeignConcreteAsset, StartsWith, StartsWithExplicitGlobalConsensus,
+	},
 };
 <span class="kw">use </span>frame_support::{
 	match_types, parameter_types,
@@ -721,6 +761,25 @@
 </span><span class="kw">pub type </span>AssetTransactors =
 	(CurrencyTransactor, FungiblesTransactor, ForeignFungiblesTransactor, PoolFungiblesTransactor);
 
+<span class="doccomment">/// Simple `MultiLocation` matcher for Local and Foreign asset `MultiLocation`.
+</span><span class="kw">pub struct </span>LocalAndForeignAssetsMultiLocationMatcher;
+<span class="kw">impl </span>MatchesLocalAndForeignAssetsMultiLocation <span class="kw">for </span>LocalAndForeignAssetsMultiLocationMatcher {
+	<span class="kw">fn </span>is_local(location: <span class="kw-2">&amp;</span>MultiLocation) -&gt; bool {
+		<span class="kw">use </span>assets_common::fungible_conversion::MatchesMultiLocation;
+		TrustBackedAssetsConvertedConcreteId::contains(location)
+	}
+
+	<span class="kw">fn </span>is_foreign(location: <span class="kw-2">&amp;</span>MultiLocation) -&gt; bool {
+		<span class="kw">use </span>assets_common::fungible_conversion::MatchesMultiLocation;
+		ForeignAssetsConvertedConcreteId::contains(location)
+	}
+}
+<span class="kw">impl </span>Contains&lt;MultiLocation&gt; <span class="kw">for </span>LocalAndForeignAssetsMultiLocationMatcher {
+	<span class="kw">fn </span>contains(location: <span class="kw-2">&amp;</span>MultiLocation) -&gt; bool {
+		<span class="self">Self</span>::is_local(location) || <span class="self">Self</span>::is_foreign(location)
+	}
+}
+
 <span class="doccomment">/// This is the type we use to convert an (incoming) XCM origin into a local `Origin` instance,
 /// ready for dispatching a transaction with Xcm&#39;s `Transact`. There is an `OriginKind` which can
 /// biases the kind of local `Origin` it will become.
@@ -774,6 +833,16 @@
 				<span class="kw">return </span><span class="bool-val">true
 			</span>}
 		}
+
+		<span class="comment">// Allow to change dedicated storage items (called by governance-like)
+		</span><span class="kw">match </span>call {
+			RuntimeCall::System(frame_system::Call::set_storage { items })
+				<span class="kw">if </span>items.iter().any(|(k, <span class="kw">_</span>)| {
+					k.eq(<span class="kw-2">&amp;</span>AllowMultiAssetPools::key()) | k.eq(<span class="kw-2">&amp;</span>LiquidityWithdrawalFee::key())
+				}) =&gt;
+				<span class="kw">return </span><span class="bool-val">true</span>,
+			<span class="kw">_ </span>=&gt; (),
+		};
 
 		<span class="macro">matches!</span>(
 			call,
@@ -1098,7 +1167,8 @@
 }
 
 <span class="attr">#[cfg(feature = <span class="string">&quot;runtime-benchmarks&quot;</span>)]
-</span><span class="kw">impl</span>&lt;SelfParaId&gt; pallet_asset_conversion::BenchmarkHelper&lt;MultiLocation&gt;
+</span><span class="kw">impl</span>&lt;SelfParaId&gt;
+	pallet_asset_conversion::BenchmarkHelper&lt;MultiLocation, sp_std::boxed::Box&lt;MultiLocation&gt;&gt;
 	<span class="kw">for </span>BenchmarkMultiLocationConverter&lt;SelfParaId&gt;
 <span class="kw">where
 	</span>SelfParaId: Get&lt;ParaId&gt;,
@@ -1112,6 +1182,10 @@
 				GeneralIndex(asset_id.into()),
 			),
 		}
+	}
+
+	<span class="kw">fn </span>multiasset_id(asset_id: u32) -&gt; sp_std::boxed::Box&lt;MultiLocation&gt; {
+		sp_std::boxed::Box::new(<span class="self">Self</span>::asset_id(asset_id))
 	}
 }
 </code></pre></div></section></main></body></html>

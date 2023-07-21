@@ -392,6 +392,84 @@
 <a href="#392" id="392">392</a>
 <a href="#393" id="393">393</a>
 <a href="#394" id="394">394</a>
+<a href="#395" id="395">395</a>
+<a href="#396" id="396">396</a>
+<a href="#397" id="397">397</a>
+<a href="#398" id="398">398</a>
+<a href="#399" id="399">399</a>
+<a href="#400" id="400">400</a>
+<a href="#401" id="401">401</a>
+<a href="#402" id="402">402</a>
+<a href="#403" id="403">403</a>
+<a href="#404" id="404">404</a>
+<a href="#405" id="405">405</a>
+<a href="#406" id="406">406</a>
+<a href="#407" id="407">407</a>
+<a href="#408" id="408">408</a>
+<a href="#409" id="409">409</a>
+<a href="#410" id="410">410</a>
+<a href="#411" id="411">411</a>
+<a href="#412" id="412">412</a>
+<a href="#413" id="413">413</a>
+<a href="#414" id="414">414</a>
+<a href="#415" id="415">415</a>
+<a href="#416" id="416">416</a>
+<a href="#417" id="417">417</a>
+<a href="#418" id="418">418</a>
+<a href="#419" id="419">419</a>
+<a href="#420" id="420">420</a>
+<a href="#421" id="421">421</a>
+<a href="#422" id="422">422</a>
+<a href="#423" id="423">423</a>
+<a href="#424" id="424">424</a>
+<a href="#425" id="425">425</a>
+<a href="#426" id="426">426</a>
+<a href="#427" id="427">427</a>
+<a href="#428" id="428">428</a>
+<a href="#429" id="429">429</a>
+<a href="#430" id="430">430</a>
+<a href="#431" id="431">431</a>
+<a href="#432" id="432">432</a>
+<a href="#433" id="433">433</a>
+<a href="#434" id="434">434</a>
+<a href="#435" id="435">435</a>
+<a href="#436" id="436">436</a>
+<a href="#437" id="437">437</a>
+<a href="#438" id="438">438</a>
+<a href="#439" id="439">439</a>
+<a href="#440" id="440">440</a>
+<a href="#441" id="441">441</a>
+<a href="#442" id="442">442</a>
+<a href="#443" id="443">443</a>
+<a href="#444" id="444">444</a>
+<a href="#445" id="445">445</a>
+<a href="#446" id="446">446</a>
+<a href="#447" id="447">447</a>
+<a href="#448" id="448">448</a>
+<a href="#449" id="449">449</a>
+<a href="#450" id="450">450</a>
+<a href="#451" id="451">451</a>
+<a href="#452" id="452">452</a>
+<a href="#453" id="453">453</a>
+<a href="#454" id="454">454</a>
+<a href="#455" id="455">455</a>
+<a href="#456" id="456">456</a>
+<a href="#457" id="457">457</a>
+<a href="#458" id="458">458</a>
+<a href="#459" id="459">459</a>
+<a href="#460" id="460">460</a>
+<a href="#461" id="461">461</a>
+<a href="#462" id="462">462</a>
+<a href="#463" id="463">463</a>
+<a href="#464" id="464">464</a>
+<a href="#465" id="465">465</a>
+<a href="#466" id="466">466</a>
+<a href="#467" id="467">467</a>
+<a href="#468" id="468">468</a>
+<a href="#469" id="469">469</a>
+<a href="#470" id="470">470</a>
+<a href="#471" id="471">471</a>
+<a href="#472" id="472">472</a>
 </pre></div><pre class="rust"><code><span class="comment">// Copyright (C) 2021 Parity Technologies (UK) Ltd.
 // SPDX-License-Identifier: Apache-2.0
 
@@ -407,92 +485,81 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-</span><span class="kw">use </span><span class="kw">crate</span>::local_and_foreign_assets::fungibles::Inspect;
-<span class="kw">use </span>cumulus_primitives_core::InteriorMultiLocation;
-<span class="kw">use </span>frame_support::{
+</span><span class="kw">use </span>frame_support::{
 	pallet_prelude::DispatchError,
 	traits::{
-		fungibles::{
-			<span class="self">self</span>, Balanced, Create, HandleImbalanceDrop, Mutate <span class="kw">as </span>MutateFungible, Unbalanced,
+		fungibles::{Balanced, Create, HandleImbalanceDrop, Inspect, Mutate, Unbalanced},
+		tokens::{
+			DepositConsequence, Fortitude, Precision, Preservation, Provenance, WithdrawConsequence,
 		},
-		tokens::{DepositConsequence, Fortitude, Preservation, Provenance, WithdrawConsequence},
-		AccountTouch, ContainsPair, Get, PalletInfoAccess,
+		AccountTouch, Contains, ContainsPair, Get, PalletInfoAccess,
 	},
 };
-<span class="kw">use </span>pallet_asset_conversion::MultiAssetIdConverter;
-<span class="kw">use </span>parachains_common::{AccountId, AssetIdForTrustBackedAssets};
+<span class="kw">use </span>pallet_asset_conversion::{MultiAssetIdConversionResult, MultiAssetIdConverter};
+<span class="kw">use </span>parachains_common::AccountId;
 <span class="kw">use </span>sp_runtime::{traits::MaybeEquivalence, DispatchResult};
 <span class="kw">use </span>sp_std::{boxed::Box, marker::PhantomData};
-<span class="kw">use </span>xcm::{latest::MultiLocation, opaque::lts::Junctions::Here};
-<span class="kw">use </span>xcm_builder::AsPrefixedGeneralIndex;
-<span class="kw">use </span>xcm_executor::traits::JustTry;
+<span class="kw">use </span>xcm::latest::MultiLocation;
 
-<span class="doccomment">/// Whether the multilocation refers to an asset in the local assets pallet or not,
-/// and if return the asset id.
-</span><span class="kw">fn </span>is_local&lt;TrustBackedAssetsPalletLocation: Get&lt;MultiLocation&gt;&gt;(
-	multilocation: MultiLocation,
-) -&gt; <span class="prelude-ty">Option</span>&lt;u32&gt; {
-	AsPrefixedGeneralIndex::&lt;TrustBackedAssetsPalletLocation, AssetIdForTrustBackedAssets, JustTry&gt;::convert(<span class="kw-2">&amp;</span>multilocation)
+<span class="kw">pub struct </span>MultiLocationConverter&lt;NativeAssetLocation: Get&lt;MultiLocation&gt;, MultiLocationMatcher&gt; {
+	_phantom: PhantomData&lt;(NativeAssetLocation, MultiLocationMatcher)&gt;,
 }
 
-<span class="kw">pub struct </span>MultiLocationConverter&lt;Balances, ParachainLocation: Get&lt;InteriorMultiLocation&gt;&gt; {
-	_phantom: PhantomData&lt;(Balances, ParachainLocation)&gt;,
-}
-
-<span class="kw">impl</span>&lt;Balances, ParachainLocation&gt; MultiAssetIdConverter&lt;Box&lt;MultiLocation&gt;, MultiLocation&gt;
-	<span class="kw">for </span>MultiLocationConverter&lt;Balances, ParachainLocation&gt;
+<span class="kw">impl</span>&lt;NativeAssetLocation, MultiLocationMatcher&gt;
+	MultiAssetIdConverter&lt;Box&lt;MultiLocation&gt;, MultiLocation&gt;
+	<span class="kw">for </span>MultiLocationConverter&lt;NativeAssetLocation, MultiLocationMatcher&gt;
 <span class="kw">where
-	</span>Balances: PalletInfoAccess,
-	ParachainLocation: Get&lt;InteriorMultiLocation&gt;,
+	</span>NativeAssetLocation: Get&lt;MultiLocation&gt;,
+	MultiLocationMatcher: Contains&lt;MultiLocation&gt;,
 {
 	<span class="kw">fn </span>get_native() -&gt; Box&lt;MultiLocation&gt; {
-		Box::new(MultiLocation { parents: <span class="number">0</span>, interior: Here })
+		Box::new(NativeAssetLocation::get())
 	}
 
 	<span class="kw">fn </span>is_native(asset_id: <span class="kw-2">&amp;</span>Box&lt;MultiLocation&gt;) -&gt; bool {
-		<span class="kw">let </span><span class="kw-2">mut </span>asset_id = asset_id.clone();
-		asset_id.simplify(<span class="kw-2">&amp;</span>ParachainLocation::get());
-		<span class="kw-2">*</span>asset_id == <span class="kw-2">*</span><span class="self">Self</span>::get_native()
+		<span class="kw-2">*</span>asset_id == <span class="self">Self</span>::get_native()
 	}
 
-	<span class="kw">fn </span>try_convert(asset_id: <span class="kw-2">&amp;</span>Box&lt;MultiLocation&gt;) -&gt; <span class="prelude-ty">Result</span>&lt;MultiLocation, ()&gt; {
-		<span class="kw">let </span><span class="kw-2">mut </span>asset_id = asset_id.clone();
-		asset_id.simplify(<span class="kw-2">&amp;</span>ParachainLocation::get());
+	<span class="kw">fn </span>try_convert(
+		asset_id: <span class="kw-2">&amp;</span>Box&lt;MultiLocation&gt;,
+	) -&gt; MultiAssetIdConversionResult&lt;Box&lt;MultiLocation&gt;, MultiLocation&gt; {
 		<span class="kw">if </span><span class="self">Self</span>::is_native(<span class="kw-2">&amp;</span>asset_id) {
-			<span class="comment">// Otherwise it will try and touch the asset to create an account.
-			</span><span class="kw">return </span><span class="prelude-val">Err</span>(())
+			<span class="kw">return </span>MultiAssetIdConversionResult::Native
 		}
-		<span class="comment">// Return simplified MultiLocation:
-		</span><span class="prelude-val">Ok</span>(<span class="kw-2">*</span>asset_id)
-	}
 
-	<span class="kw">fn </span>into_multiasset_id(asset_id: <span class="kw-2">&amp;</span>MultiLocation) -&gt; Box&lt;MultiLocation&gt; {
-		<span class="kw">let </span><span class="kw-2">mut </span>asset_id = <span class="kw-2">*</span>asset_id;
-		asset_id.simplify(<span class="kw-2">&amp;</span>ParachainLocation::get());
-		Box::new(asset_id)
+		<span class="kw">if </span>MultiLocationMatcher::contains(<span class="kw-2">&amp;</span>asset_id) {
+			MultiAssetIdConversionResult::Converted(<span class="kw-2">*</span>asset_id.clone())
+		} <span class="kw">else </span>{
+			MultiAssetIdConversionResult::Unsupported(asset_id.clone())
+		}
 	}
 }
 
-<span class="kw">pub struct </span>LocalAndForeignAssets&lt;Assets, ForeignAssets, Location&gt; {
-	_phantom: PhantomData&lt;(Assets, ForeignAssets, Location)&gt;,
+<span class="kw">pub trait </span>MatchesLocalAndForeignAssetsMultiLocation {
+	<span class="kw">fn </span>is_local(location: <span class="kw-2">&amp;</span>MultiLocation) -&gt; bool;
+	<span class="kw">fn </span>is_foreign(location: <span class="kw-2">&amp;</span>MultiLocation) -&gt; bool;
 }
 
-<span class="kw">impl</span>&lt;Assets, ForeignAssets, Location&gt; Unbalanced&lt;AccountId&gt;
-	<span class="kw">for </span>LocalAndForeignAssets&lt;Assets, ForeignAssets, Location&gt;
+<span class="kw">pub struct </span>LocalAndForeignAssets&lt;Assets, LocalAssetIdConverter, ForeignAssets&gt; {
+	_phantom: PhantomData&lt;(Assets, LocalAssetIdConverter, ForeignAssets)&gt;,
+}
+
+<span class="kw">impl</span>&lt;Assets, LocalAssetIdConverter, ForeignAssets&gt; Unbalanced&lt;AccountId&gt;
+	<span class="kw">for </span>LocalAndForeignAssets&lt;Assets, LocalAssetIdConverter, ForeignAssets&gt;
 <span class="kw">where
-	</span>Location: Get&lt;MultiLocation&gt;,
-	ForeignAssets: Inspect&lt;AccountId, Balance = u128, AssetId = MultiLocation&gt;
-		+ Unbalanced&lt;AccountId&gt;
-		+ Balanced&lt;AccountId&gt;,
-	Assets: Inspect&lt;AccountId, Balance = u128, AssetId = u32&gt;
+	</span>Assets: Inspect&lt;AccountId, Balance = u128, AssetId = u32&gt;
 		+ Unbalanced&lt;AccountId&gt;
 		+ Balanced&lt;AccountId&gt;
 		+ PalletInfoAccess,
+	LocalAssetIdConverter: MaybeEquivalence&lt;MultiLocation, u32&gt;,
+	ForeignAssets: Inspect&lt;AccountId, Balance = u128, AssetId = MultiLocation&gt;
+		+ Unbalanced&lt;AccountId&gt;
+		+ Balanced&lt;AccountId&gt;,
 {
 	<span class="kw">fn </span>handle_dust(dust: frame_support::traits::fungibles::Dust&lt;AccountId, <span class="self">Self</span>&gt;) {
 		<span class="kw">let </span>credit = dust.into_credit();
 
-		<span class="kw">if let </span><span class="prelude-val">Some</span>(asset) = is_local::&lt;Location&gt;(credit.asset()) {
+		<span class="kw">if let </span><span class="prelude-val">Some</span>(asset) = LocalAssetIdConverter::convert(<span class="kw-2">&amp;</span>credit.asset()) {
 			Assets::handle_raw_dust(asset, credit.peek());
 		} <span class="kw">else </span>{
 			ForeignAssets::handle_raw_dust(credit.asset(), credit.peek());
@@ -503,14 +570,11 @@
 	}
 
 	<span class="kw">fn </span>write_balance(
-		asset: &lt;<span class="self">Self </span><span class="kw">as </span>frame_support::traits::fungibles::Inspect&lt;AccountId&gt;&gt;::AssetId,
+		asset: &lt;<span class="self">Self </span><span class="kw">as </span>Inspect&lt;AccountId&gt;&gt;::AssetId,
 		who: <span class="kw-2">&amp;</span>AccountId,
-		amount: &lt;<span class="self">Self </span><span class="kw">as </span>frame_support::traits::fungibles::Inspect&lt;AccountId&gt;&gt;::Balance,
-	) -&gt; <span class="prelude-ty">Result</span>&lt;
-		<span class="prelude-ty">Option</span>&lt;&lt;<span class="self">Self </span><span class="kw">as </span>frame_support::traits::fungibles::Inspect&lt;AccountId&gt;&gt;::Balance&gt;,
-		sp_runtime::DispatchError,
-	&gt; {
-		<span class="kw">if let </span><span class="prelude-val">Some</span>(asset) = is_local::&lt;Location&gt;(asset) {
+		amount: &lt;<span class="self">Self </span><span class="kw">as </span>Inspect&lt;AccountId&gt;&gt;::Balance,
+	) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="prelude-ty">Option</span>&lt;&lt;<span class="self">Self </span><span class="kw">as </span>Inspect&lt;AccountId&gt;&gt;::Balance&gt;, DispatchError&gt; {
+		<span class="kw">if let </span><span class="prelude-val">Some</span>(asset) = LocalAssetIdConverter::convert(<span class="kw-2">&amp;</span>asset) {
 			Assets::write_balance(asset, who, amount)
 		} <span class="kw">else </span>{
 			ForeignAssets::write_balance(asset, who, amount)
@@ -519,27 +583,55 @@
 
 	<span class="doccomment">/// Set the total issuance of `asset` to `amount`.
 	</span><span class="kw">fn </span>set_total_issuance(asset: <span class="self">Self</span>::AssetId, amount: <span class="self">Self</span>::Balance) {
-		<span class="kw">if let </span><span class="prelude-val">Some</span>(asset) = is_local::&lt;Location&gt;(asset) {
+		<span class="kw">if let </span><span class="prelude-val">Some</span>(asset) = LocalAssetIdConverter::convert(<span class="kw-2">&amp;</span>asset) {
 			Assets::set_total_issuance(asset, amount)
 		} <span class="kw">else </span>{
 			ForeignAssets::set_total_issuance(asset, amount)
 		}
 	}
+
+	<span class="kw">fn </span>decrease_balance(
+		asset: <span class="self">Self</span>::AssetId,
+		who: <span class="kw-2">&amp;</span>AccountId,
+		amount: <span class="self">Self</span>::Balance,
+		precision: Precision,
+		preservation: Preservation,
+		force: Fortitude,
+	) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>::Balance, DispatchError&gt; {
+		<span class="kw">if let </span><span class="prelude-val">Some</span>(asset) = LocalAssetIdConverter::convert(<span class="kw-2">&amp;</span>asset) {
+			Assets::decrease_balance(asset, who, amount, precision, preservation, force)
+		} <span class="kw">else </span>{
+			ForeignAssets::decrease_balance(asset, who, amount, precision, preservation, force)
+		}
+	}
+
+	<span class="kw">fn </span>increase_balance(
+		asset: <span class="self">Self</span>::AssetId,
+		who: <span class="kw-2">&amp;</span>AccountId,
+		amount: <span class="self">Self</span>::Balance,
+		precision: Precision,
+	) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>::Balance, DispatchError&gt; {
+		<span class="kw">if let </span><span class="prelude-val">Some</span>(asset) = LocalAssetIdConverter::convert(<span class="kw-2">&amp;</span>asset) {
+			Assets::increase_balance(asset, who, amount, precision)
+		} <span class="kw">else </span>{
+			ForeignAssets::increase_balance(asset, who, amount, precision)
+		}
+	}
 }
 
-<span class="kw">impl</span>&lt;Assets, ForeignAssets, Location&gt; Inspect&lt;AccountId&gt;
-	<span class="kw">for </span>LocalAndForeignAssets&lt;Assets, ForeignAssets, Location&gt;
+<span class="kw">impl</span>&lt;Assets, LocalAssetIdConverter, ForeignAssets&gt; Inspect&lt;AccountId&gt;
+	<span class="kw">for </span>LocalAndForeignAssets&lt;Assets, LocalAssetIdConverter, ForeignAssets&gt;
 <span class="kw">where
-	</span>Location: Get&lt;MultiLocation&gt;,
+	</span>Assets: Inspect&lt;AccountId, Balance = u128, AssetId = u32&gt;,
+	LocalAssetIdConverter: MaybeEquivalence&lt;MultiLocation, u32&gt;,
 	ForeignAssets: Inspect&lt;AccountId, Balance = u128, AssetId = MultiLocation&gt;,
-	Assets: Inspect&lt;AccountId, Balance = u128, AssetId = u32&gt;,
 {
 	<span class="kw">type </span>AssetId = MultiLocation;
 	<span class="kw">type </span>Balance = u128;
 
 	<span class="doccomment">/// The total amount of issuance in the system.
 	</span><span class="kw">fn </span>total_issuance(asset: <span class="self">Self</span>::AssetId) -&gt; <span class="self">Self</span>::Balance {
-		<span class="kw">if let </span><span class="prelude-val">Some</span>(asset) = is_local::&lt;Location&gt;(asset) {
+		<span class="kw">if let </span><span class="prelude-val">Some</span>(asset) = LocalAssetIdConverter::convert(<span class="kw-2">&amp;</span>asset) {
 			Assets::total_issuance(asset)
 		} <span class="kw">else </span>{
 			ForeignAssets::total_issuance(asset)
@@ -548,16 +640,27 @@
 
 	<span class="doccomment">/// The minimum balance any single account may have.
 	</span><span class="kw">fn </span>minimum_balance(asset: <span class="self">Self</span>::AssetId) -&gt; <span class="self">Self</span>::Balance {
-		<span class="kw">if let </span><span class="prelude-val">Some</span>(asset) = is_local::&lt;Location&gt;(asset) {
+		<span class="kw">if let </span><span class="prelude-val">Some</span>(asset) = LocalAssetIdConverter::convert(<span class="kw-2">&amp;</span>asset) {
 			Assets::minimum_balance(asset)
 		} <span class="kw">else </span>{
 			ForeignAssets::minimum_balance(asset)
 		}
 	}
 
+	<span class="kw">fn </span>total_balance(
+		asset: &lt;<span class="self">Self </span><span class="kw">as </span>Inspect&lt;AccountId&gt;&gt;::AssetId,
+		account: <span class="kw-2">&amp;</span>AccountId,
+	) -&gt; &lt;<span class="self">Self </span><span class="kw">as </span>Inspect&lt;AccountId&gt;&gt;::Balance {
+		<span class="kw">if let </span><span class="prelude-val">Some</span>(asset) = LocalAssetIdConverter::convert(<span class="kw-2">&amp;</span>asset) {
+			Assets::total_balance(asset, account)
+		} <span class="kw">else </span>{
+			ForeignAssets::total_balance(asset, account)
+		}
+	}
+
 	<span class="doccomment">/// Get the `asset` balance of `who`.
 	</span><span class="kw">fn </span>balance(asset: <span class="self">Self</span>::AssetId, who: <span class="kw-2">&amp;</span>AccountId) -&gt; <span class="self">Self</span>::Balance {
-		<span class="kw">if let </span><span class="prelude-val">Some</span>(asset) = is_local::&lt;Location&gt;(asset) {
+		<span class="kw">if let </span><span class="prelude-val">Some</span>(asset) = LocalAssetIdConverter::convert(<span class="kw-2">&amp;</span>asset) {
 			Assets::balance(asset, who)
 		} <span class="kw">else </span>{
 			ForeignAssets::balance(asset, who)
@@ -571,7 +674,7 @@
 		presevation: Preservation,
 		fortitude: Fortitude,
 	) -&gt; <span class="self">Self</span>::Balance {
-		<span class="kw">if let </span><span class="prelude-val">Some</span>(asset) = is_local::&lt;Location&gt;(asset) {
+		<span class="kw">if let </span><span class="prelude-val">Some</span>(asset) = LocalAssetIdConverter::convert(<span class="kw-2">&amp;</span>asset) {
 			Assets::reducible_balance(asset, who, presevation, fortitude)
 		} <span class="kw">else </span>{
 			ForeignAssets::reducible_balance(asset, who, presevation, fortitude)
@@ -590,7 +693,7 @@
 		amount: <span class="self">Self</span>::Balance,
 		mint: Provenance,
 	) -&gt; DepositConsequence {
-		<span class="kw">if let </span><span class="prelude-val">Some</span>(asset) = is_local::&lt;Location&gt;(asset) {
+		<span class="kw">if let </span><span class="prelude-val">Some</span>(asset) = LocalAssetIdConverter::convert(<span class="kw-2">&amp;</span>asset) {
 			Assets::can_deposit(asset, who, amount, mint)
 		} <span class="kw">else </span>{
 			ForeignAssets::can_deposit(asset, who, amount, mint)
@@ -604,7 +707,7 @@
 		who: <span class="kw-2">&amp;</span>AccountId,
 		amount: <span class="self">Self</span>::Balance,
 	) -&gt; WithdrawConsequence&lt;<span class="self">Self</span>::Balance&gt; {
-		<span class="kw">if let </span><span class="prelude-val">Some</span>(asset) = is_local::&lt;Location&gt;(asset) {
+		<span class="kw">if let </span><span class="prelude-val">Some</span>(asset) = LocalAssetIdConverter::convert(<span class="kw-2">&amp;</span>asset) {
 			Assets::can_withdraw(asset, who, amount)
 		} <span class="kw">else </span>{
 			ForeignAssets::can_withdraw(asset, who, amount)
@@ -613,36 +716,25 @@
 
 	<span class="doccomment">/// Returns `true` if an `asset` exists.
 	</span><span class="kw">fn </span>asset_exists(asset: <span class="self">Self</span>::AssetId) -&gt; bool {
-		<span class="kw">if let </span><span class="prelude-val">Some</span>(asset) = is_local::&lt;Location&gt;(asset) {
+		<span class="kw">if let </span><span class="prelude-val">Some</span>(asset) = LocalAssetIdConverter::convert(<span class="kw-2">&amp;</span>asset) {
 			Assets::asset_exists(asset)
 		} <span class="kw">else </span>{
 			ForeignAssets::asset_exists(asset)
 		}
 	}
-
-	<span class="kw">fn </span>total_balance(
-		asset: &lt;<span class="self">Self </span><span class="kw">as </span>frame_support::traits::fungibles::Inspect&lt;AccountId&gt;&gt;::AssetId,
-		account: <span class="kw-2">&amp;</span>AccountId,
-	) -&gt; &lt;<span class="self">Self </span><span class="kw">as </span>frame_support::traits::fungibles::Inspect&lt;AccountId&gt;&gt;::Balance {
-		<span class="kw">if let </span><span class="prelude-val">Some</span>(asset) = is_local::&lt;Location&gt;(asset) {
-			Assets::total_balance(asset, account)
-		} <span class="kw">else </span>{
-			ForeignAssets::total_balance(asset, account)
-		}
-	}
 }
 
-<span class="kw">impl</span>&lt;Assets, ForeignAssets, Location&gt; MutateFungible&lt;AccountId&gt;
-	<span class="kw">for </span>LocalAndForeignAssets&lt;Assets, ForeignAssets, Location&gt;
+<span class="kw">impl</span>&lt;Assets, LocalAssetIdConverter, ForeignAssets&gt; Mutate&lt;AccountId&gt;
+	<span class="kw">for </span>LocalAndForeignAssets&lt;Assets, LocalAssetIdConverter, ForeignAssets&gt;
 <span class="kw">where
-	</span>Location: Get&lt;MultiLocation&gt;,
-	ForeignAssets: MutateFungible&lt;AccountId, Balance = u128&gt;
-		+ Inspect&lt;AccountId, Balance = u128, AssetId = MultiLocation&gt;
-		+ Balanced&lt;AccountId&gt;,
-	Assets: MutateFungible&lt;AccountId&gt;
+	</span>Assets: Mutate&lt;AccountId&gt;
 		+ Inspect&lt;AccountId, Balance = u128, AssetId = u32&gt;
 		+ Balanced&lt;AccountId&gt;
 		+ PalletInfoAccess,
+	LocalAssetIdConverter: MaybeEquivalence&lt;MultiLocation, u32&gt;,
+	ForeignAssets: Mutate&lt;AccountId, Balance = u128&gt;
+		+ Inspect&lt;AccountId, Balance = u128, AssetId = MultiLocation&gt;
+		+ Balanced&lt;AccountId&gt;,
 {
 	<span class="doccomment">/// Transfer funds from one account into another.
 	</span><span class="kw">fn </span>transfer(
@@ -652,7 +744,7 @@
 		amount: <span class="self">Self</span>::Balance,
 		keep_alive: Preservation,
 	) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>::Balance, DispatchError&gt; {
-		<span class="kw">if let </span><span class="prelude-val">Some</span>(asset_id) = is_local::&lt;Location&gt;(asset) {
+		<span class="kw">if let </span><span class="prelude-val">Some</span>(asset_id) = LocalAssetIdConverter::convert(<span class="kw-2">&amp;</span>asset) {
 			Assets::transfer(asset_id, source, dest, amount, keep_alive)
 		} <span class="kw">else </span>{
 			ForeignAssets::transfer(asset, source, dest, amount, keep_alive)
@@ -660,12 +752,12 @@
 	}
 }
 
-<span class="kw">impl</span>&lt;Assets, ForeignAssets, Location&gt; Create&lt;AccountId&gt;
-	<span class="kw">for </span>LocalAndForeignAssets&lt;Assets, ForeignAssets, Location&gt;
+<span class="kw">impl</span>&lt;Assets, LocalAssetIdConverter, ForeignAssets&gt; Create&lt;AccountId&gt;
+	<span class="kw">for </span>LocalAndForeignAssets&lt;Assets, LocalAssetIdConverter, ForeignAssets&gt;
 <span class="kw">where
-	</span>Location: Get&lt;MultiLocation&gt;,
+	</span>Assets: Create&lt;AccountId&gt; + Inspect&lt;AccountId, Balance = u128, AssetId = u32&gt;,
+	LocalAssetIdConverter: MaybeEquivalence&lt;MultiLocation, u32&gt;,
 	ForeignAssets: Create&lt;AccountId&gt; + Inspect&lt;AccountId, Balance = u128, AssetId = MultiLocation&gt;,
-	Assets: Create&lt;AccountId&gt; + Inspect&lt;AccountId, Balance = u128, AssetId = u32&gt;,
 {
 	<span class="doccomment">/// Create a new fungible asset.
 	</span><span class="kw">fn </span>create(
@@ -674,7 +766,7 @@
 		is_sufficient: bool,
 		min_balance: <span class="self">Self</span>::Balance,
 	) -&gt; DispatchResult {
-		<span class="kw">if let </span><span class="prelude-val">Some</span>(asset_id) = is_local::&lt;Location&gt;(asset_id) {
+		<span class="kw">if let </span><span class="prelude-val">Some</span>(asset_id) = LocalAssetIdConverter::convert(<span class="kw-2">&amp;</span>asset_id) {
 			Assets::create(asset_id, admin, is_sufficient, min_balance)
 		} <span class="kw">else </span>{
 			ForeignAssets::create(asset_id, admin, is_sufficient, min_balance)
@@ -682,19 +774,19 @@
 	}
 }
 
-<span class="kw">impl</span>&lt;Assets, ForeignAssets, Location&gt; AccountTouch&lt;MultiLocation, AccountId&gt;
-	<span class="kw">for </span>LocalAndForeignAssets&lt;Assets, ForeignAssets, Location&gt;
+<span class="kw">impl</span>&lt;Assets, LocalAssetIdConverter, ForeignAssets&gt; AccountTouch&lt;MultiLocation, AccountId&gt;
+	<span class="kw">for </span>LocalAndForeignAssets&lt;Assets, LocalAssetIdConverter, ForeignAssets&gt;
 <span class="kw">where
-	</span>Location: Get&lt;MultiLocation&gt;,
+	</span>Assets: AccountTouch&lt;u32, AccountId, Balance = u128&gt;,
+	LocalAssetIdConverter: MaybeEquivalence&lt;MultiLocation, u32&gt;,
 	ForeignAssets: AccountTouch&lt;MultiLocation, AccountId, Balance = u128&gt;,
-	Assets: AccountTouch&lt;u32, AccountId, Balance = u128&gt;,
 {
 	<span class="kw">type </span>Balance = u128;
 
 	<span class="kw">fn </span>deposit_required(
 		asset_id: MultiLocation,
 	) -&gt; &lt;<span class="self">Self </span><span class="kw">as </span>AccountTouch&lt;MultiLocation, AccountId&gt;&gt;::Balance {
-		<span class="kw">if let </span><span class="prelude-val">Some</span>(asset_id) = is_local::&lt;Location&gt;(asset_id) {
+		<span class="kw">if let </span><span class="prelude-val">Some</span>(asset_id) = LocalAssetIdConverter::convert(<span class="kw-2">&amp;</span>asset_id) {
 			Assets::deposit_required(asset_id)
 		} <span class="kw">else </span>{
 			ForeignAssets::deposit_required(asset_id)
@@ -705,8 +797,8 @@
 		asset_id: MultiLocation,
 		who: AccountId,
 		depositor: AccountId,
-	) -&gt; <span class="prelude-ty">Result</span>&lt;(), sp_runtime::DispatchError&gt; {
-		<span class="kw">if let </span><span class="prelude-val">Some</span>(asset_id) = is_local::&lt;Location&gt;(asset_id) {
+	) -&gt; <span class="prelude-ty">Result</span>&lt;(), DispatchError&gt; {
+		<span class="kw">if let </span><span class="prelude-val">Some</span>(asset_id) = LocalAssetIdConverter::convert(<span class="kw-2">&amp;</span>asset_id) {
 			Assets::touch(asset_id, who, depositor)
 		} <span class="kw">else </span>{
 			ForeignAssets::touch(asset_id, who, depositor)
@@ -715,16 +807,16 @@
 }
 
 <span class="doccomment">/// Implements [`ContainsPair`] trait for a pair of asset and account IDs.
-</span><span class="kw">impl</span>&lt;Assets, ForeignAssets, Location&gt; ContainsPair&lt;MultiLocation, AccountId&gt;
-	<span class="kw">for </span>LocalAndForeignAssets&lt;Assets, ForeignAssets, Location&gt;
+</span><span class="kw">impl</span>&lt;Assets, LocalAssetIdConverter, ForeignAssets&gt; ContainsPair&lt;MultiLocation, AccountId&gt;
+	<span class="kw">for </span>LocalAndForeignAssets&lt;Assets, LocalAssetIdConverter, ForeignAssets&gt;
 <span class="kw">where
-	</span>Location: Get&lt;MultiLocation&gt;,
+	</span>Assets: PalletInfoAccess + ContainsPair&lt;u32, AccountId&gt;,
+	LocalAssetIdConverter: MaybeEquivalence&lt;MultiLocation, u32&gt;,
 	ForeignAssets: ContainsPair&lt;MultiLocation, AccountId&gt;,
-	Assets: PalletInfoAccess + ContainsPair&lt;u32, AccountId&gt;,
 {
 	<span class="doccomment">/// Check if an account with the given asset ID and account address exists.
 	</span><span class="kw">fn </span>contains(asset_id: <span class="kw-2">&amp;</span>MultiLocation, who: <span class="kw-2">&amp;</span>AccountId) -&gt; bool {
-		<span class="kw">if let </span><span class="prelude-val">Some</span>(asset_id) = is_local::&lt;Location&gt;(<span class="kw-2">*</span>asset_id) {
+		<span class="kw">if let </span><span class="prelude-val">Some</span>(asset_id) = LocalAssetIdConverter::convert(asset_id) {
 			Assets::contains(<span class="kw-2">&amp;</span>asset_id, <span class="kw-2">&amp;</span>who)
 		} <span class="kw">else </span>{
 			ForeignAssets::contains(<span class="kw-2">&amp;</span>asset_id, <span class="kw-2">&amp;</span>who)
@@ -732,33 +824,33 @@
 	}
 }
 
-<span class="kw">impl</span>&lt;Assets, ForeignAssets, Location&gt; Balanced&lt;AccountId&gt;
-	<span class="kw">for </span>LocalAndForeignAssets&lt;Assets, ForeignAssets, Location&gt;
+<span class="kw">impl</span>&lt;Assets, LocalAssetIdConverter, ForeignAssets&gt; Balanced&lt;AccountId&gt;
+	<span class="kw">for </span>LocalAndForeignAssets&lt;Assets, LocalAssetIdConverter, ForeignAssets&gt;
 <span class="kw">where
-	</span>Location: Get&lt;MultiLocation&gt;,
-	ForeignAssets:
-		Balanced&lt;AccountId&gt; + Inspect&lt;AccountId, Balance = u128, AssetId = MultiLocation&gt;,
-	Assets:
+	</span>Assets:
 		Balanced&lt;AccountId&gt; + Inspect&lt;AccountId, Balance = u128, AssetId = u32&gt; + PalletInfoAccess,
-{
-	<span class="kw">type </span>OnDropDebt = DebtDropIndirection&lt;Assets, ForeignAssets, Location&gt;;
-	<span class="kw">type </span>OnDropCredit = CreditDropIndirection&lt;Assets, ForeignAssets, Location&gt;;
-}
-
-<span class="kw">pub struct </span>DebtDropIndirection&lt;Assets, ForeignAssets, Location&gt; {
-	_phantom: PhantomData&lt;LocalAndForeignAssets&lt;Assets, ForeignAssets, Location&gt;&gt;,
-}
-
-<span class="kw">impl</span>&lt;Assets, ForeignAssets, Location&gt; HandleImbalanceDrop&lt;MultiLocation, u128&gt;
-	<span class="kw">for </span>DebtDropIndirection&lt;Assets, ForeignAssets, Location&gt;
-<span class="kw">where
-	</span>Location: Get&lt;MultiLocation&gt;,
+	LocalAssetIdConverter: MaybeEquivalence&lt;MultiLocation, u32&gt;,
 	ForeignAssets:
 		Balanced&lt;AccountId&gt; + Inspect&lt;AccountId, Balance = u128, AssetId = MultiLocation&gt;,
-	Assets: Balanced&lt;AccountId&gt; + Inspect&lt;AccountId, Balance = u128, AssetId = u32&gt;,
+{
+	<span class="kw">type </span>OnDropDebt = DebtDropIndirection&lt;Assets, LocalAssetIdConverter, ForeignAssets&gt;;
+	<span class="kw">type </span>OnDropCredit = CreditDropIndirection&lt;Assets, LocalAssetIdConverter, ForeignAssets&gt;;
+}
+
+<span class="kw">pub struct </span>DebtDropIndirection&lt;Assets, LocalAssetIdConverter, ForeignAssets&gt; {
+	_phantom: PhantomData&lt;LocalAndForeignAssets&lt;Assets, LocalAssetIdConverter, ForeignAssets&gt;&gt;,
+}
+
+<span class="kw">impl</span>&lt;Assets, LocalAssetIdConverter, ForeignAssets&gt; HandleImbalanceDrop&lt;MultiLocation, u128&gt;
+	<span class="kw">for </span>DebtDropIndirection&lt;Assets, LocalAssetIdConverter, ForeignAssets&gt;
+<span class="kw">where
+	</span>Assets: Balanced&lt;AccountId&gt; + Inspect&lt;AccountId, Balance = u128, AssetId = u32&gt;,
+	LocalAssetIdConverter: MaybeEquivalence&lt;MultiLocation, u32&gt;,
+	ForeignAssets:
+		Balanced&lt;AccountId&gt; + Inspect&lt;AccountId, Balance = u128, AssetId = MultiLocation&gt;,
 {
 	<span class="kw">fn </span>handle(asset: MultiLocation, amount: u128) {
-		<span class="kw">if let </span><span class="prelude-val">Some</span>(asset_id) = is_local::&lt;Location&gt;(asset) {
+		<span class="kw">if let </span><span class="prelude-val">Some</span>(asset_id) = LocalAssetIdConverter::convert(<span class="kw-2">&amp;</span>asset) {
 			Assets::OnDropDebt::handle(asset_id, amount);
 		} <span class="kw">else </span>{
 			ForeignAssets::OnDropDebt::handle(asset, amount);
@@ -766,24 +858,88 @@
 	}
 }
 
-<span class="kw">pub struct </span>CreditDropIndirection&lt;Assets, ForeignAssets, Location&gt; {
-	_phantom: PhantomData&lt;LocalAndForeignAssets&lt;Assets, ForeignAssets, Location&gt;&gt;,
+<span class="kw">pub struct </span>CreditDropIndirection&lt;Assets, LocalAssetIdConverter, ForeignAssets&gt; {
+	_phantom: PhantomData&lt;LocalAndForeignAssets&lt;Assets, LocalAssetIdConverter, ForeignAssets&gt;&gt;,
 }
 
-<span class="kw">impl</span>&lt;Assets, ForeignAssets, Location&gt; HandleImbalanceDrop&lt;MultiLocation, u128&gt;
-	<span class="kw">for </span>CreditDropIndirection&lt;Assets, ForeignAssets, Location&gt;
+<span class="kw">impl</span>&lt;Assets, LocalAssetIdConverter, ForeignAssets&gt; HandleImbalanceDrop&lt;MultiLocation, u128&gt;
+	<span class="kw">for </span>CreditDropIndirection&lt;Assets, LocalAssetIdConverter, ForeignAssets&gt;
 <span class="kw">where
-	</span>Location: Get&lt;MultiLocation&gt;,
+	</span>Assets: Balanced&lt;AccountId&gt; + Inspect&lt;AccountId, Balance = u128, AssetId = u32&gt;,
+	LocalAssetIdConverter: MaybeEquivalence&lt;MultiLocation, u32&gt;,
 	ForeignAssets:
 		Balanced&lt;AccountId&gt; + Inspect&lt;AccountId, Balance = u128, AssetId = MultiLocation&gt;,
-	Assets: Balanced&lt;AccountId&gt; + Inspect&lt;AccountId, Balance = u128, AssetId = u32&gt;,
 {
 	<span class="kw">fn </span>handle(asset: MultiLocation, amount: u128) {
-		<span class="kw">if let </span><span class="prelude-val">Some</span>(asset_id) = is_local::&lt;Location&gt;(asset) {
+		<span class="kw">if let </span><span class="prelude-val">Some</span>(asset_id) = LocalAssetIdConverter::convert(<span class="kw-2">&amp;</span>asset) {
 			Assets::OnDropCredit::handle(asset_id, amount);
 		} <span class="kw">else </span>{
 			ForeignAssets::OnDropCredit::handle(asset, amount);
 		}
+	}
+}
+
+<span class="attr">#[cfg(test)]
+</span><span class="kw">mod </span>tests {
+	<span class="kw">use crate</span>::{
+		local_and_foreign_assets::MultiLocationConverter, matching::StartsWith,
+		AssetIdForPoolAssetsConvert, AssetIdForTrustBackedAssetsConvert,
+	};
+	<span class="kw">use </span>frame_support::traits::EverythingBut;
+	<span class="kw">use </span>pallet_asset_conversion::{MultiAssetIdConversionResult, MultiAssetIdConverter};
+	<span class="kw">use </span>sp_runtime::traits::MaybeEquivalence;
+	<span class="kw">use </span>xcm::latest::prelude::<span class="kw-2">*</span>;
+
+	<span class="attr">#[test]
+	</span><span class="kw">fn </span>test_multi_location_converter_works() {
+		<span class="macro">frame_support::parameter_types! </span>{
+			<span class="kw">pub const </span>WestendLocation: MultiLocation = MultiLocation::parent();
+			<span class="kw">pub </span>TrustBackedAssetsPalletLocation: MultiLocation = PalletInstance(<span class="number">50_u8</span>).into();
+			<span class="kw">pub </span>PoolAssetsPalletLocation: MultiLocation = PalletInstance(<span class="number">55_u8</span>).into();
+		}
+
+		<span class="kw">type </span>C = MultiLocationConverter&lt;
+			WestendLocation,
+			EverythingBut&lt;StartsWith&lt;PoolAssetsPalletLocation&gt;&gt;,
+		&gt;;
+
+		<span class="kw">let </span>native_asset = WestendLocation::get();
+		<span class="kw">let </span>local_asset =
+			AssetIdForTrustBackedAssetsConvert::&lt;TrustBackedAssetsPalletLocation&gt;::convert_back(
+				<span class="kw-2">&amp;</span><span class="number">123</span>,
+			)
+			.unwrap();
+		<span class="kw">let </span>pool_asset =
+			AssetIdForPoolAssetsConvert::&lt;PoolAssetsPalletLocation&gt;::convert_back(<span class="kw-2">&amp;</span><span class="number">456</span>).unwrap();
+		<span class="kw">let </span>foreign_asset1 = MultiLocation { parents: <span class="number">1</span>, interior: X1(Parachain(<span class="number">2222</span>)) };
+		<span class="kw">let </span>foreign_asset2 = MultiLocation {
+			parents: <span class="number">2</span>,
+			interior: X2(GlobalConsensus(ByGenesis([<span class="number">1</span>; <span class="number">32</span>])), Parachain(<span class="number">2222</span>)),
+		};
+
+		<span class="macro">assert!</span>(C::is_native(<span class="kw-2">&amp;</span>Box::new(native_asset)));
+		<span class="macro">assert!</span>(!C::is_native(<span class="kw-2">&amp;</span>Box::new(local_asset)));
+		<span class="macro">assert!</span>(!C::is_native(<span class="kw-2">&amp;</span>Box::new(pool_asset)));
+		<span class="macro">assert!</span>(!C::is_native(<span class="kw-2">&amp;</span>Box::new(foreign_asset1)));
+		<span class="macro">assert!</span>(!C::is_native(<span class="kw-2">&amp;</span>Box::new(foreign_asset2)));
+
+		<span class="macro">assert_eq!</span>(C::try_convert(<span class="kw-2">&amp;</span>Box::new(native_asset)), MultiAssetIdConversionResult::Native);
+		<span class="macro">assert_eq!</span>(
+			C::try_convert(<span class="kw-2">&amp;</span>Box::new(local_asset)),
+			MultiAssetIdConversionResult::Converted(local_asset)
+		);
+		<span class="macro">assert_eq!</span>(
+			C::try_convert(<span class="kw-2">&amp;</span>Box::new(pool_asset)),
+			MultiAssetIdConversionResult::Unsupported(Box::new(pool_asset))
+		);
+		<span class="macro">assert_eq!</span>(
+			C::try_convert(<span class="kw-2">&amp;</span>Box::new(foreign_asset1)),
+			MultiAssetIdConversionResult::Converted(foreign_asset1)
+		);
+		<span class="macro">assert_eq!</span>(
+			C::try_convert(<span class="kw-2">&amp;</span>Box::new(foreign_asset2)),
+			MultiAssetIdConversionResult::Converted(foreign_asset2)
+		);
 	}
 }
 </code></pre></div></section></main></body></html>
